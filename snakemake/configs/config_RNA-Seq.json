@@ -1,0 +1,128 @@
+{
+  "references" :
+  {
+  "hg38" :
+    {
+      "version" : "GRCh38_ensembl84_ERCC",
+      "genome" :
+      {
+        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/primary/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
+      },
+      "GTF" :
+      {
+        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.84_ERCC.gtf"
+      },
+      "kallisto" :
+      {
+        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.all_ERCC.ki"
+      },
+      "STAR" :
+      {
+        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/STAR_Index_ERCC"
+      }
+    },
+  "hg19" :
+    {
+    "version" : ["GRCh37_hg19_ensembl75_ERCC", "GRCh37_hg19_ensembl75", "GRCh37_hg19_UCSC", "GRCh37_hg19_UCSC_ERCC"],
+    "genome" :
+      {
+        "GRCh37_hg19_ensembl75_ERCC" : "/home/sebastian/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
+        "GRCh37_hg19_ensembl75" : "/home/sebastian/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
+        "GRCh37_hg19_UCSC" : "/home/sebastian/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_UCSC/allChroms.fa"
+      },
+    "GTF" :
+      {
+        "GRCh37_hg19_ensembl75_ERCC" : "/home/sebastian/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Homo_sapiens.GRCh37.75_ERCC.gtf",
+        "GRCh37_hg19_ensembl75" : "/home/sebastian/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Homo_sapiens.GRCh37.75.gtf",
+        "GRCh37_hg19_UCSC" : "/home/sebastian/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_UCSC/UCSC_known_genes.gtf"
+      },
+    "kallisto" :
+      {
+        "GRCh37_hg19_ensembl75_ERCC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/GRCh37_hg19_ensembl75_ERCC.ki",
+        "GRCh37_hg19_ensembl75" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/GRCh37_hg19_ensembl75.ki",
+        "GRCh37_hg19_UCSC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_UCSC/GRCh37_hg19_UCSC.ki",
+        "GRCh37_hg19_UCSC_ERCC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_UCSC/GRCh37_hg19_UCSC_ERCC.ki"
+      },
+    "STAR" :
+      {
+        "GRCh37_hg19_ensembl75_ERCC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/STAR_Index_ERCC",
+        "GRCh37_hg19_ensembl75" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/STAR_Index"
+      }
+    }
+  },
+    "kallisto" :
+    {
+      "bootstraps" : "10"
+    },
+    "STAR" :
+    {
+      "runThreadN" : "4"
+    },
+    "bt2_params" :
+    {
+        "max_insert" : ["1000"],
+        "threads" : ["7"],
+        "platform" : ["Illumina"]
+    },
+    "bt2_params_unmapped_reads" :
+    {
+        "max_insert" : ["1000000"],
+        "threads" : ["7"],
+        "platform" : ["Illumina"]
+    },
+    "samples" :
+    {
+      "RNA-Seq" :
+      {
+        "NB501086_0114_B_Azad_JCSMR_hRNAseq" :
+        {
+          "MCF10A_Scramble_1" : ["MCF10A_Scramble_1_S1_R1_001.fastq.gz", "MCF10A_Scramble_1_S1_R2_001.fastq.gz"],
+          "MCF10A_Scramble_2" : ["MCF10A_Scramble_2_S2_R1_001.fastq.gz", "MCF10A_Scramble_2_S2_R2_001.fastq.gz"],
+          "MCF10A_Scramble_3" : ["MCF10A_Scramble_3_S3_R1_001.fastq.gz", "MCF10A_Scramble_3_S3_R2_001.fastq.gz"],
+          "MCF10A_shH2AZHP1a_1" : ["MCF10A_shH2AZHP1a_1_S13_R1_001.fastq.gz", "MCF10A_shH2AZHP1a_1_S13_R2_001.fastq.gz"],
+          "MCF10A_shH2AZHP1a_2" : ["MCF10A_shH2AZHP1a_2_S14_R1_001.fastq.gz", "MCF10A_shH2AZHP1a_2_S14_R2_001.fastq.gz"],
+          "MCF10A_shH2AZHP1a_3" : ["MCF10A_shH2AZHP1a_3_S15_R1_001.fastq.gz", "MCF10A_shH2AZHP1a_3_S15_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_1" : ["MCF10A_shHP1a_1_S4_R1_001.fastq.gz", "MCF10A_shHP1a_1_S4_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_2" : ["MCF10A_shHP1a_2_S5_R1_001.fastq.gz", "MCF10A_shHP1a_2_S5_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_3" : ["MCF10A_shHP1a_3_S6_R1_001.fastq.gz", "MCF10A_shHP1a_3_S6_R2_001.fastq.gz"],
+          "MCF10A_shHP1ab_1" : ["MCF10A_shHP1ab_1_S10_R1_001.fastq.gz", "MCF10A_shHP1ab_1_S10_R2_001.fastq.gz"],
+          "MCF10A_shHP1ab_2" : ["MCF10A_shHP1ab_2_S11_R1_001.fastq.gz", "MCF10A_shHP1ab_2_S11_R2_001.fastq.gz"],
+          "MCF10A_shHP1ab_3" : ["MCF10A_shHP1ab_3_S12_R1_001.fastq.gz", "MCF10A_shHP1ab_3_S12_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_1" : ["MCF10A_shHP1b_1_S7_R1_001.fastq.gz", "MCF10A_shHP1b_1_S7_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_2" : ["MCF10A_shHP1b_2_S8_R1_001.fastq.gz", "MCF10A_shHP1b_2_S8_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_3" : ["MCF10A_shHP1b_3_S9_R1_001.fastq.gz", "MCF10A_shHP1b_3_S9_R2_001.fastq.gz"]
+        }
+      }
+    },
+    "program_parameters" :
+    {
+      "deepTools" :
+      {
+        "SES_sample_length" : ["1000"],
+        "SES_numer_of_samples" : ["10000000.0"],
+        "ignoreForNormalization" : ["MT X"]
+      },
+      "picard_tools" :
+      {
+        "CollectInsertSizeMetrics" :
+        {
+            "minimum_perc" : "0.1"
+        }
+      },
+      "cutadapt" :
+      {
+          "trim_params": "-a AGATCGGAAGAGC -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT --minimum-length=30"
+      }
+  },
+  "trim_dir" : "trimmed_data",
+  "processed_dir" : "processed_data",
+  "aligned_dir" : "aligned_data",
+  "reports_dir" : "reports",
+  "temp_dir" : "temp_data",
+  "alignment_quality" : "20",
+  "raw_dir" : "fastq",
+  "cutadapt_dir" : "/miniconda3/envs/snakemake/bin",
+  "deepTools_dir" : "/miniconda3/envs/deepTools/bin",
+  "HTSeq_dir" : "/miniconda3/envs/py27/bin",
+  "DEXSeq_dir" : "/R/x86_64-unknown-linux-gnu-library/DEXSeq/python_scripts/"
+}
