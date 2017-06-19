@@ -1,24 +1,35 @@
 {
   "references" :
   {
+  "active" : "hg38",
+  "database" :
+  {
+      "biomart" : "ensembl",
+      "dataset" : "hsapiens_gene_ensembl"
+  },
   "hg38" :
     {
-      "version" : "GRCh38_ensembl84_ERCC",
+      "ensemblHost" : "mar2016.archive.ensembl.org",
+      "version" : ["GRCh38_ensembl84_ERCC", "GRCh38_ensembl84_cDNA"],
       "genome" :
       {
-        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/primary/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
+        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/primary/Homo_sapiens.GRCh38.dna.primary_assembly.fa",
+        "GRCh38_ensembl84_cDNA" : "/home/sebastian/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/primary/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
       },
       "GTF" :
       {
-        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.84_ERCC.gtf"
+        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.84_ERCC.gtf",
+        "GRCh38_ensembl84_cDNA" : "/home/sebastian/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.84_ERCC.gtf"
       },
       "kallisto" :
       {
-        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.all_ERCC.ki"
+        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.all_ERCC.ki",
+        "GRCh38_ensembl84_cDNA" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.cDNA.ki"
       },
       "STAR" :
       {
-        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/STAR_Index_ERCC"
+        "GRCh38_ensembl84_ERCC" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/STAR_Index_ERCC",
+        "GRCh38_ensembl84_cDNA" : "/home/sebastian/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/STAR_Index_ERCC"
       }
     },
   "hg19" :
@@ -52,7 +63,7 @@
   },
     "kallisto" :
     {
-      "bootstraps" : "10"
+      "bootstraps" : "30"
     },
     "STAR" :
     {
@@ -74,6 +85,7 @@
     {
       "RNA-Seq" :
       {
+        "runID" :[ "NB501086_0114_B_Azad_JCSMR_hRNAseq", "NB501086_0082_RDomaschenz_JCSMR_mRNAseq"],
         "NB501086_0114_B_Azad_JCSMR_hRNAseq" :
         {
           "MCF10A_Scramble_1" : ["MCF10A_Scramble_1_S1_R1_001.fastq.gz", "MCF10A_Scramble_1_S1_R2_001.fastq.gz"],
@@ -91,28 +103,57 @@
           "MCF10A_shHP1b_1" : ["MCF10A_shHP1b_1_S7_R1_001.fastq.gz", "MCF10A_shHP1b_1_S7_R2_001.fastq.gz"],
           "MCF10A_shHP1b_2" : ["MCF10A_shHP1b_2_S8_R1_001.fastq.gz", "MCF10A_shHP1b_2_S8_R2_001.fastq.gz"],
           "MCF10A_shHP1b_3" : ["MCF10A_shHP1b_3_S9_R1_001.fastq.gz", "MCF10A_shHP1b_3_S9_R2_001.fastq.gz"]
+        },
+        "NB501086_0082_RDomaschenz_JCSMR_mRNAseq" :
+        {
+          "MCF10A_WT_1" : ["10AD6_1_S10_R1_001.fastq.gz", "10AD6_1_S10_R2_001.fastq.gz"],
+          "MCF10A_WT_2" : ["10AD6_2_S11_R1_001.fastq.gz", "10AD6_2_S11_R2_001.fastq.gz"],
+          "MCF10A_WT_3" : ["10AD6_3_S12_R1_001.fastq.gz", "10AD6_3_S12_R2_001.fastq.gz"],
+          "MCF10A_WT_4" : ["10AD8_1_S16_R1_001.fastq.gz", "10AD8_1_S16_R2_001.fastq.gz"],
+          "MCF10A_WT_5" : ["10AD8_2_S17_R1_001.fastq.gz", "10AD8_2_S17_R2_001.fastq.gz"],
+          "MCF10A_WT_6" : ["10AD8_3_S18_R1_001.fastq.gz", "10AD8_3_S18_R2_001.fastq.gz"]
+        },
+        "sleuth_parameters" :
+        {
+          "conditions" :
+          {
+            "MCF10A_Scramble" : ["MCF10A_Scramble_1", "MCF10A_Scramble_2", "MCF10A_Scramble_3"],
+            "MCF10A_shH2AZHP1a" : ["MCF10A_shH2AZHP1a_1", "MCF10A_shH2AZHP1a_2", "MCF10A_shH2AZHP1a_3"],
+            "MCF10A_shHP1a" : ["MCF10A_shHP1a_1", "MCF10A_shHP1a_2", "MCF10A_shHP1a_3"],
+            "MCF10A_shHP1ab" : ["MCF10A_shHP1ab_1", "MCF10A_shHP1ab_2", "MCF10A_shHP1ab_3"],
+            "MCF10A_shHP1b" : ["MCF10A_shHP1b_1", "MCF10A_shHP1b_2", "MCF10A_shHP1b_3"],
+            "MCF10A_WT" : ["MCF10A_WT_1", "MCF10A_WT_2", "MCF10A_WT_3", "MCF10A_WT_4", "MCF10A_WT_5", "MCF10A_WT_6"]
+          },
+          "contrasts" :
+          {
+            "shH2AZHP1A_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shH2AZHP1a"],
+            "shHP1a_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shHP1a"],
+            "shHP1ab_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shHP1ab"],
+            "shHP1b_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shHP1b"],
+            "scramble_vs_WT" : ["MCF10A_WT", "MCF10A_Scramble"]
+          }
         }
       }
     },
-    "program_parameters" :
+  "program_parameters" :
+  {
+    "deepTools" :
     {
-      "deepTools" :
+      "SES_sample_length" : ["1000"],
+      "SES_numer_of_samples" : ["10000000.0"],
+      "ignoreForNormalization" : ["MT X"]
+    },
+    "picard_tools" :
+    {
+      "CollectInsertSizeMetrics" :
       {
-        "SES_sample_length" : ["1000"],
-        "SES_numer_of_samples" : ["10000000.0"],
-        "ignoreForNormalization" : ["MT X"]
-      },
-      "picard_tools" :
-      {
-        "CollectInsertSizeMetrics" :
-        {
-            "minimum_perc" : "0.1"
-        }
-      },
-      "cutadapt" :
-      {
-          "trim_params": "-a AGATCGGAAGAGC -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT --minimum-length=30"
+          "minimum_perc" : "0.1"
       }
+    },
+    "cutadapt" :
+    {
+        "trim_params": "-a AGATCGGAAGAGC -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT --minimum-length=30"
+    }
   },
   "trim_dir" : "trimmed_data",
   "processed_dir" : "processed_data",
