@@ -209,8 +209,8 @@ if (length(grep("ensembl", annotationVersion)) >= 1){
     load(myBiotypes_file)
     load(myChroms_file)
     load(t2g_file)
-    geneIdCol <- "external_gene_name"
-    aggregation_column = "external_gene_name"
+    geneIdCol <- "ext_gene"
+    aggregation_column = "ext_gene"
     targetIdCol <- "target_id"
   }
 } else if (length(grep("RefSeq", annotationVersion)) >= 1) {
@@ -377,14 +377,10 @@ if(!file.exists(sleuth_results_output)){
     names(rt.gene.list) <- colnames(design)[grep("Intercept", colnames(design), invert = T)]
     # gene-level expression is summed from transcript level data (sum(TPM))
     target_mapping <- data.table::as.data.table(so$target_mapping)
-    kt.gene <- sleuth::kallisto_table(so.gene, use_filtered = T)
+    kt.gene <- data.table::data.table(sleuth::kallisto_table(so.gene, use_filtered = T, normalized = T))
     kt_wide.gene <- tidyr::spread(kt.gene[, c("target_id", "sample", "tpm")], sample, tpm)
-    kt_wide.gene <- data.table::as.data.table(merge(kt_wide.gene, subset(t2g, select = c("target_id", aggregation_column)), all.x = TRUE, all.y = FALSE))
     cols.chosen <- as.character(s2c.list[[x]]$sample)
-    kt_wide.gene <- kt_wide.gene[,lapply(.SD,sum),by=ens_gene, .SDcols = cols.chosen]
-    kt.gene <- data.table::as.data.table(reshape::melt(kt_wide.gene))
-    kt.gene$groups <- unlist(lapply(strsplit(as.character(kt.gene$variable), "_"), function(x) paste(x[1:2], collapse = "_")))
-    kt_wide.gene <- data.table::as.data.table(merge(kt_wide.gene, unique(subset(ensGenes, select =  c("ensembl_gene_id", "external_gene_name", "description")), by = "ensembl_gene_id"), by.x = "ens_gene", by.y = "ensembl_gene_id", all.x = TRUE, all.y = FALSE))
+    kt_wide.gene <- data.table::as.data.table(merge(kt_wide.gene, unique(subset(ensGenes, select =  c("ensembl_gene_id", "external_gene_name", "description")), by = "ensembl_gene_id"), by.x = "target_id", by.y = "external_gene_name", all.x = TRUE, all.y = FALSE))
     return(list(sleuth_object = so,
                 sleuth_object_genes = so.gene,
                 sleuth_results = rt.list,
