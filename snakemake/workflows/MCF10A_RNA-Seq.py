@@ -38,8 +38,15 @@ rule run_kallisto:
         expand("{assayID}/NB501086_0114_B_Azad_JCSMR_hRNAseq/{outdir}/{reference_version}/kallisto/{unit}",
                assayID = "RNA-Seq",
                outdir = config["processed_dir"],
-               reference_version = config["references"]["hg38"]["version"],
-               unit = config["samples"]["RNA-Seq"]["NB501086_0114_B_Azad_JCSMR_hRNAseq"].keys())
+               #reference_version = config["references"]["hg38"]["version"],
+               reference_version = "GRCh38_RefSeq_NM",
+               unit = config["samples"]["RNA-Seq"]["NB501086_0114_B_Azad_JCSMR_hRNAseq"].keys()),
+        expand("{assayID}/NB501086_0082_RDomaschenz_JCSMR_mRNAseq/{outdir}/{reference_version}/kallisto/{unit}",
+               assayID = "RNA-Seq",
+               outdir = config["processed_dir"],
+               #reference_version = config["references"]["hg38"]["version"],
+               reference_version = "GRCh38_RefSeq_NM",
+               unit = config["samples"]["RNA-Seq"]["NB501086_0082_RDomaschenz_JCSMR_mRNAseq"].keys())
 
 rule run_STAR:
     input:
