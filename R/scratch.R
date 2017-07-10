@@ -54,23 +54,7 @@ l1 <- sfLapply(seq_along(seq1), function(x) {
   return(dT)
 })
 
-library(data.table)
-library(rentrez)
-seq1 <- seq(1, length(mRNArefSeq_IDs), 499)
-l1 <- lapply(seq_along(seq1), function(x) {
-  print(x)
-  if (x + 1 <= length(seq1)){ 
-    IDs <- mRNArefSeq_IDs[seq1[x] : seq1[x+1]]
-    es <- entrez_summary(db = "nuccore", id = IDs)
-    el <- entrez_link(dbfrom="nuccore", id = names(es), db = "gene", by_id = T)
-    nuccore_gene <- unlist(lapply(1:length(el), function(x) el[[x]]$links$nuccore_gene))
-    es1 <- entrez_summary(db="gene", id=nuccore_gene)
-    dT <- data.table("refseq_mRNA" = IDs,
-                     "entrez_id" = names(es1), 
-                     "gene_symbol" = unlist(lapply(es1, function(x) x$name)),
-                     "refseq_mRNA_version" = unlist(lapply(es, function(x) x$accessionversion)))
-    return(dT)
-  }
-})
-
+basic_filter <- function(row, min_reads = 5, min_prop = 0.47) {
+  mean(row >= min_reads) >= min_prop
+}
 

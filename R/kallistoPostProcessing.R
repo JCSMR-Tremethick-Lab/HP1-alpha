@@ -30,7 +30,7 @@ biomart <- runConfig$references$database$biomart
 ensemblHost <- runConfig$references$hg38$ensemblHost
 annotationVersion <- runConfig$references[[refVersion]]$version
 # reset to Ensembl84 ERCC
-annotationVersion <- annotationVersion[1]
+annotationVersion <- annotationVersion[2]
 # manually set to "RNA-Seq"
 assay <- names(runConfig$samples)[1]
 processedDir <- runConfig$processed_dir
@@ -118,7 +118,7 @@ if (length(runID) == 1){
 }
 
 # file names for data output  ---------------------------------------------
-analysis_version <- "2"
+analysis_version <- "_only_scramble_2_removed"
 sleuth_results_output <- paste("sleuthResults_", annotationVersion, "_V", analysis_version, ".rda", sep = "")
 sleuth_resultsCompressed_file <- paste("sleuthResultsCompressed_", annotationVersion, "_V", analysis_version, ".rda", sep = "")
 
@@ -261,7 +261,7 @@ if (length(base_dir) == 1){
     kal_dirs <- sapply(sample_id, function(id) file.path(base_dir, id))
     condition <- unlist(lapply(strsplit(sample_id, "_"), function(x) paste(x[1:2], collapse = "_")))
     names(condition) <- sample_id
-    files <- paste(kal_dirs, "abundance.h5", sep = "/")
+    files <- paste(kal_dirs, "abundance.tsv", sep = "/")
     names(files) <- sample_id
     } else { #end of directory IF
       stop("Directory with kallisto input data is missing!")
@@ -295,11 +295,11 @@ pdf(paste("PCA_MCF10A_HP1-alpha_", annotationVersion, ".pdf", sep = ""))?
 dev.off()
 # based on visual inspection:
 # MCF10A_WT_[123] removed
-# MCF10A_Scramble_3 removed 
+# MCF10A_Scramble_2 removed 
 # MCF10A_shHP1b_3 removed due to low knock-down efficiency 
 # MCF10A_shHP1ab_3 removed due to low knock-down efficiency
 
-toRemove <- c("MCF10A_WT_1|MCF10A_WT_2|MCF10A_WT_3|MCF10A_shHP1ab_3|MCF10A_shHP1b_3|MCF10A_Scramble_3|MCF10A_shH2AZHP1a_3|MCF10A_shHP1a_3")
+toRemove <- c("MCF10A_WT_1|MCF10A_WT_2|MCF10A_WT_3|MCF10A_Scramble_2")
 files <- files[-grep(toRemove, names(files))]
 length(files)
 condition <- condition[-grep(toRemove, names(condition))]
@@ -401,13 +401,20 @@ if(!file.exists(sleuth_results_output)){
 lapply(names(results), function(x){
   tab1 <- data.table::as.data.table(results[[x]]$sleuth_results_genes)
   colnames(tab1) <- unlist(lapply(strsplit(colnames(tab1), "\\."), function(x) x[2]))
-  fn <- paste(x, "_coding_sequences_results_table.csv", sep = "")
+  fn <- paste(x, "_differential_gene_expression_results_table.csv", sep = "")
   write.csv(x = tab1, file = fn, row.names = FALSE)
 })
 
 
-
-
-
-
+# perform EGSEA analysis --------------------------------------------------
+library(EGSEA)
+library(EGSEAdata)
+toGrep <- c("MCF10A_WT|MCF10A_Scramble")
+counts <- txi$counts[, grep(toGrep, colnames(txi$counts))]
+lengthOffset <- txi$length[, grep(toGrep, colnames(txi$length))]
+genes <- getBM(attributes = c("ensembl_gene_id", "entrezgene"),
+               filters = "ensembl_gene_id",
+               values = rownames(counts),
+               mart = mart)
+genes
 
