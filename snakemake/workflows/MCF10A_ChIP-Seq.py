@@ -40,7 +40,7 @@ rule AdapterRemoval:
         read1 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R1.fastq.gz",
         read2 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R2.fastq.gz"
     wrapper:
-        "0.1.0/bio/AdapterRemoval"
+        "file://" + wrapper_dir + "AdapterRemoval/wrapper.py"
 
 rule run_AdapterRemoval:
     input:
