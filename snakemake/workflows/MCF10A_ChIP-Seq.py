@@ -18,12 +18,12 @@ include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/Breast/s
 include:
     include_prefix + "run_kallisto.py"
 
-TRIMMED_FASTQ1 = expand(join("ChIP-Seq/" + "{file}"),
+TRIMMED_FASTQ1 = expand("ChIP-Seq/{file}",
                         file = for i in config["samples"]["ChIP-Seq"]["runID"]: \
                                 for j in config["samples"]["ChIP-Seq"][i]: \
                                  join(i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R1.fastq.gz"))
 
-TRIMMED_FASTQ2 = expand(join("ChIP-Seq/" + "{file}"), 
+TRIMMED_FASTQ2 = expand("ChIP-Seq/{file}",
                         file = for i in config["samples"]["ChIP-Seq"]["runID"]: \
                                 for j in config["samples"]["ChIP-Seq"][i]: \
                                  join(i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R2.fastq.gz"))
