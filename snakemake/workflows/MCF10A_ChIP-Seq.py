@@ -22,12 +22,12 @@ include:
 # set targets here
 TRIMMED_FASTQ1 = expand("ChIP-Seq/{file}",
                         file = [ i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R1.fastq.gz" \
-                            for i in config["samples"]["ChIP-Seq"]["runID"]:\
+                            for i in config["samples"]["ChIP-Seq"]["runID"] \
                                 for j in config["samples"]["ChIP-Seq"][i]])
 
 TRIMMED_FASTQ2 = expand("ChIP-Seq/{file}",
                         file = [ i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R2.fastq.gz" \
-                            for i in config["samples"]["ChIP-Seq"]["runID"]:\
+                            for i in config["samples"]["ChIP-Seq"]["runID"] \
                                 for j in config["samples"]["ChIP-Seq"][i]])
 
 rule AdapterRemoval:
