@@ -4,6 +4,7 @@ __date__ = "2017-08-23"
 
 from snakemake.exceptions import MissingInputException
 import os
+from os.path import join
 
 rule:
     version: 0.1
