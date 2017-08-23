@@ -34,8 +34,8 @@ rule AdapterRemoval:
     params:
         threads = config["program_parameters"]["AdapterRemoval"]["threads"]
     input:
-        read1 = lambda wildcards: wildcards["assayID"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
-        read2 = lambda wildcards: wildcards["assayID"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
+        read1 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
+        read2 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
     output:
         read1 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R1.fastq.gz",
         read2 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R2.fastq.gz"
