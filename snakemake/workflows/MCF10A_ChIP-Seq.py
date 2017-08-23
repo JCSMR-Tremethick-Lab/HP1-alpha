@@ -20,14 +20,14 @@ include:
 
 # set targets here
 TRIMMED_FASTQ1 = expand("ChIP-Seq/{file}",
-                        file = for i in config["samples"]["ChIP-Seq"]["runID"]:
-                                for j in config["samples"]["ChIP-Seq"][i]:
-                                 join(i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R1.fastq.gz"))
+                        file = [for i in config["samples"]["ChIP-Seq"]["runID"]:\
+                                for j in config["samples"]["ChIP-Seq"][i]:\
+                                 join(i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R1.fastq.gz")])
 
 TRIMMED_FASTQ2 = expand("ChIP-Seq/{file}",
-                        file = for i in config["samples"]["ChIP-Seq"]["runID"]:
-                                for j in config["samples"]["ChIP-Seq"][i]:
-                                 join(i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R2.fastq.gz"))
+                        file = [for i in config["samples"]["ChIP-Seq"]["runID"]:\
+                                for j in config["samples"]["ChIP-Seq"][i]:\
+                                 join(i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R2.fastq.gz")])
 
 rule AdapterRemoval:
     params:
