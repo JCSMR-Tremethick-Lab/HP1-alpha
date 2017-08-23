@@ -140,6 +140,56 @@
           },
           "transcript_biotype" : ["protein_coding"]
         }
+      },
+      "ChIP-Seq" :
+      {
+        "runID" : ["NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq", "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq"],
+        "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" :
+        {
+          "MCF10A_WT_HP1a_ChIP_1a" : ["TS1_S1_R1_001.fastq.gz", "TS1_S1_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1a-ChIP_2a" : ["TS2_S2_R1_001.fastq.gz", "TS2_S2_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_HP1a_ChIP_1a" : ["TS3_S3_R1_001.fastq.gz", "TS3_S3_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_HP1a_ChIP_2a" : ["TS4_S4_R1_001.fastq.gz", "TS4_S4_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1a_ChIP_1a" : ["TS5_S5_R1_001.fastq.gz", "TS5_S5_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1a_ChIP_2a" : ["TS6_S6_R1_001.fastq.gz", "TS6_S6_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1b_ChIP_1a" : ["TS7_S7_R1_001.fastq.gz", "TS7_S7_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1b_ChIP_2a" : ["TS8_S8_R1_001.fastq.gz", "TS8_S8_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_HP1b_ChIP_1a" : ["TS9_S9_R1_001.fastq.gz", "TS9_S9_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_HP1b_ChIP_2a" : ["TS10_S10_R1_001.fastq.gz", "TS10_S10_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1b_ChIP_1a" : ["TS11_S11_R1_001.fastq.gz", "TS11_S11_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1b_ChIP_2a" : ["TS12_S12_R1_001.fastq.gz", "TS12_S12_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_H2AZ_ChIP_1a" : ["TS13_S13_R1_001.fastq.gz", "TS13_S13_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_H2AZ_ChIP_2a" : ["TS14_S14_R1_001.fastq.gz", "TS14_S14_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_Input_1a" : ["TS15_S15_R1_001.fastq.gz", "TS15_S15_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_Input_2a" : ["TS16_S16_R1_001.fastq.gz", "TS16_S16_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_Input_1a" : ["TS17_S17_R1_001.fastq.gz", "TS17_S17_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_Input_2a" : ["TS18_S18_R1_001.fastq.gz", "TS18_S18_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_Input_1a" : ["TS19_S19_R1_001.fastq.gz", "TS19_S19_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_Input_2a" : ["TS20_S20_R1_001.fastq.gz", "TS20_S20_R2_001.fastq.gz"]
+        },
+        "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" :
+        {
+          "MCF10A_WT_HP1a_ChIP_1b" : ["TS1_S1_R1_001.fastq.gz", "TS1_S1_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1a-ChIP_2b" : ["TS2_S2_R1_001.fastq.gz", "TS2_S2_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_HP1a_ChIP_1b" : ["TS3_S3_R1_001.fastq.gz", "TS3_S3_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_HP1a_ChIP_2b" : ["TS4_S4_R1_001.fastq.gz", "TS4_S4_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1a_ChIP_1b" : ["TS5_S5_R1_001.fastq.gz", "TS5_S5_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1a_ChIP_2b" : ["TS6_S6_R1_001.fastq.gz", "TS6_S6_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1b_ChIP_1b" : ["TS7_S7_R1_001.fastq.gz", "TS7_S7_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1b_ChIP_2b" : ["TS8_S8_R1_001.fastq.gz", "TS8_S8_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_HP1b_ChIP_1b" : ["TS9_S9_R1_001.fastq.gz", "TS9_S9_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_HP1b_ChIP_2b" : ["TS10_S10_R1_001.fastq.gz", "TS10_S10_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1b_ChIP_1b" : ["TS11_S11_R1_001.fastq.gz", "TS11_S11_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1b_ChIP_2b" : ["TS12_S12_R1_001.fastq.gz", "TS12_S12_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_H2AZ_ChIP_1b" : ["TS13_S13_R1_001.fastq.gz", "TS13_S13_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_H2AZ_ChIP_2b" : ["TS14_S14_R1_001.fastq.gz", "TS14_S14_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_Input_1b" : ["TS15_S15_R1_001.fastq.gz", "TS15_S15_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_Input_2b" : ["TS16_S16_R1_001.fastq.gz", "TS16_S16_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_Input_1b" : ["TS17_S17_R1_001.fastq.gz", "TS17_S17_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_Input_2b" : ["TS18_S18_R1_001.fastq.gz", "TS18_S18_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_Input_1b" : ["TS19_S19_R1_001.fastq.gz", "TS19_S19_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_Input_2b" : ["TS20_S20_R1_001.fastq.gz", "TS20_S20_R2_001.fastq.gz"]
+        }
       }
     },
   "program_parameters" :
@@ -160,6 +210,10 @@
     "cutadapt" :
     {
         "trim_params": "-a AGATCGGAAGAGC -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT --minimum-length=30"
+    },
+    "AdapterRemoval" :
+    {
+      "threads" : "2"
     }
   },
   "trim_dir" : "trimmed_data",
