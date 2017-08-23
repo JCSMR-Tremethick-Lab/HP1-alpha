@@ -18,10 +18,10 @@ include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/Breast/s
 include:
     include_prefix + "run_kallisto.py"
 
-TRIMMED_FASTQ = for i in config["samples"]["ChIP-Seq"]["runID"]:\
-                    for j in config["samples"]["ChIP-Seq"][i]:\
-                        join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R1.fastq.gz")\
-                        join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R2.fastq.gz")
+TRIMMED_FASTQ = expand(for i in config["samples"]["ChIP-Seq"]["runID"]: \
+                        for j in config["samples"]["ChIP-Seq"][i]: \
+                            join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R1.fastq.gz") \
+                            join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R2.fastq.gz"))
 
 rule AdapterRemoval:
     params:
