@@ -32,7 +32,7 @@ TRIMMED_FASTQ2 = expand("ChIP-Seq/{file}",
 
 rule AdapterRemoval:
     params:
-        threads = config["AdapterRemoval"]["threads"]
+        threads = config["program_parameters"]["AdapterRemoval"]["threads"]
     input:
         read1 = config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
         read2 = config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
