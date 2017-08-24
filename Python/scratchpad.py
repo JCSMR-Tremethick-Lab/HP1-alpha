@@ -19,7 +19,7 @@ def getAllFASTQ(wildcards):
     fn =[]
     for i in config["samples"][wildcards["assayID"]][wildcards["runID"]]:
         for j in config["samples"][wildcards["assayID"]][wildcards["runID"]][i]:
-            fn.append("ChIP-Seq/NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq/fastq/" + j)
+            fn.append("/".join([wildcards["assayID"], wildcards["runID"], config["raw_dir"], j]))
     return(fn)
 
 
@@ -27,6 +27,11 @@ for i in config["samples"]["ChIP-Seq"]["runID"]:
     for j in config["samples"]["ChIP-Seq"][i]:
         join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R1.fastq.gz")
         join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R2.fastq.gz")
+
+for i in config["samples"]["ChIP-Seq"]["runID"]:
+    for j in config["samples"]["ChIP-Seq"][i].values():
+        for k in j:
+            print(k)
 
 
 config["references"]["hg38"]["STAR"][wildcards["reference_version"]]
