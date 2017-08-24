@@ -30,12 +30,22 @@ TRIMMED_FASTQ2 = expand("ChIP-Seq/{file}",
                             for i in config["samples"]["ChIP-Seq"]["runID"] \
                                 for j in config["samples"]["ChIP-Seq"][i]])
 
-rule AdapterRemoval:
-    params:
-        threads = config["program_parameters"]["AdapterRemoval"]["threads"]
+rule move_fastq:
     input:
-        read1 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
-        read2 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
+        "{assayID}/{runID}/{unit}"
+    output:
+        "{assayID}/{runID}/{raw_dir}/{unit}"
+    run:
+       """
+            mv {input} {output}
+       """
+
+rule AdapterRemoval:
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["AdapterRemoval"]["threads"]).strip("['']"))
+    input:
+        read1 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
+        read2 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
     output:
         read1 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R1.fastq.gz",
         read2 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R2.fastq.gz"
