@@ -202,6 +202,7 @@
     },
     "picard_tools" :
     {
+      "jar" : "/bin/picard.jar",
       "CollectInsertSizeMetrics" :
       {
           "minimum_perc" : "0.1"
@@ -229,7 +230,7 @@
   "processed_dir" : "processed_data",
   "aligned_dir" : "aligned_data",
   "reports_dir" : "reports",
-  "temp_dir" : "temp_data",
+  "temp_dir" : "/temp_data",
   "alignment_quality" : "20",
   "raw_dir" : "fastq",
   "cutadapt_dir" : "/miniconda3/envs/snakemake/bin",

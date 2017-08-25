@@ -14,6 +14,7 @@ localrules:
 
 # variables
 home_dir = os.environ['HOME']
+home = home_dir
 
 wrapper_dir = os.environ['HOME'] + "/Development/snakemake-wrappers/bio"
 
@@ -22,9 +23,6 @@ REF_VERSION = config["references"][REF_GENOME]["version"][1]
 
 # includes
 include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/Breast/snakemake/rules/"
-
-include:
-    include_prefix + "run_kallisto.py"
 
 # input functions
 def getAllFASTQ(wildcards):
@@ -53,9 +51,15 @@ FASTQC_OUTPUT = expand("ChIP-Seq/{file}",
 
 BAMs = expand("{assayID}/{file}",
               assayID = "ChIP-Seq",
-              file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/"  + "/" + j + ".bam" \
+              file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2"  + "/" + j + ".bam" \
                   for i in config["samples"]["ChIP-Seq"]["runID"] \
                       for j in config["samples"]["ChIP-Seq"][i]])
+
+PROCESSED_BAMs = expand("{assayID}/{file}",
+                        assayID = "ChIP-Seq",
+                        file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed"  + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
+                            for i in config["samples"]["ChIP-Seq"]["runID"] \
+                                for j in config["samples"]["ChIP-Seq"][i]])
 
 # rule move_fastq:
 #     input:
@@ -123,6 +127,79 @@ rule bowtie2_pe:
             | samtools view -Sb - > {output}
         """
 
+rule bam_quality_filter:
+    params:
+        qual = config["alignment_quality"]
+    input:
+        "{assayID}/{runID}/{outdir}/" + REF_VERSION + "/bowtie2/{unit}.bam"
+    output:
+        temp("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/quality_filtered/{unit}.Q{qual}.bam")
+    shell:
+        "samtools view -b -h -q {params.qual} {input} > {output}"
+
+rule bam_sort:
+    params:
+        qual = config["alignment_quality"]
+    threads:
+        4
+    input:
+        rules.bam_quality_filter.output
+    output:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/sorted/{unit}.Q{qual}.sorted.bam"
+    shell:
+        "samtools sort -@ {threads} {input} -T {wildcards.unit}.Q{params.qual}.sorted -o {output}"
+
+rule bam_mark_duplicates:
+    params:
+        qual = config["alignment_quality"],
+        picard = home + config["program_parameters"]["picard_tools"]["jar"],
+        temp = home + config["temp_dir"]
+    threads:
+        4
+    input:
+        rules.bam_sort.output
+    output:
+        protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_marked/{unit}.Q{qual}.sorted.bam")
+    shell:
+        """
+            java -Djava.io.tmpdir={params.temp} \
+            -Xmx24G \
+            -jar {params.picard} MarkDuplicates \
+            INPUT={input}\
+            OUTPUT={output}\
+            ASSUME_SORTED=true\
+            METRICS_FILE={output}.metrics.txt
+        """
+
+rule bam_index:
+    params:
+        qual = config["alignment_quality"]
+    input:
+        rules.bam_mark_duplicates.output
+    output:
+        protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_marked/{unit}.Q{qual}.sorted.bam.bai")
+    shell:
+        "samtools index {input} {output}"
+
+rule bam_rmdup:
+    input:
+        rules.bam_mark_duplicates.output
+    output:
+        protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}.sorted.bam")
+    shell:
+        "samtools rmdup {input} {output}"
+
+rule bam_rmdup_index:
+    params:
+        qual = config["alignment_quality"]
+    input:
+        rules.bam_rmdup.output
+    output:
+        protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}.sorted.bam.bai")
+    shell:
+        "samtools index {input} {output}"
+
+# target rules
 rule run_AdapterRemoval:
     input:
         TRIMMED_FASTQ1,
@@ -135,6 +212,4 @@ rule run_fastqc:
 
 rule all:
     input:
-        TRIMMED_FASTQ1,
-        TRIMMED_FASTQ2,
-        BAMs
+        PROCESSED_BAMs
