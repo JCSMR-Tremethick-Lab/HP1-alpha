@@ -132,7 +132,8 @@
             "shHP1ab_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shHP1ab"],
             "shHP1b_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shHP1b"],
             "scramble_vs_WT" : ["MCF10A_WT", "MCF10A_Scramble"]
-          }
+          },
+          "transcript_biotype" : ["protein_coding"]
         }
       }
     },

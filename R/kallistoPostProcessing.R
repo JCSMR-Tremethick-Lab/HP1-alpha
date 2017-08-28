@@ -8,6 +8,7 @@ library(data.table)
 library(rentrez)
 library(dplyr)
 library(gtools)
+library(edgeR)
 # external functions ------------------------------------------------------
 source("~/Development/GeneralPurpose/R/amILocal.R")
 source("~/Development/GeneralPurpose/R/heatmap.3.R")
@@ -121,6 +122,11 @@ if (length(runID) == 1){
 analysis_version <- "_only_scramble_2_removed"
 sleuth_results_output <- paste("sleuthResults_", annotationVersion, "_V", analysis_version, ".rda", sep = "")
 sleuth_resultsCompressed_file <- paste("sleuthResultsCompressed_", annotationVersion, "_V", analysis_version, ".rda", sep = "")
+clusterProfiler_results_output <- paste("clusterProfilerResults_", annotationVersion, "_V", analysis_version, ".rda", sep = "")
+
+# read in additional parameters from JSON file ----------------------------
+transcriptBiotype <- runConfig$samples$`RNA-Seq`$sleuth_parameters$transcript_biotype
+
 
 # preparing annotation data from Ensembl ----------------------------------
 # ToDo: refactor annotation data preparation 
@@ -161,28 +167,39 @@ if (length(grep("ensembl", annotationVersion)) >= 1){
                                                     "transcript_length",
                                                     "version", 
                                                     "transcript_version",
-                                                    "external_gene_name"),
+                                                    "external_gene_name",
+                                                    "description",
+                                                    "transcript_biotype",
+                                                    "transcript_version"),
                                      mart = mart,
                                      filter = "ensembl_gene_id",
                                      values = ensGenes$ensembl_gene_id)
+    ensTranscripts <- data.table::data.table(ensTranscripts)
     save(ensTranscripts, file = ensTranscripts_file)
     # create t2g object
     t2g <- ensTranscripts[, c("ensembl_transcript_id", 
                               "ensembl_gene_id", 
-                              "external_gene_name", 
-                              "version", 
+                              "external_gene_name",
+                              "transcript_biotype",
+                              "description",
                               "transcript_version")]
     if(refVersion == "hg38"){
       t2g$ensembl_transcript_id <- paste(t2g$ensembl_transcript_id, t2g$transcript_version, sep = ".")
     }
+    t2g <- data.table::data.table(t2g[, c("ensembl_transcript_id", 
+                                          "ensembl_gene_id", 
+                                          "external_gene_name",
+                                          "transcript_biotype",
+                                          "description")])
+    t2g <- subset(t2g, transcript_biotype %in% transcriptBiotype)
     t2g <- dplyr::rename(t2g, target_id = ensembl_transcript_id, ens_gene = ensembl_gene_id, ext_gene = external_gene_name)
     if(length(grep("ERCC", ensGenes_file)) > 0){
       erccGenes <- import("~/Data/References/Transcriptomes/ERCC/ERCC92.gtf")
-      erccGenes <- data.frame(target_id = erccGenes$gene_id, 
-                              ens_gene = erccGenes$gene_id, 
-                              ext_gene = erccGenes$gene_id)
-      erccGenes$version <- 1
-      erccGenes$transcript_version <- 1
+      erccGenes <- data.table::data.table(target_id = erccGenes$gene_id, 
+                                          ens_gene = erccGenes$gene_id, 
+                                          ext_gene = erccGenes$gene_id,
+                                          transcript_biotype = "errc_control")
+      erccGenes$target_id <- paste(erccGenes$target_id, "1", sep = ".")
       t2g <- rbind(t2g, erccGenes)
     }
     save(t2g, file = t2g_file)
@@ -199,7 +216,7 @@ if (length(grep("ensembl", annotationVersion)) >= 1){
     save(mybiotypes, file = myBiotypes_file)
     mychroms <- data.frame(Chr = ensGenes$chromosome_name, GeneStart = ensGenes$start_position, GeneEnd = ensGenes$end_position)
     save(mychroms, file = myChroms_file)
-    geneIdCol <- "ext_gene"
+    geneIdCol <- "ens_gene"
     targetIdCol <- "target_id"
   } else {
     load(ensGenes_file)
@@ -261,7 +278,7 @@ if (length(base_dir) == 1){
     kal_dirs <- sapply(sample_id, function(id) file.path(base_dir, id))
     condition <- unlist(lapply(strsplit(sample_id, "_"), function(x) paste(x[1:2], collapse = "_")))
     names(condition) <- sample_id
-    files <- paste(kal_dirs, "abundance.tsv", sep = "/")
+    files <- paste(kal_dirs, "abundance.h5", sep = "/")
     names(files) <- sample_id
     } else { #end of directory IF
       stop("Directory with kallisto input data is missing!")
@@ -282,14 +299,14 @@ if (length(base_dir) == 1){
 
 txi <- tximport::tximport(files, 
                           type = "kallisto",
-                          tx2gene = t2g, geneIdCol = geneIdCol, txIdCol = targetIdCol,
+                          tx2gene = subset(t2g, select = c(targetIdCol, geneIdCol)), geneIdCol = geneIdCol, txIdCol = targetIdCol,
                           ignoreTxVersion = F)
 
 # perform PCA for first inspection of data --------------------------------
 sd1 <- apply(txi$abundance, 1, sd)
 summary(sd1)
 pca1 <- ade4::dudi.pca(t(txi$abundance[sd1 > 0, ]), scannf = F, nf = 6)
-pdf(paste("PCA_MCF10A_HP1-alpha_", annotationVersion, ".pdf", sep = ""))?
+pdf(paste("PCA_MCF10A_HP1-alpha_", annotationVersion, ".pdf", sep = ""))
   ade4::s.arrow(pca1$li, boxes = F)
   ade4::s.class(pca1$li, fac = as.factor(condition))
 dev.off()
@@ -309,7 +326,7 @@ kal_dirs <- kal_dirs[-grep(toRemove, kal_dirs)]
 
 txi <- tximport::tximport(files, 
                           type = "kallisto",
-                          tx2gene = t2g, geneIdCol = geneIdCol, txIdCol = targetIdCol,
+                          tx2gene = subset(t2g, select = c(targetIdCol, geneIdCol)), geneIdCol = geneIdCol, txIdCol = targetIdCol,
                           ignoreTxVersion = F)
 sd1 <- apply(txi$abundance, 1, sd)
 summary(sd1)
@@ -324,45 +341,20 @@ s2c <- data.frame(sample = sample_id, condition = condition)
 s2c <- dplyr::mutate(s2c, path = kal_dirs)
 s2c$sample <- as.character(s2c$sample)
 
-
 # build a list for all contrasts to test ----------------------------------
 contrastsList <- runConfig$samples$`RNA-Seq`$sleuth_parameters$contrasts
 conditionsList <- runConfig$samples$`RNA-Seq`$sleuth_parameters$conditions
-s2c.list <- lapply(names(contrastsList), function(x){
-  # working under the assumption that these are pairwise comparisons only!
-  return(s2c[grep(paste(unlist(conditionsList[contrastsList[[x]][c(1,2)]]), collapse = "|"), s2c$sample),]) 
-})
-names(s2c.list) <- names(contrastsList)
+design <- model.matrix(~ condition, data = s2c)
+
+
+# run sleuth --------------------------------------------------------------
 if(!file.exists(sleuth_results_output)){
-  results <- lapply(names(s2c.list), function(x){
-    s2c.list[[x]]$condition <- droplevels(s2c.list[[x]]$condition)
-    design <- model.matrix(~ condition, data = s2c.list[[x]])
-    print(paste("Processing ", x, " transcript-level analysis",sep = ""))
     #-----------------------------------------------------------------------------
-    # transcript-level DE
-    so <- sleuth::sleuth_prep(s2c.list[[x]],
-                              ~ condition, 
-                              target_mapping = t2g, 
-                              max_bootstrap = 30,
-                              read_bootstrap_tpm = T,
-                              extra_bootstrap_summary = T)
-    so <- sleuth::sleuth_fit(so, formula = design)
-    so <- sleuth::sleuth_fit(so, ~1, "reduced")
-    so <- sleuth::sleuth_lrt(so, "reduced", "full")
-    for (i in colnames(design)[grep("Intercept", colnames(design), invert = T)]){
-      so <- sleuth::sleuth_wt(so, i)  
-    }
-    rt.list <- lapply(colnames(design)[grep("Intercept", colnames(design), invert = T)], function(x){
-      rt <- sleuth::sleuth_results(so, x)
-      rt <- data.table::data.table(rt[order(rt$qval),])
-    })
-    names(rt.list) <- colnames(design)[grep("Intercept", colnames(design), invert = T)]
-    kt <- sleuth::kallisto_table(so, normalized = T, include_covariates = T)
-    kt_wide <- tidyr::spread(kt[, c("target_id", "sample", "tpm")], sample, tpm)
-    kt_wide <- data.table::as.data.table(kt_wide)
-    data.table::setkey(kt_wide, "target_id")
-    # summarise gene level expression by adding all transcripts of a gene - the data.table way!
-    so.gene <- sleuth::sleuth_prep(s2c.list[[x]], ~ condition, target_mapping = t2g, aggregation_column = aggregation_column)
+    # only doing gene level DE
+    so.gene <- sleuth::sleuth_prep(s2c, 
+                                   ~ condition, 
+                                   target_mapping = t2g, 
+                                   aggregation_column = aggregation_column)
     so.gene <- sleuth::sleuth_fit(so.gene, formula = design)
     so.gene <- sleuth::sleuth_fit(so.gene, ~1, "reduced")
     so.gene <- sleuth::sleuth_lrt(so.gene, "reduced", "full")
@@ -370,51 +362,138 @@ if(!file.exists(sleuth_results_output)){
       so.gene <- sleuth::sleuth_wt(so.gene, i)  
     }
     rt.gene.list <- lapply(colnames(design)[grep("Intercept", colnames(design), invert = T)], function(x){
-      rt.gene <- sleuth::sleuth_results(so.gene, x)
+      rt.gene <- sleuth::sleuth_results(so.gene, x, show_all = F)
       rt.gene <- data.table::data.table(rt.gene[order(rt.gene$qval),])
-      rt.gene <- rt.gene[!duplicated(rt.gene[,-c("transcript_version")])]
     })
     names(rt.gene.list) <- colnames(design)[grep("Intercept", colnames(design), invert = T)]
-    # gene-level expression is summed from transcript level data (sum(TPM))
-    target_mapping <- data.table::as.data.table(so$target_mapping)
-    kt.gene <- data.table::data.table(sleuth::kallisto_table(so.gene, use_filtered = T, normalized = T))
+    kt.gene <- data.table::data.table(sleuth::kallisto_table(so.gene, use_filtered = T, normalized = T, include_covariates = T))
     kt_wide.gene <- tidyr::spread(kt.gene[, c("target_id", "sample", "tpm")], sample, tpm)
-    cols.chosen <- as.character(s2c.list[[x]]$sample)
     kt_wide.gene <- data.table::as.data.table(merge(kt_wide.gene, unique(subset(ensGenes, select =  c("ensembl_gene_id", "external_gene_name", "description")), by = "ensembl_gene_id"), by.x = "target_id", by.y = "external_gene_name", all.x = TRUE, all.y = FALSE))
-    return(list(sleuth_object = so,
-                sleuth_object_genes = so.gene,
-                sleuth_results = rt.list,
-                sleuth_results_genes = rt.gene.list,
-                kallisto_table = kt,
-                kallisto_table_wide = kt_wide,
-                kallisto_table_genes = kt.gene,
-                kallisto_table_genes_wide = kt_wide.gene))
-  }) 
-  names(results) <- names(s2c.list)
+    kt_wide.gene <- kt_wide.gene[!duplicated(kt_wide.gene$target_id),]
+    results <- list(sleuth_object_genes = so.gene,
+                    sleuth_results_genes = rt.gene.list,
+                    kallisto_table_genes = kt.gene,
+                    kallisto_table_genes_wide = kt_wide.gene)
   save(results, file = sleuth_results_output)
 } else {
   load(sleuth_results_output)
 }
 
-
 # export sleuth_results_genes as CSV --------------------------------------
-lapply(names(results), function(x){
-  tab1 <- data.table::as.data.table(results[[x]]$sleuth_results_genes)
-  colnames(tab1) <- unlist(lapply(strsplit(colnames(tab1), "\\."), function(x) x[2]))
+lapply(names(results$sleuth_results_genes), function(x){
+  tab1 <- data.table::as.data.table(results$sleuth_results_genes[[x]])
+  tab1 <- data.table::as.data.table(merge(tab1, 
+                                          unique(subset(ensGenes, 
+                                                        select =  c("ensembl_gene_id", 
+                                                                    "external_gene_name", 
+                                                                    "description")), 
+                                                 by = "ensembl_gene_id"), 
+                                          by.x = "target_id", 
+                                          by.y = "external_gene_name", 
+                                          all.x = TRUE, 
+                                          all.y = FALSE))
+  tab1 <- tab1[order(tab1$qval, decreasing = F),]
+  tab1 <- tab1[!duplicated(tab1$target_id),]
+  # added filtering for genes
+  tab1 <- subset(tab1, qval < 0.2 | abs(b) > 1) 
   fn <- paste(x, "_differential_gene_expression_results_table.csv", sep = "")
   write.csv(x = tab1, file = fn, row.names = FALSE)
 })
 
 
-# perform EGSEA analysis --------------------------------------------------
-library(EGSEA)
-library(EGSEAdata)
-toGrep <- c("MCF10A_WT|MCF10A_Scramble")
-counts <- txi$counts[, grep(toGrep, colnames(txi$counts))]
-lengthOffset <- txi$length[, grep(toGrep, colnames(txi$length))]
-genes <- getBM(attributes = c("ensembl_gene_id", "entrezgene"),
-               filters = "ensembl_gene_id",
-               values = rownames(counts),
-               mart = mart)
-genes
+# perform gene set enrichment analysis --------------------------------------------------
+library(clusterProfiler)
+library(org.Hs.eg.db)
+gmtfiles <- list.files("~/Data/References/Annotations/MSigDB/msigdb_v6.0_GMTs", pattern = "symbols", full.names = T)
+gmtfiles <- gmtfiles[grep("all", gmtfiles)]
+gmtfilesNames <- unlist(lapply(strsplit(gmtfiles, "/"), function(x) x[9]))
+
+library(snowfall)
+sfInit(parallel = T, cpus = 5)
+sfExport(list = c("results", "gmtfiles", "gmtfilesNames"))
+sfLibrary(clusterProfiler)
+sfLibrary(org.Hs.eg.db)
+
+if (!file.exists(clusterProfiler_results_output)){
+clusterProfilerResults <- sfLapply(results$sleuth_results_genes, function(x) {
+    geneList <- x$b
+    names(geneList) <- x$target_id
+    geneList <- sort(geneList, decreasing = T)
+    gene <- names(geneList)[abs(geneList) > 1]
+    # for the GO analysis we include only differentially expressed genes
+    # effect size is > |1|, but no p/q-value cutoff
+    egoMF <- enrichGO(gene         = gene,
+                      universe = names(geneList),
+                      OrgDb         = org.Hs.eg.db,
+                      keytype       = 'SYMBOL',
+                      ont           = "MF",
+                      pAdjustMethod = "fdr",
+                      pvalueCutoff  = 0.01,
+                      qvalueCutoff  = 0.05)
+    egoBP <- enrichGO(gene         = gene,
+                      universe = names(geneList),
+                      OrgDb         = org.Hs.eg.db,
+                      keytype       = 'SYMBOL',
+                      ont           = "BP",
+                      pAdjustMethod = "fdr",
+                      pvalueCutoff  = 0.01,
+                      qvalueCutoff  = 0.05)
+    egoCC <- enrichGO(gene         = gene,
+                      universe = names(geneList),
+                      OrgDb         = org.Hs.eg.db,
+                      keytype       = 'SYMBOL',
+                      ont           = "CC",
+                      pAdjustMethod = "fdr",
+                      pvalueCutoff  = 0.01,
+                      qvalueCutoff  = 0.05)
+    
+    # for the MSigDB analysis we use the whole list of ranked genes
+    gmtList <- lapply(gmtfiles, function(y){
+      gmt <- read.gmt(y)
+      egmt <- GSEA(geneList = geneList, 
+                   TERM2GENE=gmt, 
+                   nPerm = 1000, 
+                   exponent = 1, 
+                   seed = T, 
+                   pAdjustMethod = "fdr")
+    })
+    names(gmtList) <- gmtfilesNames
+    return(list(egoBP = egoBP, 
+                egoMF = egoMF, 
+                egoCC = egoCC,
+                gmtList = gmtList))
+  
+  })
+  save(clusterProfilerResults, file = clusterProfiler_results_output)
+} else {
+  load(clusterProfiler_results_output)
+}
+
+
+# write enrichment analysis results to separate CSV files -----------------
+lapply(names(clusterProfilerResults), function(x){
+  sapply(names(clusterProfilerResults[[x]]$gmtList), function(y){
+    df <- data.frame(clusterProfilerResults[[x]]$gmtList[[y]])
+    if(nrow(df) > 0) {
+      df$http_link <- paste("http://software.broadinstitute.org/gsea/msigdb/cards", df$ID, sep = "/")
+      fileName <- paste(x, y, "csv", sep = ".")
+      write.csv(df, file = fileName)
+    }
+  })
+})
+
+
+# print dotplots for GO enrichment ----------------------------------------
+pdf(file = "Dotplots.pdf", paper = "a4r")
+lapply(names(clusterProfilerResults), function(x){
+  egos <- names(clusterProfilerResults[[x]])[grep("ego", names(clusterProfilerResults[[x]]))]
+  obj <- clusterProfilerResults[[x]]
+  lapply(egos, function(y){
+    dotplot(obj[[y]], title = paste(x, y, sep ="_"))
+    write.csv(data.frame(obj[[y]]), file = paste(x, y, "table.csv", sep = ""))
+  })
+})
+dev.off()
+
+
 
