@@ -32,6 +32,22 @@ def getAllFASTQ(wildcards):
             fn.append("/".join([wildcards["assayID"], wildcards["runID"], config["raw_dir"], j]))
     return(fn)
 
+def getAllBAMs(duplicates):
+    fn = []
+    for i in config["samples"]["ChIP-Seq"]["runID"]:
+        for j in config["samples"]["ChIP-Seq"][i]:
+            fn.append(join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/" + duplicates + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam"))
+    return(fn)
+
+def get_sample_labels(wildcards):
+    sl = []
+    runIDs = config["samples"][wildcards["assayID"]]["runID"]
+    for i in runIDs:
+        for k in config["samples"][wildcards["assayID"]][i].keys():
+            sl.append(k)
+    return(sl)
+
+
 # set targets here
 TRIMMED_FASTQ1 = expand("ChIP-Seq/{file}",
                         file = [ i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R1.fastq.gz" \
@@ -199,6 +215,31 @@ rule bam_rmdup_index:
     shell:
         "samtools index {input} {output}"
 
+rule multiBamSummary:
+    version:
+        0.2
+    params:
+        deepTools_dir = home + config["deepTools_dir"],
+        binSize = config["program_parameters"]["deepTools"]["binSize"],
+        labels = get_sample_labels
+    threads:
+        24
+    input:
+        getAllBAMs("duplicates_marked")
+    output:
+        npz = "{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/duplicates_marked/results.npz"
+    shell:
+        """
+            {params.deepTools_dir}/multiBamSummary bins --bamfiles {input} \
+                                                        --labels {params.labels} \
+                                                        --numberOfProcessors {threads} \
+                                                        --centerReads \
+                                                        --binSize {params.binSize} \
+                                                        --outFileName {output.npz}
+        """
+
+
+
 # target rules
 rule run_AdapterRemoval:
     input:
@@ -212,4 +253,7 @@ rule run_fastqc:
 
 rule all:
     input:
-        PROCESSED_BAMs
+        expand("{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/duplicates_marked/results.npz",
+               assayID = "ChIP-Seq",
+               outdir = "processed_data",
+               reference_version = REF_VERSION)

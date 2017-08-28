@@ -29,6 +29,10 @@ for i in config["samples"]["ChIP-Seq"]["runID"]:
         join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + config["trim_dir"] + "/" + j + "_R2.fastq.gz")
 
 for i in config["samples"]["ChIP-Seq"]["runID"]:
+    for j in config["samples"]["ChIP-Seq"][i]:
+        join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam")
+
+for i in config["samples"]["ChIP-Seq"]["runID"]:
     for j in config["samples"]["ChIP-Seq"][i].values():
         for k in j:
             print(k)
