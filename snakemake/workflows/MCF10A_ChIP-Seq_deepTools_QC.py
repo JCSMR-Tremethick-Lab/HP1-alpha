@@ -166,7 +166,7 @@ rule plotFingerprint:
     input:
         getBAMbyCondition
     output:
-        "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/{condition}_fingerprints_duplicates_marked.{output_format}"
+        "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/{condition}_fingerprints.{output_format}"
     shell:
         """
             {params.deepTools_dir}/plotFingerprint --bamfiles {input} \
