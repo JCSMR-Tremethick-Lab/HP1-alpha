@@ -54,6 +54,15 @@ def get_sample_labels(wildcards):
             sl.append(k)
     return(sl)
 
+def getSampleLabelsByCondition(wildcards):
+    sl = []
+    for i in config["samples"][wildcards["assayID"]]["conditions"][wildcards["condition"]]:
+        for j in config["samples"][wildcards["assayID"]]["conditions"][wildcards["condition"]][i]:
+            sl.append(j)
+    return(sl)
+
+
+
 NPZ_FILES_marked = expand("{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/{duplicates}/results.npz",
                           assayID = "ChIP-Seq",
                           outdir = "processed_data",
