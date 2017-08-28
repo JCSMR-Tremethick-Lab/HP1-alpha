@@ -32,11 +32,11 @@ def getAllFASTQ(wildcards):
             fn.append("/".join([wildcards["assayID"], wildcards["runID"], config["raw_dir"], j]))
     return(fn)
 
-def getAllBAMs(duplicates):
+def getAllBAMs(wildcards):
     fn = []
     for i in config["samples"]["ChIP-Seq"]["runID"]:
         for j in config["samples"]["ChIP-Seq"][i]:
-            fn.append(join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/" + duplicates + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam"))
+            fn.append(join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/" + wildcards["duplicates"] + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam"))
     return(fn)
 
 def get_sample_labels(wildcards):
@@ -60,15 +60,15 @@ rule multiBamSummary:
     version:
         0.2
     params:
-        deepTools_dir = home + config["deepTools_dir"],
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
         binSize = config["program_parameters"]["deepTools"]["binSize"],
         labels = get_sample_labels
     threads:
-        24
+        16
     input:
-        getAllBAMs("duplicates_marked")
+        getAllBAMs
     output:
-        npz = "{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/duplicates_marked/results.npz"
+        npz = "{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/{duplicates}/results.npz"
     shell:
         """
             {params.deepTools_dir}/multiBamSummary bins --bamfiles {input} \
@@ -83,6 +83,10 @@ rule multiBamSummary:
 rule all:
     input:
         expand("{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/duplicates_marked/results.npz",
+               assayID = "ChIP-Seq",
+               outdir = "processed_data",
+               reference_version = REF_VERSION),
+        expand("{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/duplicates_removed/results.npz",
                assayID = "ChIP-Seq",
                outdir = "processed_data",
                reference_version = REF_VERSION)
