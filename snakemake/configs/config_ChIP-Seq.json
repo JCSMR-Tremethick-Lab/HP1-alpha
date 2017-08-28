@@ -189,6 +189,29 @@
           "MCF10A_shHP1b_Input_2b" : ["TS18_S18_R1_001.fastq.gz", "TS18_S18_R2_001.fastq.gz"],
           "MCF10A_shH2AZ_Input_1b" : ["TS19_S19_R1_001.fastq.gz", "TS19_S19_R2_001.fastq.gz"],
           "MCF10A_shH2AZ_Input_2b" : ["TS20_S20_R1_001.fastq.gz", "TS20_S20_R2_001.fastq.gz"]
+        },
+        "conditions" :
+        {
+          "MCF10A_WT" :
+          {
+            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_WT_HP1a_ChIP_1a", "MCF10A_WT_HP1a_ChIP_2a", "MCF10A_WT_HP1b_ChIP_1a", "MCF10A_WT_HP1b_ChIP_2a"],
+            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_WT_HP1a_ChIP_1b", "MCF10A_WT_HP1a_ChIP_2b", "MCF10A_WT_HP1b_ChIP_1b", "MCF10A_WT_HP1b_ChIP_2b"]
+          },
+          "MCF10A_shHP1b" :
+          {
+            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shHP1b_HP1a_ChIP_1a", "MCF10A_shHP1b_HP1a_ChIP_2a", "MCF10A_shHP1b_Input_1a", "MCF10A_shHP1b_Input_2a"],
+            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shHP1b_HP1a_ChIP_1b", "MCF10A_shHP1b_HP1a_ChIP_2b", "MCF10A_shHP1b_Input_1b", "MCF10A_shHP1b_Input_2b"]
+          },
+          "MCF10A_shH2AZ" :
+          {
+            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shH2AZ_HP1a_ChIP_1a", "MCF10A_shH2AZ_HP1a_ChIP_2a", "MCF10A_shH2AZ_HP1b_ChIP_1a", "MCF10A_shH2AZ_HP1b_ChIP_2a", "MCF10A_shH2AZ_Input_1a", "MCF10A_shH2AZ_Input_2a"],
+            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shH2AZ_HP1a_ChIP_1b", "MCF10A_shH2AZ_HP1a_ChIP_2b", "MCF10A_shH2AZ_HP1b_ChIP_1b", "MCF10A_shH2AZ_HP1b_ChIP_2b", "MCF10A_shH2AZ_Input_1b", "MCF10A_shH2AZ_Input_2b"]
+          },
+          "MCF10A_shHP1a" :
+          {
+            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shHP1a_HP1b_ChIP_1a", "MCF10A_shHP1a_HP1b_ChIP_2a", "MCF10A_shHP1a_H2AZ_ChIP_1a", "MCF10A_shHP1a_H2AZ_ChIP_2a", "MCF10A_shHP1a_Input_1a", "MCF10A_shHP1a_Input_2a"],
+            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shHP1a_HP1b_ChIP_1b", "MCF10A_shHP1a_HP1b_ChIP_2b", "MCF10A_shHP1a_H2AZ_ChIP_1b", "MCF10A_shHP1a_H2AZ_ChIP_2b", "MCF10A_shHP1a_Input_1b", "MCF10A_shHP1a_Input_2b"]
+          }
         }
       }
     },

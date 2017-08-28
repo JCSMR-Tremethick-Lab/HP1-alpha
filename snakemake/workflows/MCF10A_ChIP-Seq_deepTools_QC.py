@@ -32,6 +32,13 @@ def getAllFASTQ(wildcards):
             fn.append("/".join([wildcards["assayID"], wildcards["runID"], config["raw_dir"], j]))
     return(fn)
 
+def getBAMbyCondition(wildcards):
+    fn = []
+    for i in config["samples"]["ChIP-Seq"]["runID"]:
+        for j in config["samples"]["ChIP-Seq"]["conditions"][wildcards["condition"]][i]:
+            fn.append(join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/" + wildcards["duplicates"] + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam"))
+    return(fn)
+
 def getAllBAMs(wildcards):
     fn = []
     for i in config["samples"]["ChIP-Seq"]["runID"]:
@@ -148,9 +155,9 @@ rule plotFingerprint:
     threads:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
     input:
-        getAllBAMs
+        getBAMbyCondition
     output:
-        "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/fingerprints_duplicates_marked.{output_format}"
+        "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/{condition}_fingerprints_duplicates_marked.{output_format}"
     shell:
         """
             {params.deepTools_dir}/plotFingerprint --bamfiles {input} \
@@ -170,9 +177,11 @@ rule all:
                 "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.{output_format}",
                 "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.tab",
                 "{assayID}/{outdir}/{reference_version}/deepTools/bamPEFragmentSize/{duplicates}/histogram_duplicates_marked.{output_format}",
-                "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/fingerprints_duplicates_marked.{output_format}"],
+                "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/fingerprints_duplicates_marked.{output_format}",
+                "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/{condition}_fingerprints_duplicates_marked.{output_format}"],
                assayID = "ChIP-Seq",
                outdir = config["processed_dir"],
                reference_version = REF_VERSION,
                duplicates = ["duplicates_marked", "duplicates_removed"],
+               condition = ["MCF10A_WT", "MCF10A_shHP1b", "MCF10A_shH2AZ", "MCF10A_shHP1a"],
                output_format = "pdf")
