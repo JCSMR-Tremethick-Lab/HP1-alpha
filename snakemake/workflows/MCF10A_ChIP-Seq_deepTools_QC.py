@@ -79,8 +79,6 @@ rule multiBamSummary:
                                                         --outFileName {output.npz}
         """
 
-
-
 # target rules
 rule all:
     input:
