@@ -177,7 +177,6 @@ rule all:
                 "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.{output_format}",
                 "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.tab",
                 "{assayID}/{outdir}/{reference_version}/deepTools/bamPEFragmentSize/{duplicates}/histogram_duplicates_marked.{output_format}",
-                "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/fingerprints_duplicates_marked.{output_format}",
                 "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/{condition}_fingerprints_duplicates_marked.{output_format}"],
                assayID = "ChIP-Seq",
                outdir = config["processed_dir"],

@@ -170,7 +170,7 @@
         "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" :
         {
           "MCF10A_WT_HP1a_ChIP_1b" : ["TS1_S1_R1_001.fastq.gz", "TS1_S1_R2_001.fastq.gz"],
-          "MCF10A_WT_HP1a-ChIP_2b" : ["TS2_S2_R1_001.fastq.gz", "TS2_S2_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1a_ChIP_2b" : ["TS2_S2_R1_001.fastq.gz", "TS2_S2_R2_001.fastq.gz"],
           "MCF10A_shHP1b_HP1a_ChIP_1b" : ["TS3_S3_R1_001.fastq.gz", "TS3_S3_R2_001.fastq.gz"],
           "MCF10A_shHP1b_HP1a_ChIP_2b" : ["TS4_S4_R1_001.fastq.gz", "TS4_S4_R2_001.fastq.gz"],
           "MCF10A_shH2AZ_HP1a_ChIP_1b" : ["TS5_S5_R1_001.fastq.gz", "TS5_S5_R2_001.fastq.gz"],
