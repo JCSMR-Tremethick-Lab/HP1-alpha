@@ -47,6 +47,11 @@ def get_sample_labels(wildcards):
             sl.append(k)
     return(sl)
 
+NPZ_FILES_marked = expand("{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/{duplicates}/results.npz",
+                          assayID = "ChIP-Seq",
+                          outdir = "processed_data",
+                          reference_version = REF_VERSION,
+                          duplicates = ["duplicates_removed", "duplicates_marked"])
 
 # set targets here
 PROCESSED_BAMs = expand("{assayID}/{file}",
@@ -79,14 +84,95 @@ rule multiBamSummary:
                                                         --outFileName {output.npz}
         """
 
+rule plotCorrelation_heatmap:
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        plotTitle = lambda wildcards: "Correlation heatmap - " + wildcards["duplicates"]
+    input:
+        npz = "{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/{duplicates}/results.npz"
+    output:
+        png = "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.pdf",
+        tab = "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.tab"
+    shell:
+        """
+            {params.deepTools_dir}/plotCorrelation --corData {input.npz} \
+                                                   --corMethod spearman \
+                                                   --skipZeros \
+                                                   --plotTitle "{params.plotTitle}" \
+                                                   --whatToPlot heatmap \
+                                                   --colorMap RdYlBu \
+                                                   --plotNumbers \
+                                                   -o {output.png} \
+                                                   --outFileCorMatrix {output.tab}
+        """
+
+rule plotPCA:
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        plotTitle = lambda wildcards: "PCA - " + wildcards["duplicates"]
+    input:
+        npz = "{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/{duplicates}/results.npz"
+    output:
+        png = "{assayID}/{outdir}/{reference_version}/deepTools/plotPCA/{duplicates}/PCA_readCounts.{output_format}"
+    shell:
+        """
+            {params.deepTools_dir}/plotPCA --corData {input.npz} \
+                                           --plotFile {output.png} \
+                                           --plotTitle "{params.plotTitle}"
+        """
+
+rule bamPEFragmentSize:
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        plotTitle = lambda wildcards: "BAM PE " + wildcards["duplicates"] + " fragment size",
+        labels = get_sample_labels,
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+    input:
+        getAllBAMs
+    output:
+        "{assayID}/{outdir}/{reference_version}/deepTools/bamPEFragmentSize/{duplicates}/histogram_duplicates_marked.{output_format}"
+    shell:
+        """
+            {params.deepTools_dir}/bamPEFragmentSize --bamfiles {input} \
+                                                     --samplesLabel {params.labels} \
+                                                     --numberOfProcessors {threads} \
+                                                     --histogram {output}
+        """
+
+rule plotFingerprint:
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        plotTitle = lambda wildcards: "BAM PE " + wildcards["duplicates"] + " fingerprint",
+        labels = get_sample_labels
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+    input:
+        getAllBAMs
+    output:
+        "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/fingerprints_duplicates_marked.{output_format}"
+    shell:
+        """
+            {params.deepTools_dir}/plotFingerprint --bamfiles {input} \
+                                                   --numberOfProcessors {threads} \
+                                                   --centerReads \
+                                                   --plotTitle "{params.plotTitle}" \
+                                                   --labels {params.labels} \
+                                                   --skipZeros \
+                                                   --plotFile {output}
+        """
+
+
 # target rules
 rule all:
     input:
-        expand("{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/duplicates_marked/results.npz",
+        expand(["{assayID}/{outdir}/{reference_version}/deepTools/plotPCA/{duplicates}/PCA_readCounts.{output_format}",
+                "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.{output_format}",
+                "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.tab",
+                "{assayID}/{outdir}/{reference_version}/deepTools/bamPEFragmentSize/{duplicates}/histogram_duplicates_marked.{output_format}",
+                "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/fingerprints_duplicates_marked.{output_format}"],
                assayID = "ChIP-Seq",
-               outdir = "processed_data",
-               reference_version = REF_VERSION),
-        expand("{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/duplicates_removed/results.npz",
-               assayID = "ChIP-Seq",
-               outdir = "processed_data",
-               reference_version = REF_VERSION)
+               outdir = config["processed_dir"],
+               reference_version = REF_VERSION,
+               duplicates = ["duplicates_marked", "duplicates_removed"],
+               output_format = "pdf")
