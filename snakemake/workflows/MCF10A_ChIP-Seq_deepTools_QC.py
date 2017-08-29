@@ -22,7 +22,7 @@ REF_GENOME = "hg19"
 REF_VERSION = config["references"][REF_GENOME]["version"][1]
 
 # includes
-include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/Breast/snakemake/rules/"
+include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/rules/"
 
 # input functions
 def getAllFASTQ(wildcards):

@@ -226,15 +226,78 @@
     },
   "program_parameters" :
   {
-    "deepTools" :
+  "deepTools" :
+  {
+    "SES_sample_length" : ["1000"],
+    "SES_numer_of_samples" : ["10000000.0"],
+    "ignoreForNormalization" : ["MT X"],
+    "binSize" : ["10000"],
+    "threads" : "8",
+    "regionFiles" :
     {
-      "SES_sample_length" : ["1000"],
-      "SES_numer_of_samples" : ["10000000.0"],
-      "ignoreForNormalization" : ["MT X"],
-      "binSize" : "10000",
-      "deepTools_dir" : "/miniconda3/envs/py27/bin",
-      "threads" : "32"
+      "GRCh37_hg19_ensembl75" :
+      {
+        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
+        "TanEMTup" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Tan_et_al_EMT_up_genes.bed",
+        "TanEMTdown" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Tan_et_al_EMT_down_genes.bed"
+      },
+      "GRCh37_hg19_ensembl75_ERCC" :
+      {
+        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
+        "TanEMTup" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Tan_et_al_EMT_up_genes.bed",
+        "TanEMTdown" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Tan_et_al_EMT_down_genes.bed"
+      },
+      "GRCh38_ensembl84" :
+      {
+        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/allGenes.bed"
+      }
     },
+    "bamCoverage" :
+    {
+      "MNase" :
+      {
+        "--binSize" : "1",
+        "--smoothLength" : "30"
+      },
+      "normal" :
+      {
+        "--centerReads" : " ",
+        "--binSize" : "10",
+        "--smoothLength" : "30"
+      }
+    },
+    "bamCompare" :
+    {
+      "MNase" :
+      {
+        "--binSize" : "1",
+        "--smoothLength" : "30"
+      },
+      "normal" :
+      {
+        "--centerReads" : " ",
+        "--binSize" : "10",
+        "--smoothLength" : "30"
+      }
+    },
+    "computeMatrix" :
+    {
+      "scale-regions" :
+      {
+        "--upstream" : "1500",
+        "--downstream" : "1500",
+        "--regionBodyLength" : "5000",
+        "--unscaled5prime" : "200",
+        "--unscaled3prime" : "200"
+      },
+      "reference-point" :
+      {
+        "--upstream" : "1500",
+        "--downstream" : "1500",
+        "--referencePoint" : ""
+      }
+    }
+  },
     "picard_tools" :
     {
       "jar" : "/bin/picard.jar",
