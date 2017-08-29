@@ -262,8 +262,8 @@
       "normal" :
       {
         "--centerReads" : " ",
-        "--binSize" : "10",
-        "--smoothLength" : "30"
+        "--binSize" : "100",
+        "--smoothLength" : "150"
       }
     },
     "bamCompare" :
@@ -276,8 +276,8 @@
       "normal" :
       {
         "--centerReads" : " ",
-        "--binSize" : "10",
-        "--smoothLength" : "30"
+        "--binSize" : "100",
+        "--smoothLength" : "150"
       }
     },
     "computeMatrix" :
