@@ -88,8 +88,6 @@ PROCESSED_BAMs = expand("{assayID}/{file}",
                             for i in config["samples"]["ChIP-Seq"]["runID"] \
                                 for j in config["samples"]["ChIP-Seq"][i]])
 
-        "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{duplicates}/{sample}_{mode}_{norm}.bw"
-
 BIGWIGs = expand("{assayID}/{file}_{mode}_{norm}.bw",
                  assayID = "ChIP-Seq",
                  mode = "normal",
