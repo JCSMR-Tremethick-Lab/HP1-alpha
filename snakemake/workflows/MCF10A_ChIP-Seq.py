@@ -71,15 +71,16 @@ BAMs = expand("{assayID}/{file}",
                   for i in config["samples"]["ChIP-Seq"]["runID"] \
                       for j in config["samples"]["ChIP-Seq"][i]])
 
-PROCESSED_BAMs = expand("{assayID}/{file1}",
-                        assayID = "ChIP-Seq",
-                        file1 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
-                            for i in config["samples"]["ChIP-Seq"]["runID"] \
-                                for j in config["samples"]["ChIP-Seq"][i]],
-                        "{assayID}/{file2}",
-                        file2 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_marked/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
-                            for i in config["samples"]["ChIP-Seq"]["runID"] \
-                                for j in config["samples"]["ChIP-Seq"][i]])
+PROCESSED_BAMs_dups_removed = expand("{assayID}/{file1}",
+                                     assayID = "ChIP-Seq",
+                                     file1 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
+                                        for i in config["samples"]["ChIP-Seq"]["runID"] \
+                                            for j in config["samples"]["ChIP-Seq"][i]]),
+PROCESSED_BAMs_dups_marked = ("{assayID}/{file2}",
+                              assayID = "ChIP-Seq",
+                              file2 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_marked/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
+                                for i in config["samples"]["ChIP-Seq"]["runID"] \
+                                    for j in config["samples"]["ChIP-Seq"][i]])
 
 # rule move_fastq:
 #     input:
@@ -233,4 +234,5 @@ rule run_fastqc:
 
 rule all:
     input:
-        PROCESSED_BAMs
+        PROCESSED_BAMs_dups_removed,
+        PROCESSED_BAMs_dups_marked
