@@ -71,14 +71,13 @@ BAMs = expand("{assayID}/{file}",
                   for i in config["samples"]["ChIP-Seq"]["runID"] \
                       for j in config["samples"]["ChIP-Seq"][i]])
 
-PROCESSED_BAMs = expand("{assayID}/{file}",
+PROCESSED_BAMs = expand("{assayID}/{file1}",
                         assayID = "ChIP-Seq",
-                        file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
+                        file1 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
                             for i in config["samples"]["ChIP-Seq"]["runID"] \
-                                for j in config["samples"]["ChIP-Seq"][i]]),
-                expand("{assayID}/{file}",
-                        assayID = "ChIP-Seq",
-                        file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_marked/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
+                                for j in config["samples"]["ChIP-Seq"][i]],
+                        "{assayID}/{file2}",
+                        file2 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_marked/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
                             for i in config["samples"]["ChIP-Seq"]["runID"] \
                                 for j in config["samples"]["ChIP-Seq"][i]])
 
