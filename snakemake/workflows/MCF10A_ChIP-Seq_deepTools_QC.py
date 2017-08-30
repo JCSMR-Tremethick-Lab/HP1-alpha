@@ -88,13 +88,15 @@ PROCESSED_BAMs = expand("{assayID}/{file}",
                             for i in config["samples"]["ChIP-Seq"]["runID"] \
                                 for j in config["samples"]["ChIP-Seq"][i]])
 
+        "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{duplicates}/{sample}_{mode}_{norm}.bw"
+
 BIGWIGs = expand("{assayID}/{file}_{mode}_{norm}.bw",
                  assayID = "ChIP-Seq",
-                 file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed"  + "/" + j + ".Q" + config["alignment_quality"] \
-                    for i in config["samples"]["ChIP-Seq"]["runID"] \
-                        for j in config["samples"]["ChIP-Seq"][i]]),
                  mode = "normal",
-                 norm = "RPKM")
+                 norm = "RPKM",
+                 file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "deepTools/bamCoverage/normal/duplicates_removed"  + "/" + j + ".Q" + config["alignment_quality"]\
+                    for i in config["samples"]["ChIP-Seq"]["runID"] \
+                        for j in config["samples"]["ChIP-Seq"][i]])
 
 # actual rules
 rule multiBamSummary:
@@ -236,4 +238,5 @@ rule all:
                reference_version = REF_VERSION,
                duplicates = ["duplicates_marked", "duplicates_removed"],
                condition = ["MCF10A_WT", "MCF10A_shHP1b", "MCF10A_shH2AZ", "MCF10A_shHP1a"],
-               output_format = "pdf")
+               output_format = "pdf"),
+        BIGWIGs
