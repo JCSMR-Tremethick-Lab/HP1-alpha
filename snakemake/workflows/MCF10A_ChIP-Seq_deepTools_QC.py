@@ -89,11 +89,9 @@ PROCESSED_BAMs = expand("{assayID}/{file}",
                             for i in config["samples"]["ChIP-Seq"]["runID"] \
                                 for j in config["samples"]["ChIP-Seq"][i]])
 
-BIGWIGs = expand("{assayID}/{file}_{mode}_{norm}.bw",
+BIGWIGs = expand("{assayID}/{file}.bw",
                  assayID = "ChIP-Seq",
-                 mode = "normal",
-                 norm = "RPKM",
-                 file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/duplicates_removed"  + "/" + j + ".Q" + config["alignment_quality"]\
+                 file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j + ".Q" + config["alignment_quality"]\
                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                         for j in config["samples"]["ChIP-Seq"][i]])
 
@@ -211,7 +209,7 @@ rule bamCoverage:
     input:
         bam = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + "/bowtie2/" + wildcards["duplicates"] + "/" +  wildcards["sample"] + ".Q" + config["alignment_quality"] + ".sorted.bam"
     output:
-        "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{duplicates}/{sample}_{mode}_{norm}.bw"
+        "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{sample}.bw"
     shell:
         """
             {params.deepTools_dir}/bamCoverage --bam {input.bam} \
