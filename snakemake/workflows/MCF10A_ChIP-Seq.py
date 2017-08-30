@@ -73,10 +73,14 @@ BAMs = expand("{assayID}/{file}",
 
 PROCESSED_BAMs = expand("{assayID}/{file}",
                         assayID = "ChIP-Seq",
-                        duplicates = ["duplicates_removed", "duplicates_marked"],
-                        file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/{duplicates}"  + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
+                        file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
                             for i in config["samples"]["ChIP-Seq"]["runID"] \
                                 for j in config["samples"]["ChIP-Seq"][i]]),
+                expand("{assayID}/{file}",
+                        assayID = "ChIP-Seq",
+                        file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_marked/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
+                            for i in config["samples"]["ChIP-Seq"]["runID"] \
+                                for j in config["samples"]["ChIP-Seq"][i]])
 
 # rule move_fastq:
 #     input:
