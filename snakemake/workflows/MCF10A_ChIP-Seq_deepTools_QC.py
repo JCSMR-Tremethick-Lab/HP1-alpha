@@ -93,7 +93,7 @@ BIGWIGs = expand("{assayID}/{file}_{mode}_{norm}.bw",
                  assayID = "ChIP-Seq",
                  mode = "normal",
                  norm = "RPKM",
-                 file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "deepTools/bamCoverage/normal/duplicates_removed"  + "/" + j + ".Q" + config["alignment_quality"]\
+                 file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/duplicates_removed"  + "/" + j + ".Q" + config["alignment_quality"]\
                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                         for j in config["samples"]["ChIP-Seq"][i]])
 
