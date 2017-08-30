@@ -233,6 +233,7 @@
     "ignoreForNormalization" : ["MT X"],
     "binSize" : ["10000"],
     "threads" : "8",
+    "deepTools_dir" : "/miniconda3/py27/bin",
     "regionFiles" :
     {
       "GRCh37_hg19_ensembl75" :
