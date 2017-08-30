@@ -5,6 +5,9 @@ from os.path import join
 with open("config_ChIP-Seq.json") as data_file:
     config = json.load(data_file)
 
+REF_GENOME = "hg19"
+REF_VERSION = config["references"][REF_GENOME]["version"][1]
+
 wildcards = dict()
 wildcards = {"assayID" : "RNA-Seq", "processed_dir" : "processed_data", "runID": "NB501086_0114_B_Azad_JCSMR_hRNAseq", "reports_dir" : "reports", "reference_version" : "GRCh38_ensembl84_ERCC"}
 
@@ -13,7 +16,9 @@ wildcards = {"assayID" : "ChIP-Seq",
              "runID": "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq",
              "reports_dir" : "reports",
              "reference_version" : "GRCh37_hg19_ensembl75",
-             "unit" : "MCF10A_shHP1b_Input_1b"}
+             "unit" : "MCF10A_shHP1b_Input_1b",
+             "condition" : "MCF10A_shHP1b",
+             "duplicates" : "duplicates_removed"}
 
 def getAllFASTQ(wildcards):
     fn =[]
