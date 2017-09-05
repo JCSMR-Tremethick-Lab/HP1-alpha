@@ -51,7 +51,13 @@ def getAllBAMs(wildcards):
     fn = []
     for i in config["samples"]["ChIP-Seq"]["runID"]:
         for j in config["samples"]["ChIP-Seq"][i]:
-            fn.append(join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/" + wildcards["duplicates"] + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam"))
+            fn.append("/".join(["ChIP-Seq",
+                                i,
+                                config["processed_dir"],
+                                REF_VERSION,
+                                "bowtie2",
+                                wildcards["duplicates"],
+                                j + ".Q" + config["alignment_quality"] + ".sorted.bam"]))
     return(fn)
 
 def get_sample_labels(wildcards):
@@ -96,18 +102,20 @@ def cli_parameters_bamCoverage(wildcards):
         b = b + "--MNase"
     return(b.rstrip())
 
-def get_computeMatrix_input(wildcards):
+def getComputeMatrixInput(wildcards):
     fn = []
     path = "/".join((wildcards["assayID"],
                      wildcards["runID"],
                      config["processed_dir"],
-                     config["references"][REF_GENOME]["version"][0],
+                     REF_VERSION,
                      wildcards["application"],
                      "bamCoverage",
                      wildcards["mode"],
+                     wildcards["norm"],
                      wildcards["duplicates"]))
-    for i in config["samples"][wildcards["assayID"]][wildcards["runID"]]:
-        fn.append("/".join((path, "_".join((i, wildcards["mode"], "RPKM.bw")))))
+    for i in config["samples"][wildcards["assayID"]]["conditions"][wildcards["condition"]]:
+        for j in config["samples"]["ChIP-Seq"][i]:
+            fn.append("/".join((path, ".".join((j, "Q" + config["alignment_quality"], "bw")))))
     return(fn)
 
 # rules
@@ -135,7 +143,65 @@ rule bamCoverage:
                                                --ignoreForNormalization {params.ignore}
         """
 
+rule computeMatrix:
+    version:
+        0.2
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        program_parameters = lambda wildcards: ' '.join("{!s}={!s}".format(key, val.strip("\\'")) for (key, val) in cli_parameters_computeMatrix(wildcards).items())
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+    input:
+        file = getComputeMatrixInput,
+        region = lambda wildcards: home + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
+    output:
+        matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}_{mode}.matrix.gz"
+    shell:
+        """
+            {params.deepTools_dir}/computeMatrix {wildcards.command} \
+                                                 --regionsFileName {input.region} \
+                                                 --scoreFileName {input.file} \
+                                                 --missingDataAsZero \
+                                                 --skipZeros \
+                                                 --numberOfProcessors {threads} \
+                                                 {params.program_parameters} \
+                                                 --outFileName {output.matrix_gz}
+        """
+
+rule plotProfile:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+    input:
+        matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/computeMatrix/{command}/{duplicates}/{referencePoint}/{region}_{mode}.matrix.gz"
+    output:
+        figure = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.pdf",
+        data = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.data",
+        regions = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.bed"
+    shell:
+        """
+            {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
+                                               --outFileName {output.figure} \
+                                               --outFileNameData {output.data} \
+                                               --outFileSortedRegions {output.regions} \
+                                               --plotType {wildcards.plotType}
+        """
+
 # target rules
 rule all:
     input:
-        BIGWIGs
+        BIGWIGs,
+        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.{suffix}",
+               assayID = "ChIP-Seq",
+               outdir = config["processed_dir"],
+               reference_version = REF_VERSION,
+               application = "deepTools",
+               tool = "plotProfile",
+               command = ["reference-point", "scale-regions"],
+               duplicates = ["duplicates_marked", "duplicates_removed"],
+               referencePoint = "TSS",
+               plotType = "se",
+               mode = ["normal"],
+               region = "allGenes",
+               suffix = ["pdf", "data", "bed"])
