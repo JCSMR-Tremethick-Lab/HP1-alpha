@@ -238,11 +238,11 @@
     {
       "GRCh37_hg19_ensembl75" :
       {
-        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
+        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed"
       },
       "GRCh37_hg19_ensembl75_ERCC" :
       {
-        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
+        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed"
       },
       "GRCh38_ensembl84" :
       {
