@@ -235,5 +235,5 @@ rule all:
                reference_version = REF_VERSION,
                duplicates = ["duplicates_marked", "duplicates_removed"],
                condition = ["MCF10A_WT", "MCF10A_shHP1b", "MCF10A_shH2AZ", "MCF10A_shHP1a"],
-               output_format = "pdf"),
+               output_format = ["pdf", "png"]),
         BIGWIGs
