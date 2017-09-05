@@ -199,7 +199,7 @@ rule all:
                application = "deepTools",
                tool = "plotProfile",
                command = ["reference-point", "scale-regions"],
-               duplicates = ["duplicates_marked", "duplicates_removed"],
+               duplicates = ["duplicates_removed"],
                referencePoint = "TSS",
                plotType = "se",
                mode = ["normal"],
