@@ -192,7 +192,7 @@ rule plotProfile:
 rule all:
     input:
         BIGWIGs,
-        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.{suffix}",
+        expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.{suffix}",
                assayID = "ChIP-Seq",
                outdir = config["processed_dir"],
                reference_version = REF_VERSION,
