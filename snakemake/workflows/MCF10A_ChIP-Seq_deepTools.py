@@ -104,18 +104,18 @@ def cli_parameters_bamCoverage(wildcards):
 
 def getComputeMatrixInput(wildcards):
     fn = []
-    path = "/".join((wildcards["assayID"],
-                     wildcards["runID"],
-                     config["processed_dir"],
-                     REF_VERSION,
-                     wildcards["application"],
-                     "bamCoverage",
-                     wildcards["mode"],
-                     wildcards["norm"],
-                     wildcards["duplicates"]))
-    for i in config["samples"][wildcards["assayID"]]["conditions"][wildcards["condition"]]:
+    for i in config["samples"]["ChIP-Seq"]["runID"]:
         for j in config["samples"]["ChIP-Seq"][i]:
-            fn.append("/".join((path, ".".join((j, "Q" + config["alignment_quality"], "bw")))))
+            fn.append("/".join(["ChIP-Seq",
+                                i,
+                                config["processed_dir"],
+                                REF_VERSION,
+                                "deepTools",
+                                "bamCoverage",
+                                wildcards["mode"],
+                                wildcards["norm"],
+                                wildcards["duplicates"],
+                                j + ".Q" + config["alignment_quality"] + ".bw"]))
     return(fn)
 
 # rules
