@@ -160,7 +160,7 @@ rule bamPEFragmentSize:
     params:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
         plotTitle = lambda wildcards: "BAM PE " + wildcards["duplicates"] + " fragment size",
-        labels = get_sample_labels,
+        labels = getSampleLabelsByCondition,
     threads:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
     input:
