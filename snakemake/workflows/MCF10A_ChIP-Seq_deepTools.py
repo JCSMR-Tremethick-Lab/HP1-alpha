@@ -155,7 +155,7 @@ rule computeMatrix:
         file = getComputeMatrixInput,
         region = lambda wildcards: home + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
     output:
-        matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}_{mode}.matrix.gz"
+        matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
     shell:
         """
             {params.deepTools_dir}/computeMatrix {wildcards.command} \
@@ -174,11 +174,11 @@ rule plotProfile:
     params:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
     input:
-        matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/computeMatrix/{command}/{duplicates}/{referencePoint}/{region}_{mode}.matrix.gz"
+        matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/computeMatrix/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
     output:
-        figure = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.pdf",
-        data = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.data",
-        regions = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.bed"
+        figure = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.pdf",
+        data = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.data",
+        regions = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.bed"
     shell:
         """
             {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
@@ -192,7 +192,7 @@ rule plotProfile:
 rule all:
     input:
         BIGWIGs,
-        expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{region}.{suffix}",
+        expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
                assayID = "ChIP-Seq",
                outdir = config["processed_dir"],
                reference_version = REF_VERSION,
@@ -203,5 +203,6 @@ rule all:
                referencePoint = "TSS",
                plotType = "se",
                mode = ["normal"],
+               norm = ["RPKM"],
                region = "allGenes",
                suffix = ["pdf", "data", "bed"])
