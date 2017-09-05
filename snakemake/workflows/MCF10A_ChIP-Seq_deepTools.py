@@ -24,6 +24,14 @@ REF_VERSION = config["references"][REF_GENOME]["version"][1]
 # includes
 include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/rules/"
 
+# target files
+BIGWIGs = expand("{assayID}/{file}.bw",
+                 assayID = "ChIP-Seq",
+                 file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j + ".Q" + config["alignment_quality"]\
+                    for i in config["samples"]["ChIP-Seq"]["runID"] \
+                        for j in config["samples"]["ChIP-Seq"][i]])
+
+
 # input functions
 def getAllFASTQ(wildcards):
     fn =[]
@@ -101,3 +109,33 @@ def get_computeMatrix_input(wildcards):
     for i in config["samples"][wildcards["assayID"]][wildcards["runID"]]:
         fn.append("/".join((path, "_".join((i, wildcards["mode"], "RPKM.bw")))))
     return(fn)
+
+# rules
+rule bamCoverage:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
+        program_parameters = cli_parameters_bamCoverage
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+    input:
+        bam = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + "/bowtie2/" + wildcards["duplicates"] + "/" +  wildcards["sample"] + ".sorted.bam"
+    output:
+        "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{sample}.bw"
+    shell:
+        """
+            {params.deepTools_dir}/bamCoverage --bam {input.bam} \
+                                               --outFileName {output} \
+                                               --outFileFormat bigwig \
+                                               {params.program_parameters} \
+                                               --numberOfProcessors {threads} \
+                                               --normalizeUsingRPKM \
+                                               --ignoreForNormalization {params.ignore}
+        """
+
+# target rules
+rule all:
+    input:
+        BIGWIGs
