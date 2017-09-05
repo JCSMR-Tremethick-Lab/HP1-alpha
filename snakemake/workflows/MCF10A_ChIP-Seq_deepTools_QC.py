@@ -164,9 +164,9 @@ rule bamPEFragmentSize:
     threads:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
     input:
-        getAllBAMs
+        getBAMbyCondition
     output:
-        "{assayID}/{outdir}/{reference_version}/deepTools/bamPEFragmentSize/{duplicates}/histogram_duplicates_marked.{output_format}"
+        "{assayID}/{outdir}/{reference_version}/deepTools/bamPEFragmentSize/{duplicates}/{condition}_histogram_fragmentSizes.{output_format}"
     shell:
         """
             {params.deepTools_dir}/bamPEFragmentSize --bamfiles {input} \
@@ -228,7 +228,7 @@ rule all:
         expand(["{assayID}/{outdir}/{reference_version}/deepTools/plotPCA/{duplicates}/PCA_readCounts.{output_format}",
                 "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.{output_format}",
                 "{assayID}/{outdir}/{reference_version}/deepTools/plotCorrelation/{duplicates}/heatmap_SpearmanCorr_readCounts.tab",
-                "{assayID}/{outdir}/{reference_version}/deepTools/bamPEFragmentSize/{duplicates}/histogram_duplicates_marked.{output_format}",
+                "{assayID}/{outdir}/{reference_version}/deepTools/bamPEFragmentSize/{duplicates}/{condition}_histogram_fragmentSizes.{output_format}",
                 "{assayID}/{outdir}/{reference_version}/deepTools/plotFingerprint/{duplicates}/{condition}_fingerprints.{output_format}"],
                assayID = "ChIP-Seq",
                outdir = config["processed_dir"],
