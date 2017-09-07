@@ -238,7 +238,8 @@
     {
       "GRCh37_hg19_ensembl75" :
       {
-        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed"
+        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
+        "intergenicRegions" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed.bed"
       },
       "GRCh37_hg19_ensembl75_ERCC" :
       {
@@ -281,11 +282,22 @@
     {
       "scale-regions" :
       {
-        "--upstream" : "1500",
-        "--downstream" : "1500",
-        "--regionBodyLength" : "5000",
-        "--unscaled5prime" : "200",
-        "--unscaled3prime" : "200"
+        "allGenes" :
+        {
+          "--upstream" : "1500",
+          "--downstream" : "1500",
+          "--regionBodyLength" : "5000",
+          "--unscaled5prime" : "200",
+          "--unscaled3prime" : "200"
+        },
+        "intergenicRegions" :
+        {
+          "--upstream" : "0",
+          "--downstream" : "0",
+          "--regionBodyLength" : "20000",
+          "--unscaled5prime" : "0",
+          "--unscaled3prime" : "0"
+        },
       },
       "reference-point" :
       {
