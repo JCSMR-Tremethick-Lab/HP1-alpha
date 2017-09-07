@@ -297,7 +297,7 @@
           "--regionBodyLength" : "20000",
           "--unscaled5prime" : "0",
           "--unscaled3prime" : "0"
-        },
+        }
       },
       "reference-point" :
       {
