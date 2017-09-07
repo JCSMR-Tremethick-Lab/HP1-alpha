@@ -239,7 +239,7 @@
       "GRCh37_hg19_ensembl75" :
       {
         "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
-        "intergenicRegions" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed.bed"
+        "intergenicRegions" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed"
       },
       "GRCh37_hg19_ensembl75_ERCC" :
       {
