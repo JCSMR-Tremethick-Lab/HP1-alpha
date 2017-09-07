@@ -76,10 +76,13 @@ def getSampleLabelsByCondition(wildcards):
     return(sl)
 
 def cli_parameters_computeMatrix(wildcards):
-    a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]]
     if wildcards["command"] == "reference-point":
-        a["--referencePoint"] = wildcards.referencePoint
-    return(a)
+        a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]]
+        a["--referencePoint"] = wildcards["referencePoint"]
+        return(a)
+    if wildcards["command"] == "scale-regions":
+        a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]][wildcards["region"]]
+        return(a)
 
 def cli_parameters_normalization(wildcards):
     if wildcards["norm"] == "RPKM":
@@ -204,5 +207,5 @@ rule all:
                plotType = "se",
                mode = ["normal"],
                norm = ["RPKM"],
-               region = "allGenes",
+               region = ["allGenes", "intergenicRegions"],
                suffix = ["pdf", "data", "bed"])
