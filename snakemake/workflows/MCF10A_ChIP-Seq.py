@@ -223,15 +223,15 @@ rule bam_rmdup_index:
 
 
 # target rules
-rule run_AdapterRemoval:
-    input:
-        TRIMMED_FASTQ1,
-        TRIMMED_FASTQ2
-
-rule run_fastqc:
-    input:
-        expand("ChIP-Seq/{runID}/processed_data/reports/",
-               runID = config["samples"]["ChIP-Seq"]["runID"])
+# rule run_AdapterRemoval:
+#     input:
+#         TRIMMED_FASTQ1,
+#         TRIMMED_FASTQ2
+#
+# rule run_fastqc:
+#     input:
+#         expand("ChIP-Seq/{runID}/processed_data/reports/",
+#                runID = config["samples"]["ChIP-Seq"]["runID"])
 
 rule all:
     input:
