@@ -150,8 +150,8 @@ rule bowtie2_pe:
         """
 
 rule bam_quality_filter:
-    params:
-        qual = config["alignment_quality"]
+    # params:
+    #     qual = config["alignment_quality"]
     input:
         "{assayID}/{runID}/{outdir}/" + REF_VERSION + "/bowtie2/{unit}.bam"
     output:
