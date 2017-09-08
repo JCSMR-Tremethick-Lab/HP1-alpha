@@ -150,14 +150,14 @@ rule bowtie2_pe:
         """
 
 rule bam_quality_filter:
-    params:
-        qual = config["alignment_quality"]
+    # params:
+    #     qual = config["alignment_quality"]
     input:
         "{assayID}/{runID}/{outdir}/" + REF_VERSION + "/bowtie2/{unit}.bam"
     output:
         temp("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/quality_filtered/{unit}.Q{qual}.bam")
     shell:
-        "samtools view -b -h -q {params.qual} {input} > {output}"
+        "samtools view -b -h -q {wildcards.qual} {input} > {output}"
 
 rule bam_sort:
     params:
