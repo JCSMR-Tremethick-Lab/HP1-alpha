@@ -13,12 +13,24 @@ wildcards = {"assayID" : "RNA-Seq", "processed_dir" : "processed_data", "runID":
 
 wildcards = {"assayID" : "ChIP-Seq",
              "processed_dir" : "processed_data",
-             "runID": "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq",
+             "runID": "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq",
              "reports_dir" : "reports",
              "reference_version" : "GRCh37_hg19_ensembl75",
              "unit" : "MCF10A_shHP1b_Input_1b",
-             "condition" : "MCF10A_shHP1b",
-             "duplicates" : "duplicates_removed"}
+             "condition" : "MCF10A_shH2AZ",
+             "duplicates" : "duplicates_removed",
+             "mode" : "normal",
+             "norm" : "RPKM",
+             "application" : "deepTools"}
+
+def getBAMbyCondition(wildcards):
+    fn = []
+    for i in config["samples"]["ChIP-Seq"]["runID"]:
+        if i in config["samples"]["ChIP-Seq"]["conditions"][wildcards["condition"]].keys():
+            for j in config["samples"]["ChIP-Seq"]["conditions"][wildcards["condition"]][i]:
+                fn.append(join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/" + wildcards["duplicates"] + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam"))
+    return(fn)
+
 
 def getAllFASTQ(wildcards):
     fn =[]
