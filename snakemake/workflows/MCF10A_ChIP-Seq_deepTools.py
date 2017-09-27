@@ -201,7 +201,7 @@ rule all:
                reference_version = REF_VERSION,
                application = "deepTools",
                tool = "plotProfile",
-               command = ["reference-point", "scale-regions"],
+               command = ["scale-regions"],
                duplicates = ["duplicates_removed"],
                referencePoint = "TSS",
                plotType = "se",

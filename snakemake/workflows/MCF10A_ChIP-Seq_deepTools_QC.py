@@ -62,20 +62,6 @@ def getSampleLabelsByCondition(wildcards):
             sl.append(j)
     return(sl)
 
-def cli_parameters_bamCoverage(wildcards):
-    a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["mode"]]
-    b = str()
-    for (key, val) in a.items():
-        if val == " ":
-            f = key + " "
-            b = b + f
-        else:
-            f = key + "=" + val + " "
-            b = b + f
-    if wildcards["mode"] == "MNase":
-        b = b + "--MNase"
-    return(b.rstrip())
-
 NPZ_FILES_marked = expand("{assayID}/{outdir}/{reference_version}/deepTools/multiBamSummary/{duplicates}/results.npz",
                           assayID = "ChIP-Seq",
                           outdir = "processed_data",
@@ -88,13 +74,6 @@ PROCESSED_BAMs = expand("{assayID}/{file}",
                         file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed"  + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
                             for i in config["samples"]["ChIP-Seq"]["runID"] \
                                 for j in config["samples"]["ChIP-Seq"][i]])
-
-BIGWIGs = expand("{assayID}/{file}.bw",
-                 assayID = "ChIP-Seq",
-                 file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j + ".Q" + config["alignment_quality"]\
-                    for i in config["samples"]["ChIP-Seq"]["runID"] \
-                        for j in config["samples"]["ChIP-Seq"][i]])
-
 # actual rules
 rule multiBamSummary:
     version:
@@ -196,31 +175,6 @@ rule plotFingerprint:
                                                    --skipZeros \
                                                    --plotFile {output}
         """
-
-rule bamCoverage:
-    version:
-        0.1
-    params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
-        ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
-        program_parameters = cli_parameters_bamCoverage
-    threads:
-        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
-    input:
-        bam = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + "/bowtie2/" + wildcards["duplicates"] + "/" +  wildcards["sample"] + ".sorted.bam"
-    output:
-        "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{sample}.bw"
-    shell:
-        """
-            {params.deepTools_dir}/bamCoverage --bam {input.bam} \
-                                               --outFileName {output} \
-                                               --outFileFormat bigwig \
-                                               {params.program_parameters} \
-                                               --numberOfProcessors {threads} \
-                                               --normalizeUsingRPKM \
-                                               --ignoreForNormalization {params.ignore}
-        """
-
 
 # target rules
 rule all:
