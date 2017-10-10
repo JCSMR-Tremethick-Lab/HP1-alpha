@@ -231,7 +231,7 @@ rule bamMerge:
     input:
         getBAMbyReplicates
     output:
-        "{assayID}/{outdir}/{reference_version}/merged/duplicates_removed/{replicates}.bam"
+        "{assayID}/{outdir}/{reference_version}/merged/{duplicates}/{replicates}.bam"
     shell:
         """
             samtools merge -f {output} {input} --threads {threads} {params.outputFormat}
