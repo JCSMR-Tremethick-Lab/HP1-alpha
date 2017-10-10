@@ -1,13 +1,13 @@
-_author__ = "Sebastian Kurscheid (sebastian.kurscheid@anu.edu.au)"
-__license__ = "MIT"
-__date__ = "2017-08-29"
-
 from snakemake.exceptions import MissingInputException
 import os
 from os.path import join
 
+_author__ = "Sebastian Kurscheid (sebastian.kurscheid@anu.edu.au)"
+__license__ = "MIT"
+__date__ = "2017-08-29"
+
 rule:
-    version: 0.1
+    version: 0.2
 
 localrules:
     all
@@ -22,23 +22,24 @@ REF_GENOME = "hg19"
 REF_VERSION = config["references"][REF_GENOME]["version"][1]
 
 # includes
-include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/rules/"
+include_prefix = os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/rules/"
 
 # target files
 BIGWIGs = expand("{assayID}/{file}.bw",
-                 assayID = "ChIP-Seq",
-                 file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j + ".Q" + config["alignment_quality"]\
+                 assayID="ChIP-Seq",
+                 file=[i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j + ".Q" + config["alignment_quality"]\
                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                         for j in config["samples"]["ChIP-Seq"][i]])
 
 
 # input functions
 def getAllFASTQ(wildcards):
-    fn =[]
+    fn = []
     for i in config["samples"][wildcards["assayID"]][wildcards["runID"]]:
         for j in config["samples"][wildcards["assayID"]][wildcards["runID"]][i]:
             fn.append("/".join([wildcards["assayID"], wildcards["runID"], config["raw_dir"], j]))
     return(fn)
+
 
 def getBAMbyCondition(wildcards):
     fn = []
@@ -46,6 +47,7 @@ def getBAMbyCondition(wildcards):
         for j in config["samples"]["ChIP-Seq"]["conditions"][wildcards["condition"]][i]:
             fn.append(join("ChIP-Seq/" + i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/" + wildcards["duplicates"] + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam"))
     return(fn)
+
 
 def getAllBAMs(wildcards):
     fn = []
@@ -60,6 +62,7 @@ def getAllBAMs(wildcards):
                                 j + ".Q" + config["alignment_quality"] + ".sorted.bam"]))
     return(fn)
 
+
 def get_sample_labels(wildcards):
     sl = []
     runIDs = config["samples"][wildcards["assayID"]]["runID"]
@@ -68,6 +71,7 @@ def get_sample_labels(wildcards):
             sl.append(k)
     return(sl)
 
+
 def getSampleLabelsByCondition(wildcards):
     sl = []
     for i in config["samples"][wildcards["assayID"]]["conditions"][wildcards["condition"]]:
@@ -75,14 +79,16 @@ def getSampleLabelsByCondition(wildcards):
             sl.append(j)
     return(sl)
 
+
 def cli_parameters_computeMatrix(wildcards):
     if wildcards["command"] == "reference-point":
         a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]]
-        a["--referencePoint"] = wildcards["referencePoint"]
+        a["--referencePoint"]=wildcards["referencePoint"]
         return(a)
     if wildcards["command"] == "scale-regions":
         a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]][wildcards["region"]]
         return(a)
+
 
 def cli_parameters_normalization(wildcards):
     if wildcards["norm"] == "RPKM":
@@ -90,6 +96,7 @@ def cli_parameters_normalization(wildcards):
     elif wildcards["norm"] == "1xcoverage":
         a = " ".join(("--normalizeTo1x", config["references"][REF_GENOME]["effectiveSize"]))
     return(a)
+
 
 def cli_parameters_bamCoverage(wildcards):
     a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["mode"]]
@@ -105,6 +112,7 @@ def cli_parameters_bamCoverage(wildcards):
         b = b + "--MNase"
     return(b.rstrip())
 
+
 def getComputeMatrixInput(wildcards):
     fn = []
     for i in config["samples"]["ChIP-Seq"]["runID"]:
@@ -119,6 +127,28 @@ def getComputeMatrixInput(wildcards):
                                 wildcards["norm"],
                                 wildcards["duplicates"],
                                 j + ".Q" + config["alignment_quality"] + ".bw"]))
+    return(fn)
+
+
+def getBAMbyReplicates(wildcards):
+    fn=[]
+    for i in config["samples"]["ChIP-Seq"]["runID"]:
+        for j in config["samples"]["ChIP-Seq"][i]:
+            if j in config["samples"]["ChIP-Seq"]["replicates"][wildcards["replicates"]]:
+                fn.append(join("ChIP-Seq/" +
+                               i +
+                               "/" +
+                               config["processed_dir"] +
+                               "/" +
+                               REF_VERSION +
+                               "/bowtie2/" +
+                               wildcards["duplicates"] +
+                               "/" +
+                               j +
+                               ".Q" +
+                               config["alignment_quality"] +
+                               ".sorted.bam"))
+                print(i, j)
     return(fn)
 
 # rules
@@ -191,21 +221,52 @@ rule plotProfile:
                                                --plotType {wildcards.plotType}
         """
 
+rule bamMerge:
+    version:
+        0.1
+    params:
+        outputFormat = "--output-fmt BAM"  # ToDo: move
+    threads:
+        16
+    input:
+        getBAMbyReplicates
+    output:
+        "{assayID}/{outdir}/{reference_version}/merged/duplicates_removed/{replicates}.bam"
+    shell:
+        """
+            samtools merge --threads {threads} {params.outputFormat}
+        """
+
 # target rules
 rule all:
     input:
         BIGWIGs,
         expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
-               assayID = "ChIP-Seq",
-               outdir = config["processed_dir"],
-               reference_version = REF_VERSION,
-               application = "deepTools",
-               tool = "plotProfile",
-               command = ["scale-regions"],
-               duplicates = ["duplicates_removed"],
-               referencePoint = "TSS",
-               plotType = "se",
-               mode = ["normal"],
-               norm = ["RPKM"],
-               region = ["allGenes", "intergenicRegions"],
-               suffix = ["pdf", "data", "bed"])
+               assayID="ChIP-Seq",
+               outdir=config["processed_dir"],
+               reference_version=REF_VERSION,
+               application="deepTools",
+               tool="plotProfile",
+               command=["scale-regions"],
+               duplicates=["duplicates_removed"],
+               referencePoint="TSS",
+               plotType="se",
+               mode=["normal"],
+               norm=["RPKM"],
+               region=["allGenes", "intergenicRegions"],
+               suffix=["pdf", "data", "bed"]),
+        expand("{assayID}/{outdir}/{reference_version}/merged/duplicates_removed/{replicates}.bam",
+               assayID="ChIP-Seq",
+               outdir=config["processed_dir"],
+               reference_version=REF_VERSION,
+               replicates=['MCF10A_WT_HP1b_ChIP',
+                           'MCF10A_shHP1a_HP1b_ChIP',
+                           'MCF10A_shHP1b_Input',
+                           'MCF10A_WT_Input',
+                           'MCF10A_shH2AZ_Input',
+                           'MCF10A_shHP1b_HP1a_ChIP',
+                           'MCF10A_shH2AZ_HP1b_ChIP',
+                           'MCF10A_shH2AZ_HP1a_ChIP',
+                           'MCF10A_shHP1a_Input',
+                           'MCF10A_WT_HP1a_ChIP',
+                           'MCF10A_WT_H2AZ_ChIP'])

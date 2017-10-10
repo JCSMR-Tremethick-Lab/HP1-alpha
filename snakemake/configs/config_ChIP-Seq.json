@@ -1,360 +1,360 @@
 {
-  "references" :
+  "references":
   {
-  "active" : "hg38",
-  "database" :
+  "active": "hg38",
+  "database":
   {
-      "biomart" : "ensembl",
-      "dataset" : "hsapiens_gene_ensembl"
+      "biomart": "ensembl",
+      "dataset": "hsapiens_gene_ensembl"
   },
-  "hg38" :
+  "hg38":
     {
-      "ensemblHost" : "mar2016.archive.ensembl.org",
-      "version" : ["GRCh38_ensembl84_ERCC", "GRCh38_ensembl84_cDNA", "GRCh38_RefSeq_NM"],
-      "genome" :
+      "ensemblHost": "mar2016.archive.ensembl.org",
+      "version": ["GRCh38_ensembl84_ERCC", "GRCh38_ensembl84_cDNA", "GRCh38_RefSeq_NM"],
+      "genome":
       {
-        "GRCh38_ensembl84_ERCC" : "/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/primary/Homo_sapiens.GRCh38.dna.primary_assembly.fa",
-        "GRCh38_ensembl84_cDNA" : "/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/primary/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
+        "GRCh38_ensembl84_ERCC": "/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/primary/Homo_sapiens.GRCh38.dna.primary_assembly.fa",
+        "GRCh38_ensembl84_cDNA": "/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/primary/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
       },
-      "GTF" :
+      "GTF":
       {
-        "GRCh38_ensembl84_ERCC" : "/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.84_ERCC.gtf",
-        "GRCh38_ensembl84_cDNA" : "/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.84_ERCC.gtf"
+        "GRCh38_ensembl84_ERCC": "/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.84_ERCC.gtf",
+        "GRCh38_ensembl84_cDNA": "/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.84_ERCC.gtf"
       },
-      "kallisto" :
+      "kallisto":
       {
-        "GRCh38_ensembl84_ERCC" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.all_ERCC.ki",
-        "GRCh38_ensembl84_cDNA" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.cDNA.ki",
-        "GRCh38_RefSeq_NM" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_RefSeq82/GRCh38_RefSeq_NM.ki"
+        "GRCh38_ensembl84_ERCC": "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.all_ERCC.ki",
+        "GRCh38_ensembl84_cDNA": "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/Homo_sapiens.GRCh38.cDNA.ki",
+        "GRCh38_RefSeq_NM": "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_RefSeq82/GRCh38_RefSeq_NM.ki"
       },
-      "STAR" :
+      "STAR":
       {
-        "GRCh38_ensembl84_ERCC" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/STAR_Index_ERCC",
-        "GRCh38_ensembl84_cDNA" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/STAR_Index_ERCC"
+        "GRCh38_ensembl84_ERCC": "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/STAR_Index_ERCC",
+        "GRCh38_ensembl84_cDNA": "/Data/References/Transcriptomes/Homo_sapiens/GRCh38_ensembl84/STAR_Index_ERCC"
       }
     },
-  "hg19" :
+  "hg19":
     {
-    "version" : ["GRCh37_hg19_ensembl75_ERCC", "GRCh37_hg19_ensembl75", "GRCh37_hg19_UCSC", "GRCh37_hg19_UCSC_ERCC"],
-    "genome" :
+    "version": ["GRCh37_hg19_ensembl75_ERCC", "GRCh37_hg19_ensembl75", "GRCh37_hg19_UCSC", "GRCh37_hg19_UCSC_ERCC"],
+    "genome":
       {
-        "GRCh37_hg19_ensembl75_ERCC" : "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
-        "GRCh37_hg19_ensembl75" : "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
-        "GRCh37_hg19_UCSC" : "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_UCSC/allChroms.fa"
+        "GRCh37_hg19_ensembl75_ERCC": "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
+        "GRCh37_hg19_ensembl75": "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
+        "GRCh37_hg19_UCSC": "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_UCSC/allChroms.fa"
       },
-    "GTF" :
+    "GTF":
       {
-        "GRCh37_hg19_ensembl75_ERCC" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Homo_sapiens.GRCh37.75_ERCC.gtf",
-        "GRCh37_hg19_ensembl75" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Homo_sapiens.GRCh37.75.gtf",
-        "GRCh37_hg19_UCSC" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_UCSC/UCSC_known_genes.gtf"
+        "GRCh37_hg19_ensembl75_ERCC": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Homo_sapiens.GRCh37.75_ERCC.gtf",
+        "GRCh37_hg19_ensembl75": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/Homo_sapiens.GRCh37.75.gtf",
+        "GRCh37_hg19_UCSC": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_UCSC/UCSC_known_genes.gtf"
       },
-    "kallisto" :
+    "kallisto":
       {
-        "GRCh37_hg19_ensembl75_ERCC" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/GRCh37_hg19_ensembl75_ERCC.ki",
-        "GRCh37_hg19_ensembl75" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/GRCh37_hg19_ensembl75.ki",
-        "GRCh37_hg19_UCSC" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_UCSC/GRCh37_hg19_UCSC.ki",
-        "GRCh37_hg19_UCSC_ERCC" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_UCSC/GRCh37_hg19_UCSC_ERCC.ki"
+        "GRCh37_hg19_ensembl75_ERCC": "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/GRCh37_hg19_ensembl75_ERCC.ki",
+        "GRCh37_hg19_ensembl75": "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/GRCh37_hg19_ensembl75.ki",
+        "GRCh37_hg19_UCSC": "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_UCSC/GRCh37_hg19_UCSC.ki",
+        "GRCh37_hg19_UCSC_ERCC": "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_UCSC/GRCh37_hg19_UCSC_ERCC.ki"
       },
-    "STAR" :
+    "STAR":
       {
-        "GRCh37_hg19_ensembl75_ERCC" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/STAR_Index_ERCC",
-        "GRCh37_hg19_ensembl75" : "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/STAR_Index"
+        "GRCh37_hg19_ensembl75_ERCC": "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/STAR_Index_ERCC",
+        "GRCh37_hg19_ensembl75": "/Data/References/Transcriptomes/Homo_sapiens/GRCh37_hg19_ensembl75/STAR_Index"
       },
-    "bowtie2" :
+    "bowtie2":
       {
-        "GRCh37_hg19_ensembl75" : "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly",
-        "GRCh37_hg19_ensembl75_ERCC" : "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly"
+        "GRCh37_hg19_ensembl75": "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly",
+        "GRCh37_hg19_ensembl75_ERCC": "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly"
       }
     }
   },
-    "kallisto" :
+    "kallisto":
     {
-      "bootstraps" : "30"
+      "bootstraps": "30"
     },
-    "STAR" :
+    "STAR":
     {
-      "runThreadN" : "4"
+      "runThreadN": "4"
     },
-    "bt2_params" :
+    "bt2_params":
     {
-        "max_insert" : ["1000"],
-        "threads" : ["7"],
-        "platform" : ["Illumina"]
+        "max_insert": ["1000"],
+        "threads": ["7"],
+        "platform": ["Illumina"]
     },
-    "bt2_params_unmapped_reads" :
+    "bt2_params_unmapped_reads":
     {
-        "max_insert" : ["1000000"],
-        "threads" : ["7"],
-        "platform" : ["Illumina"]
+        "max_insert": ["1000000"],
+        "threads": ["7"],
+        "platform": ["Illumina"]
     },
-    "samples" :
+    "samples":
     {
-      "RNA-Seq" :
+      "RNA-Seq":
       {
-        "runID" :[ "NB501086_0114_B_Azad_JCSMR_hRNAseq", "NB501086_0082_RDomaschenz_JCSMR_mRNAseq"],
-        "NB501086_0114_B_Azad_JCSMR_hRNAseq" :
+        "runID":[ "NB501086_0114_B_Azad_JCSMR_hRNAseq", "NB501086_0082_RDomaschenz_JCSMR_mRNAseq"],
+        "NB501086_0114_B_Azad_JCSMR_hRNAseq":
         {
-          "MCF10A_Scramble_1" : ["MCF10A_Scramble_1_S1_R1_001.fastq.gz", "MCF10A_Scramble_1_S1_R2_001.fastq.gz"],
-          "MCF10A_Scramble_2" : ["MCF10A_Scramble_2_S2_R1_001.fastq.gz", "MCF10A_Scramble_2_S2_R2_001.fastq.gz"],
-          "MCF10A_Scramble_3" : ["MCF10A_Scramble_3_S3_R1_001.fastq.gz", "MCF10A_Scramble_3_S3_R2_001.fastq.gz"],
-          "MCF10A_shH2AZHP1a_1" : ["MCF10A_shH2AZHP1a_1_S13_R1_001.fastq.gz", "MCF10A_shH2AZHP1a_1_S13_R2_001.fastq.gz"],
-          "MCF10A_shH2AZHP1a_2" : ["MCF10A_shH2AZHP1a_2_S14_R1_001.fastq.gz", "MCF10A_shH2AZHP1a_2_S14_R2_001.fastq.gz"],
-          "MCF10A_shH2AZHP1a_3" : ["MCF10A_shH2AZHP1a_3_S15_R1_001.fastq.gz", "MCF10A_shH2AZHP1a_3_S15_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_1" : ["MCF10A_shHP1a_1_S4_R1_001.fastq.gz", "MCF10A_shHP1a_1_S4_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_2" : ["MCF10A_shHP1a_2_S5_R1_001.fastq.gz", "MCF10A_shHP1a_2_S5_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_3" : ["MCF10A_shHP1a_3_S6_R1_001.fastq.gz", "MCF10A_shHP1a_3_S6_R2_001.fastq.gz"],
-          "MCF10A_shHP1ab_1" : ["MCF10A_shHP1ab_1_S10_R1_001.fastq.gz", "MCF10A_shHP1ab_1_S10_R2_001.fastq.gz"],
-          "MCF10A_shHP1ab_2" : ["MCF10A_shHP1ab_2_S11_R1_001.fastq.gz", "MCF10A_shHP1ab_2_S11_R2_001.fastq.gz"],
-          "MCF10A_shHP1ab_3" : ["MCF10A_shHP1ab_3_S12_R1_001.fastq.gz", "MCF10A_shHP1ab_3_S12_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_1" : ["MCF10A_shHP1b_1_S7_R1_001.fastq.gz", "MCF10A_shHP1b_1_S7_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_2" : ["MCF10A_shHP1b_2_S8_R1_001.fastq.gz", "MCF10A_shHP1b_2_S8_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_3" : ["MCF10A_shHP1b_3_S9_R1_001.fastq.gz", "MCF10A_shHP1b_3_S9_R2_001.fastq.gz"]
+          "MCF10A_Scramble_1": ["MCF10A_Scramble_1_S1_R1_001.fastq.gz", "MCF10A_Scramble_1_S1_R2_001.fastq.gz"],
+          "MCF10A_Scramble_2": ["MCF10A_Scramble_2_S2_R1_001.fastq.gz", "MCF10A_Scramble_2_S2_R2_001.fastq.gz"],
+          "MCF10A_Scramble_3": ["MCF10A_Scramble_3_S3_R1_001.fastq.gz", "MCF10A_Scramble_3_S3_R2_001.fastq.gz"],
+          "MCF10A_shH2AZHP1a_1": ["MCF10A_shH2AZHP1a_1_S13_R1_001.fastq.gz", "MCF10A_shH2AZHP1a_1_S13_R2_001.fastq.gz"],
+          "MCF10A_shH2AZHP1a_2": ["MCF10A_shH2AZHP1a_2_S14_R1_001.fastq.gz", "MCF10A_shH2AZHP1a_2_S14_R2_001.fastq.gz"],
+          "MCF10A_shH2AZHP1a_3": ["MCF10A_shH2AZHP1a_3_S15_R1_001.fastq.gz", "MCF10A_shH2AZHP1a_3_S15_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_1": ["MCF10A_shHP1a_1_S4_R1_001.fastq.gz", "MCF10A_shHP1a_1_S4_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_2": ["MCF10A_shHP1a_2_S5_R1_001.fastq.gz", "MCF10A_shHP1a_2_S5_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_3": ["MCF10A_shHP1a_3_S6_R1_001.fastq.gz", "MCF10A_shHP1a_3_S6_R2_001.fastq.gz"],
+          "MCF10A_shHP1ab_1": ["MCF10A_shHP1ab_1_S10_R1_001.fastq.gz", "MCF10A_shHP1ab_1_S10_R2_001.fastq.gz"],
+          "MCF10A_shHP1ab_2": ["MCF10A_shHP1ab_2_S11_R1_001.fastq.gz", "MCF10A_shHP1ab_2_S11_R2_001.fastq.gz"],
+          "MCF10A_shHP1ab_3": ["MCF10A_shHP1ab_3_S12_R1_001.fastq.gz", "MCF10A_shHP1ab_3_S12_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_1": ["MCF10A_shHP1b_1_S7_R1_001.fastq.gz", "MCF10A_shHP1b_1_S7_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_2": ["MCF10A_shHP1b_2_S8_R1_001.fastq.gz", "MCF10A_shHP1b_2_S8_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_3": ["MCF10A_shHP1b_3_S9_R1_001.fastq.gz", "MCF10A_shHP1b_3_S9_R2_001.fastq.gz"]
         },
-        "NB501086_0082_RDomaschenz_JCSMR_mRNAseq" :
+        "NB501086_0082_RDomaschenz_JCSMR_mRNAseq":
         {
-          "MCF10A_WT_1" : ["10AD6_1_S10_R1_001.fastq.gz", "10AD6_1_S10_R2_001.fastq.gz"],
-          "MCF10A_WT_2" : ["10AD6_2_S11_R1_001.fastq.gz", "10AD6_2_S11_R2_001.fastq.gz"],
-          "MCF10A_WT_3" : ["10AD6_3_S12_R1_001.fastq.gz", "10AD6_3_S12_R2_001.fastq.gz"],
-          "MCF10A_WT_4" : ["10AD8_1_S16_R1_001.fastq.gz", "10AD8_1_S16_R2_001.fastq.gz"],
-          "MCF10A_WT_5" : ["10AD8_2_S17_R1_001.fastq.gz", "10AD8_2_S17_R2_001.fastq.gz"],
-          "MCF10A_WT_6" : ["10AD8_3_S18_R1_001.fastq.gz", "10AD8_3_S18_R2_001.fastq.gz"]
+          "MCF10A_WT_1": ["10AD6_1_S10_R1_001.fastq.gz", "10AD6_1_S10_R2_001.fastq.gz"],
+          "MCF10A_WT_2": ["10AD6_2_S11_R1_001.fastq.gz", "10AD6_2_S11_R2_001.fastq.gz"],
+          "MCF10A_WT_3": ["10AD6_3_S12_R1_001.fastq.gz", "10AD6_3_S12_R2_001.fastq.gz"],
+          "MCF10A_WT_4": ["10AD8_1_S16_R1_001.fastq.gz", "10AD8_1_S16_R2_001.fastq.gz"],
+          "MCF10A_WT_5": ["10AD8_2_S17_R1_001.fastq.gz", "10AD8_2_S17_R2_001.fastq.gz"],
+          "MCF10A_WT_6": ["10AD8_3_S18_R1_001.fastq.gz", "10AD8_3_S18_R2_001.fastq.gz"]
         },
-        "sleuth_parameters" :
+        "sleuth_parameters":
         {
-          "conditions" :
+          "conditions":
           {
-            "MCF10A_Scramble" : ["MCF10A_Scramble_1", "MCF10A_Scramble_2", "MCF10A_Scramble_3"],
-            "MCF10A_shH2AZHP1a" : ["MCF10A_shH2AZHP1a_1", "MCF10A_shH2AZHP1a_2", "MCF10A_shH2AZHP1a_3"],
-            "MCF10A_shHP1a" : ["MCF10A_shHP1a_1", "MCF10A_shHP1a_2", "MCF10A_shHP1a_3"],
-            "MCF10A_shHP1ab" : ["MCF10A_shHP1ab_1", "MCF10A_shHP1ab_2", "MCF10A_shHP1ab_3"],
-            "MCF10A_shHP1b" : ["MCF10A_shHP1b_1", "MCF10A_shHP1b_2", "MCF10A_shHP1b_3"],
-            "MCF10A_WT" : ["MCF10A_WT_1", "MCF10A_WT_2", "MCF10A_WT_3", "MCF10A_WT_4", "MCF10A_WT_5", "MCF10A_WT_6"]
+            "MCF10A_Scramble": ["MCF10A_Scramble_1", "MCF10A_Scramble_2", "MCF10A_Scramble_3"],
+            "MCF10A_shH2AZHP1a": ["MCF10A_shH2AZHP1a_1", "MCF10A_shH2AZHP1a_2", "MCF10A_shH2AZHP1a_3"],
+            "MCF10A_shHP1a": ["MCF10A_shHP1a_1", "MCF10A_shHP1a_2", "MCF10A_shHP1a_3"],
+            "MCF10A_shHP1ab": ["MCF10A_shHP1ab_1", "MCF10A_shHP1ab_2", "MCF10A_shHP1ab_3"],
+            "MCF10A_shHP1b": ["MCF10A_shHP1b_1", "MCF10A_shHP1b_2", "MCF10A_shHP1b_3"],
+            "MCF10A_WT": ["MCF10A_WT_1", "MCF10A_WT_2", "MCF10A_WT_3", "MCF10A_WT_4", "MCF10A_WT_5", "MCF10A_WT_6"]
           },
-          "contrasts" :
+          "contrasts":
           {
-            "shH2AZHP1A_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shH2AZHP1a"],
-            "shHP1a_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shHP1a"],
-            "shHP1ab_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shHP1ab"],
-            "shHP1b_vs_scramble" : ["MCF10A_Scramble", "MCF10A_shHP1b"],
-            "scramble_vs_WT" : ["MCF10A_WT", "MCF10A_Scramble"]
+            "shH2AZHP1A_vs_scramble": ["MCF10A_Scramble", "MCF10A_shH2AZHP1a"],
+            "shHP1a_vs_scramble": ["MCF10A_Scramble", "MCF10A_shHP1a"],
+            "shHP1ab_vs_scramble": ["MCF10A_Scramble", "MCF10A_shHP1ab"],
+            "shHP1b_vs_scramble": ["MCF10A_Scramble", "MCF10A_shHP1b"],
+            "scramble_vs_WT": ["MCF10A_WT", "MCF10A_Scramble"]
           },
-          "transcript_biotype" : ["protein_coding"]
+          "transcript_biotype": ["protein_coding"]
         }
       },
-      "ChIP-Seq" :
+      "ChIP-Seq":
       {
-        "runID" : ["NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq", "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq", "NB501086_0086_DSTremethick_JCSMR_MCF10A_ChIPseq"],
-        "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" :
+        "runID": ["NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq", "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq", "NB501086_0086_DSTremethick_JCSMR_MCF10A_ChIPseq"],
+        "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq":
         {
-          "MCF10A_WT_HP1a_ChIP_1a" : ["TS1_S1_R1_001.fastq.gz", "TS1_S1_R2_001.fastq.gz"],
-          "MCF10A_WT_HP1a_ChIP_2a" : ["TS2_S2_R1_001.fastq.gz", "TS2_S2_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_HP1a_ChIP_1a" : ["TS3_S3_R1_001.fastq.gz", "TS3_S3_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_HP1a_ChIP_2a" : ["TS4_S4_R1_001.fastq.gz", "TS4_S4_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_HP1a_ChIP_1a" : ["TS5_S5_R1_001.fastq.gz", "TS5_S5_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_HP1a_ChIP_2a" : ["TS6_S6_R1_001.fastq.gz", "TS6_S6_R2_001.fastq.gz"],
-          "MCF10A_WT_HP1b_ChIP_1a" : ["TS7_S7_R1_001.fastq.gz", "TS7_S7_R2_001.fastq.gz"],
-          "MCF10A_WT_HP1b_ChIP_2a" : ["TS8_S8_R1_001.fastq.gz", "TS8_S8_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_HP1b_ChIP_1a" : ["TS9_S9_R1_001.fastq.gz", "TS9_S9_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_HP1b_ChIP_2a" : ["TS10_S10_R1_001.fastq.gz", "TS10_S10_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_HP1b_ChIP_1a" : ["TS11_S11_R1_001.fastq.gz", "TS11_S11_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_HP1b_ChIP_2a" : ["TS12_S12_R1_001.fastq.gz", "TS12_S12_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_H2AZ_ChIP_1a" : ["TS13_S13_R1_001.fastq.gz", "TS13_S13_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_H2AZ_ChIP_2a" : ["TS14_S14_R1_001.fastq.gz", "TS14_S14_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_Input_1a" : ["TS15_S15_R1_001.fastq.gz", "TS15_S15_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_Input_2a" : ["TS16_S16_R1_001.fastq.gz", "TS16_S16_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_Input_1a" : ["TS17_S17_R1_001.fastq.gz", "TS17_S17_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_Input_2a" : ["TS18_S18_R1_001.fastq.gz", "TS18_S18_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_Input_1a" : ["TS19_S19_R1_001.fastq.gz", "TS19_S19_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_Input_2a" : ["TS20_S20_R1_001.fastq.gz", "TS20_S20_R2_001.fastq.gz"]
+          "MCF10A_WT_HP1a_ChIP_1a": ["TS1_S1_R1_001.fastq.gz", "TS1_S1_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1a_ChIP_2a": ["TS2_S2_R1_001.fastq.gz", "TS2_S2_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_HP1a_ChIP_1a": ["TS3_S3_R1_001.fastq.gz", "TS3_S3_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_HP1a_ChIP_2a": ["TS4_S4_R1_001.fastq.gz", "TS4_S4_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1a_ChIP_1a": ["TS5_S5_R1_001.fastq.gz", "TS5_S5_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1a_ChIP_2a": ["TS6_S6_R1_001.fastq.gz", "TS6_S6_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1b_ChIP_1a": ["TS7_S7_R1_001.fastq.gz", "TS7_S7_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1b_ChIP_2a": ["TS8_S8_R1_001.fastq.gz", "TS8_S8_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_HP1b_ChIP_1a": ["TS9_S9_R1_001.fastq.gz", "TS9_S9_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_HP1b_ChIP_2a": ["TS10_S10_R1_001.fastq.gz", "TS10_S10_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1b_ChIP_1a": ["TS11_S11_R1_001.fastq.gz", "TS11_S11_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1b_ChIP_2a": ["TS12_S12_R1_001.fastq.gz", "TS12_S12_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_H2AZ_ChIP_1a": ["TS13_S13_R1_001.fastq.gz", "TS13_S13_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_H2AZ_ChIP_2a": ["TS14_S14_R1_001.fastq.gz", "TS14_S14_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_Input_1a": ["TS15_S15_R1_001.fastq.gz", "TS15_S15_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_Input_2a": ["TS16_S16_R1_001.fastq.gz", "TS16_S16_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_Input_1a": ["TS17_S17_R1_001.fastq.gz", "TS17_S17_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_Input_2a": ["TS18_S18_R1_001.fastq.gz", "TS18_S18_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_Input_1a": ["TS19_S19_R1_001.fastq.gz", "TS19_S19_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_Input_2a": ["TS20_S20_R1_001.fastq.gz", "TS20_S20_R2_001.fastq.gz"]
         },
-        "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" :
+        "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq":
         {
-          "MCF10A_WT_HP1a_ChIP_1b" : ["TS1_S1_R1_001.fastq.gz", "TS1_S1_R2_001.fastq.gz"],
-          "MCF10A_WT_HP1a_ChIP_2b" : ["TS2_S2_R1_001.fastq.gz", "TS2_S2_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_HP1a_ChIP_1b" : ["TS3_S3_R1_001.fastq.gz", "TS3_S3_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_HP1a_ChIP_2b" : ["TS4_S4_R1_001.fastq.gz", "TS4_S4_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_HP1a_ChIP_1b" : ["TS5_S5_R1_001.fastq.gz", "TS5_S5_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_HP1a_ChIP_2b" : ["TS6_S6_R1_001.fastq.gz", "TS6_S6_R2_001.fastq.gz"],
-          "MCF10A_WT_HP1b_ChIP_1b" : ["TS7_S7_R1_001.fastq.gz", "TS7_S7_R2_001.fastq.gz"],
-          "MCF10A_WT_HP1b_ChIP_2b" : ["TS8_S8_R1_001.fastq.gz", "TS8_S8_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_HP1b_ChIP_1b" : ["TS9_S9_R1_001.fastq.gz", "TS9_S9_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_HP1b_ChIP_2b" : ["TS10_S10_R1_001.fastq.gz", "TS10_S10_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_HP1b_ChIP_1b" : ["TS11_S11_R1_001.fastq.gz", "TS11_S11_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_HP1b_ChIP_2b" : ["TS12_S12_R1_001.fastq.gz", "TS12_S12_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_H2AZ_ChIP_1b" : ["TS13_S13_R1_001.fastq.gz", "TS13_S13_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_H2AZ_ChIP_2b" : ["TS14_S14_R1_001.fastq.gz", "TS14_S14_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_Input_1b" : ["TS15_S15_R1_001.fastq.gz", "TS15_S15_R2_001.fastq.gz"],
-          "MCF10A_shHP1a_Input_2b" : ["TS16_S16_R1_001.fastq.gz", "TS16_S16_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_Input_1b" : ["TS17_S17_R1_001.fastq.gz", "TS17_S17_R2_001.fastq.gz"],
-          "MCF10A_shHP1b_Input_2b" : ["TS18_S18_R1_001.fastq.gz", "TS18_S18_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_Input_1b" : ["TS19_S19_R1_001.fastq.gz", "TS19_S19_R2_001.fastq.gz"],
-          "MCF10A_shH2AZ_Input_2b" : ["TS20_S20_R1_001.fastq.gz", "TS20_S20_R2_001.fastq.gz"]
+          "MCF10A_WT_HP1a_ChIP_1b": ["TS1_S1_R1_001.fastq.gz", "TS1_S1_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1a_ChIP_2b": ["TS2_S2_R1_001.fastq.gz", "TS2_S2_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_HP1a_ChIP_1b": ["TS3_S3_R1_001.fastq.gz", "TS3_S3_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_HP1a_ChIP_2b": ["TS4_S4_R1_001.fastq.gz", "TS4_S4_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1a_ChIP_1b": ["TS5_S5_R1_001.fastq.gz", "TS5_S5_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1a_ChIP_2b": ["TS6_S6_R1_001.fastq.gz", "TS6_S6_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1b_ChIP_1b": ["TS7_S7_R1_001.fastq.gz", "TS7_S7_R2_001.fastq.gz"],
+          "MCF10A_WT_HP1b_ChIP_2b": ["TS8_S8_R1_001.fastq.gz", "TS8_S8_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_HP1b_ChIP_1b": ["TS9_S9_R1_001.fastq.gz", "TS9_S9_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_HP1b_ChIP_2b": ["TS10_S10_R1_001.fastq.gz", "TS10_S10_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1b_ChIP_1b": ["TS11_S11_R1_001.fastq.gz", "TS11_S11_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_HP1b_ChIP_2b": ["TS12_S12_R1_001.fastq.gz", "TS12_S12_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_H2AZ_ChIP_1b": ["TS13_S13_R1_001.fastq.gz", "TS13_S13_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_H2AZ_ChIP_2b": ["TS14_S14_R1_001.fastq.gz", "TS14_S14_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_Input_1b": ["TS15_S15_R1_001.fastq.gz", "TS15_S15_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_Input_2b": ["TS16_S16_R1_001.fastq.gz", "TS16_S16_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_Input_1b": ["TS17_S17_R1_001.fastq.gz", "TS17_S17_R2_001.fastq.gz"],
+          "MCF10A_shHP1b_Input_2b": ["TS18_S18_R1_001.fastq.gz", "TS18_S18_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_Input_1b": ["TS19_S19_R1_001.fastq.gz", "TS19_S19_R2_001.fastq.gz"],
+          "MCF10A_shH2AZ_Input_2b": ["TS20_S20_R1_001.fastq.gz", "TS20_S20_R2_001.fastq.gz"]
         },
-        "NB501086_0086_DSTremethick_JCSMR_MCF10A_ChIPseq" :
+        "NB501086_0086_DSTremethick_JCSMR_MCF10A_ChIPseq":
         {
-          "MCF10A_WT_H2AZ_ChIP_1a" : ["H2AZ_10A_high_rep1/Florida_2_S2_R1_001.fastq.gz", "H2AZ_10A_high_rep1/Florida_2_S2_R2_001.fastq.gz"],
-          "MCF10A_WT_H2AZ_ChIP_2a" : ["H2AZ_10A_high_rep2/Florida_4_S4_R1_001.fastq.gz", "H2AZ_10A_high_rep2/Florida_4_S4_R2_001.fastq.gz"],
-          "MCF10A_WT_Input_1a" : ["Inp_10A_high_rep1/Florida_1_S1_R1_001.fastq.gz", "Inp_10A_high_rep1/Florida_1_S1_R2_001.fastq.gz"],
-          "MCF10A_WT_Input_2a" : ["Inp_10A_high_rep2/Florida_3_S3_R1_001.fastq.gz", "Inp_10A_high_rep2/Florida_3_S3_R2_001.fastq.gz"]
+          "MCF10A_WT_H2AZ_ChIP_1a": ["H2AZ_10A_high_rep1/Florida_2_S2_R1_001.fastq.gz", "H2AZ_10A_high_rep1/Florida_2_S2_R2_001.fastq.gz"],
+          "MCF10A_WT_H2AZ_ChIP_2a": ["H2AZ_10A_high_rep2/Florida_4_S4_R1_001.fastq.gz", "H2AZ_10A_high_rep2/Florida_4_S4_R2_001.fastq.gz"],
+          "MCF10A_WT_Input_1a": ["Inp_10A_high_rep1/Florida_1_S1_R1_001.fastq.gz", "Inp_10A_high_rep1/Florida_1_S1_R2_001.fastq.gz"],
+          "MCF10A_WT_Input_2a": ["Inp_10A_high_rep2/Florida_3_S3_R1_001.fastq.gz", "Inp_10A_high_rep2/Florida_3_S3_R2_001.fastq.gz"]
 
         },
-        "replicates" :
+        "replicates":
         {
-          "MCF10A_WT_HP1a_ChIP" : ["MCF10A_WT_HP1a_ChIP_1a", "MCF10A_WT_HP1a_ChIP_2a", "MCF10A_WT_HP1a_ChIP_1b", "MCF10A_WT_HP1a_ChIP_2b"],
-          "MCF10A_WT_HP1b_ChIP" : ["MCF10A_WT_HP1b_ChIP_1a", "MCF10A_WT_HP1b_ChIP_2a", "MCF10A_WT_HP1b_ChIP_1b", "MCF10A_WT_HP1b_ChIP_2b"],
-          "MCF10A_WT_H2AZ_ChIP" : ["MCF10A_WT_H2AZ_ChIP_1a", "MCF10A_WT_H2AZ_ChIP_2a"],
-          "MCF10A_WT_Input" : ["MCF10A_WT_Input_1a", "MCF10A_WT_Input_2a"],
-          "MCF10A_shHP1b_HP1a_ChIP" : ["MCF10A_shHP1b_HP1a_ChIP_1a", "MCF10A_shHP1b_HP1a_ChIP_2a", "MCF10A_shHP1b_HP1a_ChIP_1b", "MCF10A_shHP1b_HP1a_ChIP_2b"],
-          "MCF10A_shHP1b_Input" : ["MCF10A_shHP1b_Input_1a", "MCF10A_shHP1b_Input_2a", "MCF10A_shHP1b_Input_1b", "MCF10A_shHP1b_Input_2b"],
-          "MCF10A_shHP1a_HP1b_ChIP" : ["MCF10A_shHP1a_HP1b_ChIP_1a", "MCF10A_shHP1a_HP1b_ChIP_2a", "MCF10A_shHP1a_HP1b_ChIP_1b", "MCF10A_shHP1a_HP1b_ChIP_2b"],
-          "MCF10A_shHP1a_Input" : ["MCF10A_shHP1a_Input_1a", "MCF10A_shHP1a_Input_2a", "MCF10A_shHP1a_Input_1b", "MCF10A_shHP1a_Input_2b"],
-          "MCF10A_shH2AZ_HP1a_ChIP" : ["MCF10A_shH2AZ_HP1a_ChIP_1a", "MCF10A_shH2AZ_HP1a_ChIP_2a", "MCF10A_shH2AZ_HP1a_ChIP_1b", "MCF10A_shH2AZ_HP1a_ChIP_2b"],
-          "MCF10A_shH2AZ_HP1b_ChIP" : ["MCF10A_shH2AZ_HP1b_ChIP_1a", "MCF10A_shH2AZ_HP1b_ChIP_2a", "MCF10A_shH2AZ_HP1b_ChIP_1b", "MCF10A_shH2AZ_HP1b_ChIP_2b"],
-          "MCF10A_shH2AZ_Input" : ["MCF10A_shH2AZ_Input_1a", "MCF10A_shH2AZ_Input_2a", "MCF10A_shH2AZ_Input_1b", "MCF10A_shH2AZ_Input_2b"]
+          "MCF10A_WT_HP1a_ChIP": ["MCF10A_WT_HP1a_ChIP_1a", "MCF10A_WT_HP1a_ChIP_2a", "MCF10A_WT_HP1a_ChIP_1b", "MCF10A_WT_HP1a_ChIP_2b"],
+          "MCF10A_WT_HP1b_ChIP": ["MCF10A_WT_HP1b_ChIP_1a", "MCF10A_WT_HP1b_ChIP_2a", "MCF10A_WT_HP1b_ChIP_1b", "MCF10A_WT_HP1b_ChIP_2b"],
+          "MCF10A_WT_H2AZ_ChIP": ["MCF10A_WT_H2AZ_ChIP_1a", "MCF10A_WT_H2AZ_ChIP_2a"],
+          "MCF10A_WT_Input": ["MCF10A_WT_Input_1a", "MCF10A_WT_Input_2a"],
+          "MCF10A_shHP1b_HP1a_ChIP": ["MCF10A_shHP1b_HP1a_ChIP_1a", "MCF10A_shHP1b_HP1a_ChIP_2a", "MCF10A_shHP1b_HP1a_ChIP_1b", "MCF10A_shHP1b_HP1a_ChIP_2b"],
+          "MCF10A_shHP1b_Input": ["MCF10A_shHP1b_Input_1a", "MCF10A_shHP1b_Input_2a", "MCF10A_shHP1b_Input_1b", "MCF10A_shHP1b_Input_2b"],
+          "MCF10A_shHP1a_HP1b_ChIP": ["MCF10A_shHP1a_HP1b_ChIP_1a", "MCF10A_shHP1a_HP1b_ChIP_2a", "MCF10A_shHP1a_HP1b_ChIP_1b", "MCF10A_shHP1a_HP1b_ChIP_2b"],
+          "MCF10A_shHP1a_Input": ["MCF10A_shHP1a_Input_1a", "MCF10A_shHP1a_Input_2a", "MCF10A_shHP1a_Input_1b", "MCF10A_shHP1a_Input_2b"],
+          "MCF10A_shH2AZ_HP1a_ChIP": ["MCF10A_shH2AZ_HP1a_ChIP_1a", "MCF10A_shH2AZ_HP1a_ChIP_2a", "MCF10A_shH2AZ_HP1a_ChIP_1b", "MCF10A_shH2AZ_HP1a_ChIP_2b"],
+          "MCF10A_shH2AZ_HP1b_ChIP": ["MCF10A_shH2AZ_HP1b_ChIP_1a", "MCF10A_shH2AZ_HP1b_ChIP_2a", "MCF10A_shH2AZ_HP1b_ChIP_1b", "MCF10A_shH2AZ_HP1b_ChIP_2b"],
+          "MCF10A_shH2AZ_Input": ["MCF10A_shH2AZ_Input_1a", "MCF10A_shH2AZ_Input_2a", "MCF10A_shH2AZ_Input_1b", "MCF10A_shH2AZ_Input_2b"]
         },
-        "conditions" :
+        "conditions":
         {
-          "MCF10A_WT" :
+          "MCF10A_WT":
           {
-            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_WT_HP1a_ChIP_1a", "MCF10A_WT_HP1a_ChIP_2a", "MCF10A_WT_HP1b_ChIP_1a", "MCF10A_WT_HP1b_ChIP_2a"],
-            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_WT_HP1a_ChIP_1b", "MCF10A_WT_HP1a_ChIP_2b", "MCF10A_WT_HP1b_ChIP_1b", "MCF10A_WT_HP1b_ChIP_2b"],
-            "NB501086_0086_DSTremethick_JCSMR_MCF10A_ChIPseq" : ["MCF10A_WT_H2AZ_ChIP_1a", "MCF10A_WT_H2AZ_ChIP_2a", "MCF10A_WT_Input_1a", "MCF10A_WT_Input_2a"]
+            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_WT_HP1a_ChIP_1a", "MCF10A_WT_HP1a_ChIP_2a", "MCF10A_WT_HP1b_ChIP_1a", "MCF10A_WT_HP1b_ChIP_2a"],
+            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_WT_HP1a_ChIP_1b", "MCF10A_WT_HP1a_ChIP_2b", "MCF10A_WT_HP1b_ChIP_1b", "MCF10A_WT_HP1b_ChIP_2b"],
+            "NB501086_0086_DSTremethick_JCSMR_MCF10A_ChIPseq": ["MCF10A_WT_H2AZ_ChIP_1a", "MCF10A_WT_H2AZ_ChIP_2a", "MCF10A_WT_Input_1a", "MCF10A_WT_Input_2a"]
           },
-          "MCF10A_shHP1b" :
+          "MCF10A_shHP1b":
           {
-            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shHP1b_HP1a_ChIP_1a", "MCF10A_shHP1b_HP1a_ChIP_2a", "MCF10A_shHP1b_Input_1a", "MCF10A_shHP1b_Input_2a"],
-            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shHP1b_HP1a_ChIP_1b", "MCF10A_shHP1b_HP1a_ChIP_2b", "MCF10A_shHP1b_Input_1b", "MCF10A_shHP1b_Input_2b"]
+            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shHP1b_HP1a_ChIP_1a", "MCF10A_shHP1b_HP1a_ChIP_2a", "MCF10A_shHP1b_Input_1a", "MCF10A_shHP1b_Input_2a"],
+            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shHP1b_HP1a_ChIP_1b", "MCF10A_shHP1b_HP1a_ChIP_2b", "MCF10A_shHP1b_Input_1b", "MCF10A_shHP1b_Input_2b"]
           },
-          "MCF10A_shH2AZ" :
+          "MCF10A_shH2AZ":
           {
-            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shH2AZ_HP1a_ChIP_1a", "MCF10A_shH2AZ_HP1a_ChIP_2a", "MCF10A_shH2AZ_HP1b_ChIP_1a", "MCF10A_shH2AZ_HP1b_ChIP_2a", "MCF10A_shH2AZ_Input_1a", "MCF10A_shH2AZ_Input_2a"],
-            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shH2AZ_HP1a_ChIP_1b", "MCF10A_shH2AZ_HP1a_ChIP_2b", "MCF10A_shH2AZ_HP1b_ChIP_1b", "MCF10A_shH2AZ_HP1b_ChIP_2b", "MCF10A_shH2AZ_Input_1b", "MCF10A_shH2AZ_Input_2b"]
+            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shH2AZ_HP1a_ChIP_1a", "MCF10A_shH2AZ_HP1a_ChIP_2a", "MCF10A_shH2AZ_HP1b_ChIP_1a", "MCF10A_shH2AZ_HP1b_ChIP_2a", "MCF10A_shH2AZ_Input_1a", "MCF10A_shH2AZ_Input_2a"],
+            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shH2AZ_HP1a_ChIP_1b", "MCF10A_shH2AZ_HP1a_ChIP_2b", "MCF10A_shH2AZ_HP1b_ChIP_1b", "MCF10A_shH2AZ_HP1b_ChIP_2b", "MCF10A_shH2AZ_Input_1b", "MCF10A_shH2AZ_Input_2b"]
           },
-          "MCF10A_shHP1a" :
+          "MCF10A_shHP1a":
           {
-            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shHP1a_HP1b_ChIP_1a", "MCF10A_shHP1a_HP1b_ChIP_2a", "MCF10A_shHP1a_H2AZ_ChIP_1a", "MCF10A_shHP1a_H2AZ_ChIP_2a", "MCF10A_shHP1a_Input_1a", "MCF10A_shHP1a_Input_2a"],
-            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq" : ["MCF10A_shHP1a_HP1b_ChIP_1b", "MCF10A_shHP1a_HP1b_ChIP_2b", "MCF10A_shHP1a_H2AZ_ChIP_1b", "MCF10A_shHP1a_H2AZ_ChIP_2b", "MCF10A_shHP1a_Input_1b", "MCF10A_shHP1a_Input_2b"]
+            "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shHP1a_HP1b_ChIP_1a", "MCF10A_shHP1a_HP1b_ChIP_2a", "MCF10A_shHP1a_H2AZ_ChIP_1a", "MCF10A_shHP1a_H2AZ_ChIP_2a", "MCF10A_shHP1a_Input_1a", "MCF10A_shHP1a_Input_2a"],
+            "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shHP1a_HP1b_ChIP_1b", "MCF10A_shHP1a_HP1b_ChIP_2b", "MCF10A_shHP1a_H2AZ_ChIP_1b", "MCF10A_shHP1a_H2AZ_ChIP_2b", "MCF10A_shHP1a_Input_1b", "MCF10A_shHP1a_Input_2b"]
           }
         }
       }
     },
-  "program_parameters" :
+  "program_parameters":
   {
-  "deepTools" :
+  "deepTools":
   {
-    "SES_sample_length" : ["1000"],
-    "SES_numer_of_samples" : ["10000000.0"],
-    "ignoreForNormalization" : ["MT X"],
-    "binSize" : ["10000"],
-    "threads" : "8",
-    "deepTools_dir" : "/miniconda3/envs/py27/bin",
-    "regionFiles" :
+    "SES_sample_length": ["1000"],
+    "SES_numer_of_samples": ["10000000.0"],
+    "ignoreForNormalization": ["MT X"],
+    "binSize": ["10000"],
+    "threads": "8",
+    "deepTools_dir": "/miniconda3/envs/py27/bin",
+    "regionFiles":
     {
-      "GRCh37_hg19_ensembl75" :
+      "GRCh37_hg19_ensembl75":
       {
-        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
-        "intergenicRegions" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed"
+        "allGenes": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
+        "intergenicRegions": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed"
       },
-      "GRCh37_hg19_ensembl75_ERCC" :
+      "GRCh37_hg19_ensembl75_ERCC":
       {
-        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed"
+        "allGenes": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed"
       },
-      "GRCh38_ensembl84" :
+      "GRCh38_ensembl84":
       {
-        "allGenes" : "/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/allGenes.bed"
+        "allGenes": "/Data/References/Annotations/Homo_sapiens/GRCh38_ensembl84/allGenes.bed"
       }
     },
-    "bamCoverage" :
+    "bamCoverage":
     {
-      "MNase" :
+      "MNase":
       {
-        "--binSize" : "1",
-        "--smoothLength" : "30"
+        "--binSize": "1",
+        "--smoothLength": "30"
       },
-      "normal" :
+      "normal":
       {
-        "--centerReads" : " ",
-        "--binSize" : "100",
-        "--smoothLength" : "150"
+        "--centerReads": " ",
+        "--binSize": "100",
+        "--smoothLength": "150"
       }
     },
-    "bamCompare" :
+    "bamCompare":
     {
-      "MNase" :
+      "MNase":
       {
-        "--binSize" : "1",
-        "--smoothLength" : "30"
+        "--binSize": "1",
+        "--smoothLength": "30"
       },
-      "normal" :
+      "normal":
       {
-        "--centerReads" : " ",
-        "--binSize" : "100",
-        "--smoothLength" : "150"
+        "--centerReads": " ",
+        "--binSize": "100",
+        "--smoothLength": "150"
       }
     },
-    "computeMatrix" :
+    "computeMatrix":
     {
-      "scale-regions" :
+      "scale-regions":
       {
-        "allGenes" :
+        "allGenes":
         {
-          "--upstream" : "1500",
-          "--downstream" : "1500",
-          "--regionBodyLength" : "5000",
-          "--unscaled5prime" : "200",
-          "--unscaled3prime" : "200"
+          "--upstream": "1500",
+          "--downstream": "1500",
+          "--regionBodyLength": "5000",
+          "--unscaled5prime": "200",
+          "--unscaled3prime": "200"
         },
-        "intergenicRegions" :
+        "intergenicRegions":
         {
-          "--upstream" : "0",
-          "--downstream" : "0",
-          "--regionBodyLength" : "20000",
-          "--unscaled5prime" : "0",
-          "--unscaled3prime" : "0"
+          "--upstream": "0",
+          "--downstream": "0",
+          "--regionBodyLength": "20000",
+          "--unscaled5prime": "0",
+          "--unscaled3prime": "0"
         }
       },
-      "reference-point" :
+      "reference-point":
       {
-        "--upstream" : "1500",
-        "--downstream" : "1500",
-        "--referencePoint" : ""
+        "--upstream": "1500",
+        "--downstream": "1500",
+        "--referencePoint": ""
       }
     }
   },
-    "picard_tools" :
+    "picard_tools":
     {
-      "jar" : "/bin/picard.jar",
-      "CollectInsertSizeMetrics" :
+      "jar": "/bin/picard.jar",
+      "CollectInsertSizeMetrics":
       {
-          "minimum_perc" : "0.1"
+          "minimum_perc": "0.1"
       }
     },
-    "cutadapt" :
+    "cutadapt":
     {
         "trim_params": "-a AGATCGGAAGAGC -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT --minimum-length=30"
     },
-    "AdapterRemoval" :
+    "AdapterRemoval":
     {
-      "threads" : "2"
+      "threads": "2"
     },
-    "fastqc" :
+    "fastqc":
     {
-      "threads" : "16"
+      "threads": "16"
     },
-    "bowtie2" :
+    "bowtie2":
     {
-      "threads" : "8",
-      "max_insert" : 500
+      "threads": "8",
+      "max_insert": 500
     }
   },
-  "trim_dir" : "trimmed_data",
-  "processed_dir" : "processed_data",
-  "aligned_dir" : "aligned_data",
-  "reports_dir" : "reports",
-  "temp_dir" : "/temp_data",
-  "alignment_quality" : "20",
-  "raw_dir" : "fastq",
-  "cutadapt_dir" : "/miniconda3/envs/snakemake/bin",
-  "HTSeq_dir" : "/miniconda3/envs/py27/bin",
-  "DEXSeq_dir" : "/R/x86_64-unknown-linux-gnu-library/DEXSeq/python_scripts/"
+  "trim_dir": "trimmed_data",
+  "processed_dir": "processed_data",
+  "aligned_dir": "aligned_data",
+  "reports_dir": "reports",
+  "temp_dir": "/temp_data",
+  "alignment_quality": "20",
+  "raw_dir": "fastq",
+  "cutadapt_dir": "/miniconda3/envs/snakemake/bin",
+  "HTSeq_dir": "/miniconda3/envs/py27/bin",
+  "DEXSeq_dir": "/R/x86_64-unknown-linux-gnu-library/DEXSeq/python_scripts/"
 }
