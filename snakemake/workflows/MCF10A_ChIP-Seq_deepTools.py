@@ -236,7 +236,11 @@ rule bamMerge:
         "{assayID}/{outdir}/{reference_version}/merged/{duplicates}/{replicates}.bam"
     shell:
         """
+<<<<<<< HEAD
             samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
+=======
+            samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>{log} 2>>{log}
+>>>>>>> 088bbee5cf220a49354621f002ec6629b5497656
         """
 
 # target rules
