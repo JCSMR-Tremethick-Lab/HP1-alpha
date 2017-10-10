@@ -226,6 +226,8 @@ rule bamMerge:
         0.1
     params:
         outputFormat = "--output-fmt BAM"  # ToDo: move
+    log:
+        "bamMerge.log"
     threads:
         16
     input:
@@ -234,7 +236,7 @@ rule bamMerge:
         "{assayID}/{outdir}/{reference_version}/merged/{duplicates}/{replicates}.bam"
     shell:
         """
-            samtools merge -f {output} {input} --threads {threads} {params.outputFormat}
+            samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
         """
 
 # target rules
