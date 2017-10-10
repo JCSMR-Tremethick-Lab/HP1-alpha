@@ -234,7 +234,7 @@ rule bamMerge:
         "{assayID}/{outdir}/{reference_version}/merged/duplicates_removed/{replicates}.bam"
     shell:
         """
-            samtools merge --threads {threads} {params.outputFormat}
+            samtools merge -f {output} {input} --threads {threads} {params.outputFormat}
         """
 
 # target rules
