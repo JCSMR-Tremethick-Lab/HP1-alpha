@@ -252,7 +252,7 @@ rule indexMerged:
         "{assayID}/{outdir}/{reference_version}/merged/{duplicates}/{replicates}.bam.bai"
     shell:
         """
-            samtools index {input} {output} --threads {threads} 1>>{log} 2>>{log}
+            samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
         """
 
 # target rules
