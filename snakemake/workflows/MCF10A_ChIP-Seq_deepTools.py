@@ -227,7 +227,7 @@ rule bamMerge:
     params:
         outputFormat = "--output-fmt BAM"  # ToDo: move
     log:
-        "log/{replicates}.bamMerge.log"
+        "logs/{replicates}.bamMerge.log"
     threads:
         16
     input:
@@ -237,6 +237,22 @@ rule bamMerge:
     shell:
         """
             samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
+        """
+
+rule indexMerged:
+    version:
+        0.1
+    log:
+        "logs/{replicates}.indexMerged.log"
+    threads:
+        16
+    input:
+        rules.bamMerge.output
+    output:
+        "{assayID}/{outdir}/{reference_version}/merged/{duplicates}/{replicates}.bam.bai"
+    shell:
+        """
+            samtools index {input} {output} --threads {threads} 1>>{log} 2>>{log}
         """
 
 # target rules
@@ -257,7 +273,7 @@ rule all:
                norm=["RPKM"],
                region=["allGenes", "intergenicRegions"],
                suffix=["pdf", "data", "bed"]),
-        expand("{assayID}/{outdir}/{reference_version}/merged/duplicates_removed/{replicates}.bam",
+        expand("{assayID}/{outdir}/{reference_version}/merged/duplicates_removed/{replicates}.bam.bai",
                assayID="ChIP-Seq",
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
