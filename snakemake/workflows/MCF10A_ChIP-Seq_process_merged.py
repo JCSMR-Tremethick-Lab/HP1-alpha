@@ -88,20 +88,19 @@ def cli_parameters_bamCoverage(wildcards):
     return(b.rstrip())
 
 
-def getComputeMatrixInput(wildcards):
+def getComputeMatrixInputReplicates(wildcards):
     fn = []
-    for i in config["samples"]["ChIP-Seq"]["runID"]:
-        for j in config["samples"]["ChIP-Seq"][i]:
-            fn.append("/".join(["ChIP-Seq",
-                                i,
-                                config["processed_dir"],
-                                REF_VERSION,
-                                "deepTools",
-                                "bamCoverage",
-                                wildcards["mode"],
-                                wildcards["norm"],
-                                wildcards["duplicates"],
-                                j + ".Q" + config["alignment_quality"] + ".bw"]))
+    for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
+        fn.append("/".join(["ChIP-Seq",
+                            "merged",
+                            config["processed_dir"],
+                            REF_VERSION,
+                            "deepTools",
+                            "bamCoverage",
+                            wildcards["mode"],
+                            wildcards["norm"],
+                            wildcards["duplicates"],
+                            i + ".bw"]))
     return(fn)
 
 
@@ -232,8 +231,7 @@ rule plotProfile:
 # target rules
 rule all:
     input:
-        BIGWIGs,
-        expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
+        expand("{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
                assayID="ChIP-Seq",
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
@@ -247,7 +245,7 @@ rule all:
                norm=["RPKM"],
                region=["allGenes", "intergenicRegions"],
                suffix=["pdf", "data", "bed"]),
-        expand("{assayID}/merged/{outdir}/{reference_version}/duplicates_removed/{replicates}.bam.bai",
+        expand("{assayID}/merged/{outdir}/{reference_ve rsion}/duplicates_removed/{replicates}.bam.bai",
                assayID="ChIP-Seq",
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
