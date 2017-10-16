@@ -209,6 +209,7 @@ rule indexMerged:
             samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
         """
 
+<<<<<<< HEAD
 rule bamCoverage:
     version:
         0.2
@@ -232,6 +233,31 @@ rule bamCoverage:
                                                --normalizeUsingRPKM \
                                                --ignoreForNormalization {params.ignore}
         """
+=======
+# rule bamCoverage:
+#     version:
+#         0.1
+#     params:
+#         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+#         ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
+#         program_parameters = cli_parameters_bamCoverage
+#     threads:
+#         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+#     input:
+#         bam = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + "/bowtie2/" + wildcards["duplicates"] + "/" +  wildcards["sample"] + ".sorted.bam"
+#     output:
+#         "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{sample}.bw"
+#     shell:
+#         """
+#             {params.deepTools_dir}/bamCoverage --bam {input.bam} \
+#                                                --outFileName {output} \
+#                                                --outFileFormat bigwig \
+#                                                {params.program_parameters} \
+#                                                --numberOfProcessors {threads} \
+#                                                --normalizeUsingRPKM \
+#                                                --ignoreForNormalization {params.ignore}
+#         """
+>>>>>>> 6bb07b2d823916ec3957e6d0ddfed2f3ba370808
 # target rules
 rule all:
     input:
