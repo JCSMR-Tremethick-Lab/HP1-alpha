@@ -27,15 +27,32 @@ include_prefix = os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/HP1-alp
 # target files
 BIGWIGs = expand("{assayID}/{file}.bw",
                  assayID="ChIP-Seq",
-                 file=[i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j + ".Q" + config["alignment_quality"]\
+                 file=[i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j + ".Q" + config["alignment_quality"] \
                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                         for j in config["samples"]["ChIP-Seq"][i]])
 
 MergedBIGWIGs = expand("{assayID}/{file}.bw",
-                       assayID="ChIP-Seq",
-                       file=[i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j + ".Q" + config["alignment_quality"]\
-                            for i in "merged" \
-                                for j in ['MCF10A_WT_HP1b_ChIP', 'MCF10A_shHP1a_HP1b_ChIP', 'MCF10A_shHP1b_Input', 'MCF10A_WT_Input', 'MCF10A_shH2AZ_Input', 'MCF10A_shHP1b_HP1a_ChIP', 'MCF10A_shH2AZ_HP1b_ChIP', 'MCF10A_shH2AZ_HP1a_ChIP', 'MCF10A_shHP1a_Input', 'MCF10A_WT_HP1a_ChIP', 'MCF10A_WT_H2AZ_ChIP'])
+                        assayID="ChIP-Seq",
+                        file=["merged" +
+                                "/" +
+                                config["processed_dir"] +
+                                "/" +
+                                REF_VERSION +
+                                "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  +
+                                j +
+                                ".Q" +
+                                config["alignment_quality"]]
+                                for j in ['MCF10A_WT_HP1b_ChIP',
+                                          'MCF10A_shHP1a_HP1b_ChIP',
+                                          'MCF10A_shHP1b_Input',
+                                          'MCF10A_WT_Input',
+                                          'MCF10A_shH2AZ_Input',
+                                          'MCF10A_shHP1b_HP1a_ChIP',
+                                          'MCF10A_shH2AZ_HP1b_ChIP',
+                                          'MCF10A_shH2AZ_HP1a_ChIP',
+                                          'MCF10A_shHP1a_Input',
+                                          'MCF10A_WT_HP1a_ChIP',
+                                          'MCF10A_WT_H2AZ_ChIP'])
 
 
 # input functions
@@ -231,7 +248,7 @@ rule bamMerge:
     version:
         0.1
     params:
-        outputFormat = "--output-fmt BAM"  # ToDo: move
+        outputFormat="--output-fmt BAM"  # ToDo: move
     log:
         "logs/{replicates}.bamMerge.log"
     threads:
