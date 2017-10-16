@@ -88,7 +88,7 @@ def cli_parameters_bamCoverage(wildcards):
     return(b.rstrip())
 
 
-def getComputeMatrixInputReplicates(wildcards):
+def getComputeMatrixInputMerged(wildcards):
     fn = []
     for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
         fn.append("/".join(["ChIP-Seq",
@@ -192,7 +192,7 @@ rule computeMatrix:
     threads:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
     input:
-        file = getComputeMatrixInput,
+        file = getComputeMatrixInputMerged,
         region = lambda wildcards: home + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
     output:
         matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
@@ -245,7 +245,7 @@ rule all:
                norm=["RPKM"],
                region=["allGenes", "intergenicRegions"],
                suffix=["pdf", "data", "bed"]),
-        expand("{assayID}/merged/{outdir}/{reference_ve rsion}/duplicates_removed/{replicates}.bam.bai",
+        expand("{assayID}/merged/{outdir}/{reference_version}/duplicates_removed/{replicates}.bam.bai",
                assayID="ChIP-Seq",
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
