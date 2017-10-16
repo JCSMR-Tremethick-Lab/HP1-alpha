@@ -41,7 +41,7 @@ MergedBIGWIGs = expand("{assayID}/{file}.bw",
                                 "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  +
                                 j +
                                 ".Q" +
-                                config["alignment_quality"]]
+                                config["alignment_quality"] \
                                 for j in ['MCF10A_WT_HP1b_ChIP',
                                           'MCF10A_shHP1a_HP1b_ChIP',
                                           'MCF10A_shHP1b_Input',
@@ -52,7 +52,7 @@ MergedBIGWIGs = expand("{assayID}/{file}.bw",
                                           'MCF10A_shH2AZ_HP1a_ChIP',
                                           'MCF10A_shHP1a_Input',
                                           'MCF10A_WT_HP1a_ChIP',
-                                          'MCF10A_WT_H2AZ_ChIP'])
+                                          'MCF10A_WT_H2AZ_ChIP']])
 
 
 # input functions
