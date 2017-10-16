@@ -31,6 +31,11 @@ BIGWIGs = expand("{assayID}/{file}.bw",
                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                         for j in config["samples"]["ChIP-Seq"][i]])
 
+MergedBIGWIGs = expand("{assayID}/{file}.bw",
+                         assayID="ChIP-Seq",
+                         file=["merged/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j \
+                                for j in config["samples"]["ChIP-Seq"][i]])
+
 
 # input functions
 def getAllFASTQ(wildcards):
@@ -176,6 +181,30 @@ rule bamCoverage:
                                                --ignoreForNormalization {params.ignore}
         """
 
+rule bamCoverageMerged:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
+        program_parameters = cli_parameters_bamCoverage
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+    input:
+        bam = lambda wildcards: wildcards["assayID"] + "/merged/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + wildcards["duplicates"] + "/" +  wildcards["replicates"] + ".bam"
+    output:
+        "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{replicates}.bw"
+    shell:
+        """
+            {params.deepTools_dir}/bamCoverage --bam {input.bam} \
+                                               --outFileName {output} \
+                                               --outFileFormat bigwig \
+                                               {params.program_parameters} \
+                                               --numberOfProcessors {threads} \
+                                               --normalizeUsingRPKM \
+                                               --ignoreForNormalization {params.ignore}
+        """
+
 rule computeMatrix:
     version:
         0.2
@@ -287,4 +316,5 @@ rule all:
                            'MCF10A_shH2AZ_HP1a_ChIP',
                            'MCF10A_shHP1a_Input',
                            'MCF10A_WT_HP1a_ChIP',
-                           'MCF10A_WT_H2AZ_ChIP'])
+                           'MCF10A_WT_H2AZ_ChIP']),
+        MergedBIGWIGs
