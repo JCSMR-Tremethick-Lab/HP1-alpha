@@ -34,7 +34,7 @@ BIGWIGs = expand("{assayID}/{file}.bw",
 MergedBIGWIGs = expand("{assayID}/{file}.bw",
                          assayID="ChIP-Seq",
                          file=["merged/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j \
-                                for j in config["samples"]["ChIP-Seq"][i]])
+                                for j in config["samples"]["ChIP-Seq"]["replicates"]])
 
 
 # input functions
