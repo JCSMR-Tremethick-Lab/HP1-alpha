@@ -256,7 +256,7 @@ rule bamMerge:
     input:
         getBAMbyReplicates
     output:
-        "{assayID}/{outdir}/{reference_version}/merged/{duplicates}/{replicates}.bam"
+        "{assayID}/{outdir}/{reference_version}/bowtie2/{duplicates}/{replicates}.Q20.sorted.bam"
     shell:
         """
             samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
@@ -297,8 +297,9 @@ rule all:
                norm=["RPKM"],
                region=["allGenes", "intergenicRegions"],
                suffix=["pdf", "data", "bed"]),
-        expand("{assayID}/{outdir}/{reference_version}/merged/duplicates_removed/{replicates}.bam.bai",
+        expand("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{replicates}.Q20.sorted.bam.bai",
                assayID="ChIP-Seq",
+               runID="merged",
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
                replicates=['MCF10A_WT_HP1b_ChIP',
