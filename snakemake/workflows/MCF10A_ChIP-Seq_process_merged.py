@@ -171,7 +171,7 @@ rule bamCoverageMerged:
     threads:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
     input:
-        bam = lambda wildcards: wildcards["assayID"] + "/merged/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + wildcards["duplicates"] + "/" +  wildcards["replicates"] + ".bam"
+        bam = lambda wildcards: wildcards["assayID"] + "/merged/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + "/" + wildcards["duplicates"] + "/" +  wildcards["replicates"] + ".bam"
     output:
         "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{replicates}.bw"
     shell:
