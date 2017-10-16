@@ -233,7 +233,7 @@ rule bamMerge:
     input:
         getBAMbyReplicates
     output:
-        "{assayID}/{outdir}/{reference_version}/merged/{duplicates}/{replicates}.bam"
+        "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam"
     shell:
         """
             samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
@@ -249,7 +249,7 @@ rule indexMerged:
     input:
         rules.bamMerge.output
     output:
-        "{assayID}/{outdir}/{reference_version}/merged/{duplicates}/{replicates}.bam.bai"
+        "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai"
     shell:
         """
             samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
@@ -273,7 +273,7 @@ rule all:
                norm=["RPKM"],
                region=["allGenes", "intergenicRegions"],
                suffix=["pdf", "data", "bed"]),
-        expand("{assayID}/{outdir}/{reference_version}/merged/duplicates_removed/{replicates}.bam.bai",
+        expand("{assayID}/merged/{outdir}/{reference_version}/duplicates_removed/{replicates}.bam.bai",
                assayID="ChIP-Seq",
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
