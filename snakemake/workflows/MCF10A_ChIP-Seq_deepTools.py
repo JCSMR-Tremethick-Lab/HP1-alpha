@@ -256,7 +256,7 @@ rule bamMerge:
     input:
         getBAMbyReplicates
     output:
-        "{assayID}/{outdir}/{reference_version}/bowtie2/{duplicates}/{replicates}.Q20.sorted.bam"
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/{duplicates}/{replicates}.Q20.sorted.bam"
     shell:
         """
             samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
