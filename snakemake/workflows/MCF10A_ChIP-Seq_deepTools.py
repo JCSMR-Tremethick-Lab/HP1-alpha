@@ -294,5 +294,4 @@ rule all:
                            'MCF10A_shH2AZ_HP1a_ChIP',
                            'MCF10A_shHP1a_Input',
                            'MCF10A_WT_HP1a_ChIP',
-                           'MCF10A_WT_H2AZ_ChIP']),
-        MergedBIGWIGs
+                           'MCF10A_WT_H2AZ_ChIP'])
