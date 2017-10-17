@@ -83,6 +83,7 @@ PROCESSED_BAMs_dups_marked = expand("{assayID}/{file2}",
                                      for i in config["samples"]["ChIP-Seq"]["runID"] \
                                         for j in config["samples"]["ChIP-Seq"][i]])
 
+
 # rule move_fastq:
 #     input:
 #         "{assayID}/{runID}/{unit}"
@@ -221,7 +222,6 @@ rule bam_rmdup_index:
     shell:
         "samtools index {input} {output}"
 
-
 # target rules
 # rule run_AdapterRemoval:
 #     input:
@@ -237,3 +237,4 @@ rule all:
     input:
         PROCESSED_BAMs_dups_removed,
         PROCESSED_BAMs_dups_marked
+
