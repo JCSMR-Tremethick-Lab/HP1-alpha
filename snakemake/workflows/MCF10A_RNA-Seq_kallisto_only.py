@@ -19,7 +19,8 @@ include:
     include_prefix + "run_kallisto.py"
 
 # variables
-REF_VERSION = "GRCh37_hg19_ensembl75"
+REF_GENOME="hg19"
+REF_VERSION="GRCh37_hg19_ensembl75"
 
 # targets
 BEARS = expand("{assayID}/{file}",
