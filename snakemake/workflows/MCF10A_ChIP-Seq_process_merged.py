@@ -208,17 +208,17 @@ rule computeMatrix:
                                                  --outFileName {output.matrix_gz}
         """
 
-rule plotProfile:
+rule plotProfileMerged:
     version:
         0.1
     params:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
     input:
-        matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/computeMatrix/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
+        matrix_gz = "{assayID}/merged/{outdir}/{reference_version}/{application}/computeMatrix/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
     output:
-        figure = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.pdf",
-        data = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.data",
-        regions = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.bed"
+        figure = "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.pdf",
+        data = "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.data",
+        regions = "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.bed"
     shell:
         """
             {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
