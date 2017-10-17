@@ -71,16 +71,16 @@ BAMs = expand("{assayID}/{file}",
                   for i in config["samples"]["ChIP-Seq"]["runID"] \
                       for j in config["samples"]["ChIP-Seq"][i]])
 
-PROCESSED_BAMs_marked = expand("{assayID}/{file}",
-                               assayID = "ChIP-Seq",
-                               file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_marked"  + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
-                                    for i in config["samples"]["ChIP-Seq"]["runID"] \
-                                        for j in config["samples"]["ChIP-Seq"][i]])
+PROCESSED_BAMs_dups_removed = expand("{assayID}/{file1}",
+                                     assayID = "ChIP-Seq",
+                                     file1 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
+                                        for i in config["samples"]["ChIP-Seq"]["runID"] \
+                                            for j in config["samples"]["ChIP-Seq"][i]]),
 
-PROCESSED_BAMs_removed = expand("{assayID}/{file}",
-                               assayID = "ChIP-Seq",
-                               file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed"  + "/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
-                                    for i in config["samples"]["ChIP-Seq"]["runID"] \
+PROCESSED_BAMs_dups_marked = expand("{assayID}/{file2}",
+                                     assayID = "ChIP-Seq",
+                                     file2 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_marked/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
+                                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                                         for j in config["samples"]["ChIP-Seq"][i]])
 
 
@@ -94,29 +94,29 @@ PROCESSED_BAMs_removed = expand("{assayID}/{file}",
 #             mv {input} {output}
 #        """
 
-rule AdapterRemoval:
-    threads:
-        lambda wildcards: int(str(config["program_parameters"]["AdapterRemoval"]["threads"]).strip("['']"))
-    input:
-        read1 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
-        read2 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
-    output:
-        read1 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R1.fastq.gz",
-        read2 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R2.fastq.gz"
-    wrapper:
-        "file://" + wrapper_dir + "/AdapterRemoval/wrapper.py"
-
-rule fastqc:
-    version:
-        0.2
-    threads:
-        lambda wildcards: int(str(config["program_parameters"]["fastqc"]["threads"]).strip("['']"))
-    input:
-        getAllFASTQ
-    output:
-        "{assayID}/{runID}/{processed_dir}/{reports_dir}/"
-    shell:
-        home_dir + "/bin/fastqc {input} --noextract --threads {threads} --outdir {output}"
+# rule AdapterRemoval:
+#     threads:
+#         lambda wildcards: int(str(config["program_parameters"]["AdapterRemoval"]["threads"]).strip("['']"))
+#     input:
+#         read1 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
+#         read2 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
+#     output:
+#         read1 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R1.fastq.gz",
+#         read2 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R2.fastq.gz"
+#     wrapper:
+#         "file://" + wrapper_dir + "/AdapterRemoval/wrapper.py"
+#
+# rule fastqc:
+#     version:
+#         0.2
+#     threads:
+#         lambda wildcards: int(str(config["program_parameters"]["fastqc"]["threads"]).strip("['']"))
+#     input:
+#         getAllFASTQ
+#     output:
+#         "{assayID}/{runID}/{processed_dir}/{reports_dir}/"
+#     shell:
+#         home_dir + "/bin/fastqc {input} --noextract --threads {threads} --outdir {output}"
 
 rule bowtie2_pe:
     version:
@@ -151,14 +151,14 @@ rule bowtie2_pe:
         """
 
 rule bam_quality_filter:
-    params:
-        qual = config["alignment_quality"]
+    # params:
+    #     qual = config["alignment_quality"]
     input:
         "{assayID}/{runID}/{outdir}/" + REF_VERSION + "/bowtie2/{unit}.bam"
     output:
         temp("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/quality_filtered/{unit}.Q{qual}.bam")
     shell:
-        "samtools view -b -h -q {params.qual} {input} > {output}"
+        "samtools view -b -h -q {wildcards.qual} {input} > {output}"
 
 rule bam_sort:
     params:
@@ -223,17 +223,18 @@ rule bam_rmdup_index:
         "samtools index {input} {output}"
 
 # target rules
-rule run_AdapterRemoval:
-    input:
-        TRIMMED_FASTQ1,
-        TRIMMED_FASTQ2
-
-rule run_fastqc:
-    input:
-        expand("ChIP-Seq/{runID}/processed_data/reports/",
-               runID = config["samples"]["ChIP-Seq"]["runID"])
+# rule run_AdapterRemoval:
+#     input:
+#         TRIMMED_FASTQ1,
+#         TRIMMED_FASTQ2
+#
+# rule run_fastqc:
+#     input:
+#         expand("ChIP-Seq/{runID}/processed_data/reports/",
+#                runID = config["samples"]["ChIP-Seq"]["runID"])
 
 rule all:
     input:
-        PROCESSED_BAMs_marked,
-        PROCESSED_BAMs_removed
+        PROCESSED_BAMs_dups_removed,
+        PROCESSED_BAMs_dups_marked
+
