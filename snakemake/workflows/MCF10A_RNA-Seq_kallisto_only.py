@@ -24,5 +24,5 @@ rule run_kallisto:
                assayID = "RNA-Seq",
                runID = ["NB501086_0114_B_Azad_JCSMR_hRNAseq", "NB501086_0082_RDomaschenz_JCSMR_mRNAseq"],
                outdir = config["processed_dir"],
-               reference_version = config["references"]["hg38"]["version"],
+               reference_version = "GRCh37_hg19_ensembl75",
                unit = config["samples"]["RNA-Seq"])
