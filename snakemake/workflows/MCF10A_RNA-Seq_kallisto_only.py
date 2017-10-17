@@ -1,9 +1,9 @@
+from snakemake.exceptions import MissingInputException
+import os
+
 _author__ = "Sebastian Kurscheid (sebastian.kurscheid@anu.edu.au)"
 __license__ = "MIT"
 __date__ = "2015-04-22"
-
-from snakemake.exceptions import MissingInputException
-import os
 
 rule:
     version: 0.3
@@ -18,11 +18,16 @@ include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/Breast/s
 include:
     include_prefix + "run_kallisto.py"
 
+# variables
+REF_VERSION = "GRCh37_hg19_ensembl75"
+
+# targets
+BEARS = expand("{assayID}/{file}",
+              assayID = "RNA-Seq",
+              file = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/kallisto/" + j \
+                  for i in config["samples"]["ChIP-Seq"]["runID"] \
+                      for j in config["samples"]["ChIP-Seq"][i]].keys())
+
 rule run_kallisto:
     input:
-        expand("{assayID}/{runID}/{outdir}/{reference_version}/kallisto/{unit}",
-               assayID = "RNA-Seq",
-               runID = ["NB501086_0114_B_Azad_JCSMR_hRNAseq", "NB501086_0082_RDomaschenz_JCSMR_mRNAseq"],
-               outdir = config["processed_dir"],
-               reference_version = "GRCh37_hg19_ensembl75",
-               unit = config["samples"]["RNA-Seq"])
+        BEARS
