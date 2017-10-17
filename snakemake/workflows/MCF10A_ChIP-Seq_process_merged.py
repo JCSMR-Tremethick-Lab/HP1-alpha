@@ -190,7 +190,7 @@ rule computeMatrix:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
         program_parameters = lambda wildcards: ' '.join("{!s}={!s}".format(key, val.strip("\\'")) for (key, val) in cli_parameters_computeMatrix(wildcards).items())
     threads:
-        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+        32
     input:
         file = getComputeMatrixInputMerged,
         region = lambda wildcards: home + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
