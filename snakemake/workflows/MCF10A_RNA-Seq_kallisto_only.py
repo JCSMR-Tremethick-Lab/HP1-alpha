@@ -13,7 +13,7 @@ localrules:
 
 wrapper_dir = os.environ['HOME'] + "/Development/snakemake-wrappers/bio"
 
-include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/Breast/snakemake/rules/"
+include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/rules/"
 
 include:
     include_prefix + "run_kallisto.py"
