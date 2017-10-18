@@ -67,26 +67,6 @@
       }
     }
   },
-    "kallisto":
-    {
-      "bootstraps": "30"
-    },
-    "STAR":
-    {
-      "runThreadN": "4"
-    },
-    "bt2_params":
-    {
-        "max_insert": ["1000"],
-        "threads": ["7"],
-        "platform": ["Illumina"]
-    },
-    "bt2_params_unmapped_reads":
-    {
-        "max_insert": ["1000000"],
-        "threads": ["7"],
-        "platform": ["Illumina"]
-    },
     "samples":
     {
       "RNA-Seq":
@@ -240,6 +220,27 @@
     },
   "program_parameters":
   {
+  "kallisto":
+  {
+    "bootstraps": "30",
+    "threads" : "8"
+  },
+  "STAR":
+  {
+    "runThreadN": "8"
+  },
+  "bt2_params":
+  {
+      "max_insert": ["1000"],
+      "threads": ["7"],
+      "platform": ["Illumina"]
+  },
+  "bt2_params_unmapped_reads":
+  {
+      "max_insert": ["1000000"],
+      "threads": ["7"],
+      "platform": ["Illumina"]
+  },
   "deepTools":
   {
     "SES_sample_length": ["1000"],

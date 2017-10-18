@@ -10,9 +10,10 @@ rule kallisto_quant:
     message:
         "Running kallisto quant..."
     params:
-        bootstraps = config["kallisto"]["bootstraps"],
-        threads = 4,
+        bootstraps = config["program_parameters"]["kallisto"]["bootstraps"],
         trim_dir = config["trim_dir"]
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["kallisto"]["threads"]).strip("['']"))
     input:
         read1 = "{assayID}/{runID}/{processed_dir}/trimmed_data/{unit}_R1_001.QT.CA.fastq.gz",
         read2 = "{assayID}/{runID}/{processed_dir}/trimmed_data/{unit}_R2_001.QT.CA.fastq.gz",
@@ -23,7 +24,7 @@ rule kallisto_quant:
         """
             kallisto quant --index={input.ki} \
                            --output-dir={output} \
-                           --threads=4 \
+                           --threads={threads} \
                            --bootstrap-samples={params.bootstraps} \
                            {input.read1} {input.read2}
         """
