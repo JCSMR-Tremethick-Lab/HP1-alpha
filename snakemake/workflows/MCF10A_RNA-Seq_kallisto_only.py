@@ -21,6 +21,7 @@ include:
 # variables
 REF_GENOME="hg19"
 REF_VERSION="GRCh37_hg19_ensembl75"
+HOME=os.environ['HOME']
 
 # targets
 BEARS = expand("{assayID}/{file}",
