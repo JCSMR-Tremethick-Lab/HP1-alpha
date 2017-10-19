@@ -61,8 +61,13 @@ def cli_parameters_computeMatrix(wildcards):
         a["--referencePoint"]=wildcards["referencePoint"]
         return(a)
     if wildcards["command"] == "scale-regions":
-        a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]][wildcards["region"]]
-        return(a)
+        if wildcards["region"] in ["allGenes", "intergenicRegions"]:
+            a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]][wildcards["region"]]
+            return(a)
+        else:
+            a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]]["default"]
+            return(a)
+
 
 
 def cli_parameters_normalization(wildcards):
