@@ -35,8 +35,9 @@
     },
   "hg19":
     {
-    "version": ["GRCh37_hg19_ensembl75_ERCC", "GRCh37_hg19_ensembl75", "GRCh37_hg19_UCSC", "GRCh37_hg19_UCSC_ERCC"],
-    "genome":
+      "ensemblHost": "grch37.ensembl.org",
+      "version": ["GRCh37_hg19_ensembl75_ERCC", "GRCh37_hg19_ensembl75", "GRCh37_hg19_UCSC", "GRCh37_hg19_UCSC_ERCC"],
+      "genome":
       {
         "GRCh37_hg19_ensembl75_ERCC": "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
         "GRCh37_hg19_ensembl75": "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
