@@ -249,7 +249,7 @@ rule all:
                plotType="se",
                mode=["normal"],
                norm=["RPKM"],
-               region=["allGenes", "intergenicRegions"],
+               region=["allGenes", "intergenicRegions", "conditionMCF10A_shH2AZHP1a", "conditionMCF10A_shHP1ab", "conditionMCF10A_shHP1a", "conditionMCF10A_shHP1b", "conditionMCF10A_WT"],
                suffix=["pdf", "data", "bed"]),
         expand("{assayID}/merged/{outdir}/{reference_version}/duplicates_removed/{replicates}.bam.bai",
                assayID="ChIP-Seq",
