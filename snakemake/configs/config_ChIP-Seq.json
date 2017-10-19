@@ -255,7 +255,12 @@
       "GRCh37_hg19_ensembl75":
       {
         "allGenes": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
-        "intergenicRegions": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed"
+        "intergenicRegions": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed",
+        "conditionMCF10A_shH2AZHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shH2AZHP1a.bed",
+        "conditionMCF10A_shHP1ab" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1ab.bed",
+        "conditionMCF10A_shHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1a.bed",
+        "conditionMCF10A_shHP1b" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1b.bed",
+        "conditionMCF10A_WT" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shH2AZHP1a.bed"
       },
       "GRCh37_hg19_ensembl75_ERCC":
       {
@@ -298,6 +303,14 @@
     {
       "scale-regions":
       {
+        "default":
+        {
+          "--upstream": "1500",
+          "--downstream": "1500",
+          "--regionBodyLength": "5000",
+          "--unscaled5prime": "200",
+          "--unscaled3prime": "200"
+        },
         "allGenes":
         {
           "--upstream": "1500",
