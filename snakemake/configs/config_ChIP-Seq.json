@@ -1,7 +1,7 @@
 {
   "references":
   {
-  "active": "hg38",
+  "active": "hg19",
   "database":
   {
       "biomart": "ensembl",
