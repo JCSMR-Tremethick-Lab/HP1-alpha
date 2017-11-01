@@ -233,9 +233,67 @@ rule plotProfileMerged:
                                                --plotType {wildcards.plotType}
         """
 
+rule bigwigCompareMerged:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+    input:
+        chip = lambda wildcards: "/".join(wildcards["assayID"],
+                                           "merged",
+                                           wildcards["outdir"],
+                                           wildcards["reference_version"],
+                                           wildcards["application"],
+                                           "bamCoverage"
+                                           wildcards["mode"],
+                                           wildcards["norm"],
+                                           wildcards["duplicates"],
+                                           config["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["ChIP"],
+                                           ".bw"),
+        input = lambda wildcards: "/".join(wildcards["assayID"],
+                                           "merged",
+                                           wildcards["outdir"],
+                                           wildcards["reference_version"],
+                                           wildcards["application"],
+                                           "bamCoverage"
+                                           wildcards["mode"],
+                                           wildcards["norm"],
+                                           wildcards["duplicates"],
+                                           config["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["Input"],
+                                           ".bw")
+    output:
+        "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{condition}_{contrast}_{ratio}.bw"
+    shell:
+        """
+            {params.deepTools_dir}/bigwigCompare --bigwig1 {input.chip}\
+                                                 --bigwig2 {input.input}\
+                                                 --ratio {wildcards.ratio}\
+                                                 --outFileFormat bigwig\
+                                                 --outFileName {output}
+        """
+
 # target rules
 rule all:
     input:
+        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{condition}_{contrast}_{ratio}.bw",
+               assayID="ChIP-Seq",
+               runID="merged",
+               outdir=config["processed_dir"],
+               reference_version=REF_VERSION,
+               application=["deepTools"],
+               tool=["plotProfile"],
+               mode=["normal"],
+               norm=["RPKM"],
+               duplicates=["duplicates_removed"],
+               condition=["MCF10A_WT_HP1a",
+                          "MCF10A_WT_HP1b",
+                          "MCF10A_WT_H2AZ",
+                          "MCF10A_shHP1a_HP1b",
+                          "MCF10A_shHP1b_HP1a",
+                          "MCF10A_shH2AZ_HP1a",
+                          "MCF10A_shH2AZ_HP1b"],
+               contrast=["ChIP-Input"],
+               ratio="log2"),
         expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
                assayID="ChIP-Seq",
                runID="merged",
