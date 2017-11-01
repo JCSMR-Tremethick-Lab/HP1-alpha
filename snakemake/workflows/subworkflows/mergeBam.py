@@ -82,19 +82,21 @@ rule indexMerged:
         """
 
 # build targets
-expand("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai",
-       assayID="ChIP-Seq",
-       outdir=config["processed_dir"],
-       reference_version=REF_VERSION,
-       duplicates=["duplicates_removed"],
-       replicates=['MCF10A_WT_HP1b_ChIP',
-                   'MCF10A_shHP1a_HP1b_ChIP',
-                   'MCF10A_shHP1b_Input',
-                   'MCF10A_WT_Input',
-                   'MCF10A_shH2AZ_Input',
-                   'MCF10A_shHP1b_HP1a_ChIP',
-                   'MCF10A_shH2AZ_HP1b_ChIP',
-                   'MCF10A_shH2AZ_HP1a_ChIP',
-                   'MCF10A_shHP1a_Input',
-                   'MCF10A_WT_HP1a_ChIP',
-                   'MCF10A_WT_H2AZ_ChIP'])
+rule all:
+    input:
+        expand("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai",
+               assayID="ChIP-Seq",
+               outdir=config["processed_dir"],
+               reference_version=REF_VERSION,
+               duplicates=["duplicates_removed"],
+               replicates=['MCF10A_WT_HP1b_ChIP',
+                           'MCF10A_shHP1a_HP1b_ChIP',
+                           'MCF10A_shHP1b_Input',
+                           'MCF10A_WT_Input',
+                           'MCF10A_shH2AZ_Input',
+                           'MCF10A_shHP1b_HP1a_ChIP',
+                           'MCF10A_shH2AZ_HP1b_ChIP',
+                           'MCF10A_shH2AZ_HP1a_ChIP',
+                           'MCF10A_shHP1a_Input',
+                           'MCF10A_WT_HP1a_ChIP',
+                           'MCF10A_WT_H2AZ_ChIP'])
