@@ -108,62 +108,12 @@ def getComputeMatrixInputMerged(wildcards):
                             i + ".bw"]))
     return(fn)
 
-
-def getBAMbyReplicates(wildcards):
-    fn=[]
-    for i in config["samples"]["ChIP-Seq"]["runID"]:
-        for j in config["samples"]["ChIP-Seq"][i]:
-            if j in config["samples"]["ChIP-Seq"]["replicates"][wildcards["replicates"]]:
-                fn.append(join("ChIP-Seq/" +
-                               i +
-                               "/" +
-                               config["processed_dir"] +
-                               "/" +
-                               REF_VERSION +
-                               "/bowtie2/" +
-                               wildcards["duplicates"] +
-                               "/" +
-                               j +
-                               ".Q" +
-                               config["alignment_quality"] +
-                               ".sorted.bam"))
-    return(fn)
+# subworkflows section
+subworkflow mergeBams:
+    workdir:  home + "/Data/Tremethick/HP1-alpha"
+    snakefile: home + "Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/workflows/subworkflows/mergeBam.py"
 
 # rules section
-rule bamMerge:
-    version:
-        0.1
-    params:
-        outputFormat = "--output-fmt BAM"  # ToDo: move
-    log:
-        "logs/{replicates}.bamMerge.log"
-    threads:
-        16
-    input:
-        getBAMbyReplicates
-    output:
-        "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam"
-    shell:
-        """
-            samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
-        """
-
-rule indexMerged:
-    version:
-        0.1
-    log:
-        "logs/{replicates}.indexMerged.log"
-    threads:
-        16
-    input:
-        rules.bamMerge.output
-    output:
-        "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai"
-    shell:
-        """
-            samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
-        """
-
 rule bamCoverageMerged:
     version:
         0.1
@@ -174,7 +124,8 @@ rule bamCoverageMerged:
     threads:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
     input:
-        bam = lambda wildcards: wildcards["assayID"] + "/merged/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + "/" + wildcards["duplicates"] + "/" +  wildcards["replicates"] + ".bam"
+        bai = mergeBams("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai")
+        bam = mergeBams("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam")
     output:
         "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{replicates}.bw"
     shell:
@@ -309,19 +260,4 @@ rule all:
                norm=["RPKM"],
                region=["allGenes", "intergenicRegions", "conditionMCF10A_shH2AZHP1a", "conditionMCF10A_shHP1ab", "conditionMCF10A_shHP1a", "conditionMCF10A_shHP1b", "conditionMCF10A_WT"],
                suffix=["pdf", "data", "bed"]),
-        expand("{assayID}/merged/{outdir}/{reference_version}/duplicates_removed/{replicates}.bam.bai",
-               assayID="ChIP-Seq",
-               outdir=config["processed_dir"],
-               reference_version=REF_VERSION,
-               replicates=['MCF10A_WT_HP1b_ChIP',
-                           'MCF10A_shHP1a_HP1b_ChIP',
-                           'MCF10A_shHP1b_Input',
-                           'MCF10A_WT_Input',
-                           'MCF10A_shH2AZ_Input',
-                           'MCF10A_shHP1b_HP1a_ChIP',
-                           'MCF10A_shH2AZ_HP1b_ChIP',
-                           'MCF10A_shH2AZ_HP1a_ChIP',
-                           'MCF10A_shHP1a_Input',
-                           'MCF10A_WT_HP1a_ChIP',
-                           'MCF10A_WT_H2AZ_ChIP']),
         MergedBIGWIGs
