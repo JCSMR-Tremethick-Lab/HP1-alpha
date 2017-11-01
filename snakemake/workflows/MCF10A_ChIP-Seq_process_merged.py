@@ -244,7 +244,7 @@ rule bigwigCompareMerged:
                                            wildcards["outdir"],
                                            wildcards["reference_version"],
                                            wildcards["application"],
-                                           "bamCoverage"
+                                           "bamCoverage",
                                            wildcards["mode"],
                                            wildcards["norm"],
                                            wildcards["duplicates"],
@@ -255,7 +255,7 @@ rule bigwigCompareMerged:
                                            wildcards["outdir"],
                                            wildcards["reference_version"],
                                            wildcards["application"],
-                                           "bamCoverage"
+                                           "bamCoverage",
                                            wildcards["mode"],
                                            wildcards["norm"],
                                            wildcards["duplicates"],
