@@ -102,7 +102,7 @@ rule indexMerged:
             samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
         """
 
-# rules section
+# rules section 
 rule bamCoverageMerged:
     version:
         0.1
@@ -113,8 +113,8 @@ rule bamCoverageMerged:
     threads:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
     input:
-        bai = mergeBams("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai"),
-        bam = mergeBams("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam")
+        bai = "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai",
+        bam = "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam"
     output:
         "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{replicates}.bw"
     shell:
@@ -127,7 +127,6 @@ rule bamCoverageMerged:
                                                --normalizeUsingRPKM \
                                                --ignoreForNormalization {params.ignore}
         """
-
 
 # build targets
 rule all:
