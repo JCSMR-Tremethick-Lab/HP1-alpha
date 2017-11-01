@@ -147,6 +147,8 @@ rule bigwigCompareMerged:
     params:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
         debug = debugWildcards
+    threads:
+        32
     input:
         chip = lambda wildcards: "/".join((wildcards["assayID"],
                                            "merged",
@@ -175,6 +177,7 @@ rule bigwigCompareMerged:
             {params.deepTools_dir}/bigwigCompare --bigwig1 {input.chip}\
                                                  --bigwig2 {input.input}\
                                                  --ratio {wildcards.ratio}\
+                                                 --numberOfProcessors {threads} \
                                                  --outFileFormat bigwig\
                                                  --outFileName {output}
         """
