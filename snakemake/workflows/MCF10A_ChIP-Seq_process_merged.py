@@ -86,6 +86,10 @@ def getComputeMatrixInputMerged(wildcards):
                             i + ".bw"]))
     return(fn)
 
+
+def debugWildcards(wildcards):
+    print(wildcards)
+
 # subworkflows section
 subworkflow mergeBams:
     workdir:  home + "/Data/Tremethick/HP1-alpha"
@@ -142,6 +146,7 @@ rule bigwigCompareMerged:
         0.1
     params:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        debug = debugWildcards
     input:
         chip = lambda wildcards: "/".join(wildcards["assayID"],
                                            "merged",
