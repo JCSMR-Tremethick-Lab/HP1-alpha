@@ -31,12 +31,6 @@ BIGWIGs = expand("{assayID}/{file}.bw",
                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                         for j in config["samples"]["ChIP-Seq"][i]])
 
-MergedBIGWIGs = expand("{assayID}/{file}.bw",
-                         assayID="ChIP-Seq",
-                         file=["merged/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j \
-                                for j in config["samples"]["ChIP-Seq"]["replicates"].keys()])
-
-
 # input functions
 def get_sample_labels(wildcards):
     sl = []
@@ -77,22 +71,6 @@ def cli_parameters_normalization(wildcards):
         a = " ".join(("--normalizeTo1x", config["references"][REF_GENOME]["effectiveSize"]))
     return(a)
 
-
-def cli_parameters_bamCoverage(wildcards):
-    a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["mode"]]
-    b = str()
-    for (key, val) in a.items():
-        if val == " ":
-            f = key + " "
-            b = b + f
-        else:
-            f = key + "=" + val + " "
-            b = b + f
-    if wildcards["mode"] == "MNase":
-        b = b + "--MNase"
-    return(b.rstrip())
-
-
 def getComputeMatrixInputMerged(wildcards):
     fn = []
     for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
@@ -113,31 +91,6 @@ subworkflow mergeBams:
     workdir:  home + "/Data/Tremethick/HP1-alpha"
     snakefile: home + "Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/workflows/subworkflows/mergeBam.py"
 
-# rules section
-rule bamCoverageMerged:
-    version:
-        0.1
-    params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
-        ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
-        program_parameters = cli_parameters_bamCoverage
-    threads:
-        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
-    input:
-        bai = mergeBams("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai"),
-        bam = mergeBams("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam")
-    output:
-        "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{replicates}.bw"
-    shell:
-        """
-            {params.deepTools_dir}/bamCoverage --bam {input.bam} \
-                                               --outFileName {output} \
-                                               --outFileFormat bigwig \
-                                               {params.program_parameters} \
-                                               --numberOfProcessors {threads} \
-                                               --normalizeUsingRPKM \
-                                               --ignoreForNormalization {params.ignore}
-        """
 
 rule computeMatrix:
     version:
@@ -260,4 +213,3 @@ rule all:
                norm=["RPKM"],
                region=["allGenes", "intergenicRegions", "conditionMCF10A_shH2AZHP1a", "conditionMCF10A_shHP1ab", "conditionMCF10A_shHP1a", "conditionMCF10A_shHP1b", "conditionMCF10A_WT"],
                suffix=["pdf", "data", "bed"]),
-        MergedBIGWIGs
