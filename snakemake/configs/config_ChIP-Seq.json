@@ -231,7 +231,7 @@
           },
           "MCF10A_WT_H2AZ" :
           {
-            "ChIP" : "MCF10A_WT_HP2AZ_ChIP",
+            "ChIP" : "MCF10A_WT_H2AZ_ChIP",
             "Input" : "MCF10A_WT_Input"
           },
           "MCF10A_shHP1a_HP1b":

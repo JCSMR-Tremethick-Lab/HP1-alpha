@@ -31,12 +31,6 @@ BIGWIGs = expand("{assayID}/{file}.bw",
                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                         for j in config["samples"]["ChIP-Seq"][i]])
 
-MergedBIGWIGs = expand("{assayID}/{file}.bw",
-                         assayID="ChIP-Seq",
-                         file=["merged/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/duplicates_removed/"  + j \
-                                for j in config["samples"]["ChIP-Seq"]["replicates"].keys()])
-
-
 # input functions
 def get_sample_labels(wildcards):
     sl = []
@@ -77,22 +71,6 @@ def cli_parameters_normalization(wildcards):
         a = " ".join(("--normalizeTo1x", config["references"][REF_GENOME]["effectiveSize"]))
     return(a)
 
-
-def cli_parameters_bamCoverage(wildcards):
-    a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["mode"]]
-    b = str()
-    for (key, val) in a.items():
-        if val == " ":
-            f = key + " "
-            b = b + f
-        else:
-            f = key + "=" + val + " "
-            b = b + f
-    if wildcards["mode"] == "MNase":
-        b = b + "--MNase"
-    return(b.rstrip())
-
-
 def getComputeMatrixInputMerged(wildcards):
     fn = []
     for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
@@ -109,84 +87,14 @@ def getComputeMatrixInputMerged(wildcards):
     return(fn)
 
 
-def getBAMbyReplicates(wildcards):
-    fn=[]
-    for i in config["samples"]["ChIP-Seq"]["runID"]:
-        for j in config["samples"]["ChIP-Seq"][i]:
-            if j in config["samples"]["ChIP-Seq"]["replicates"][wildcards["replicates"]]:
-                fn.append(join("ChIP-Seq/" +
-                               i +
-                               "/" +
-                               config["processed_dir"] +
-                               "/" +
-                               REF_VERSION +
-                               "/bowtie2/" +
-                               wildcards["duplicates"] +
-                               "/" +
-                               j +
-                               ".Q" +
-                               config["alignment_quality"] +
-                               ".sorted.bam"))
-    return(fn)
+def debugWildcards(wildcards):
+    print(wildcards)
 
-# rules section
-rule bamMerge:
-    version:
-        0.1
-    params:
-        outputFormat = "--output-fmt BAM"  # ToDo: move
-    log:
-        "logs/{replicates}.bamMerge.log"
-    threads:
-        16
-    input:
-        getBAMbyReplicates
-    output:
-        "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam"
-    shell:
-        """
-            samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
-        """
+# subworkflows section
+subworkflow mergeBams:
+    workdir:  home + "/Data/Tremethick/HP1-alpha"
+    snakefile: home + "Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/workflows/subworkflows/mergeBam.py"
 
-rule indexMerged:
-    version:
-        0.1
-    log:
-        "logs/{replicates}.indexMerged.log"
-    threads:
-        16
-    input:
-        rules.bamMerge.output
-    output:
-        "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai"
-    shell:
-        """
-            samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
-        """
-
-rule bamCoverageMerged:
-    version:
-        0.1
-    params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
-        ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
-        program_parameters = cli_parameters_bamCoverage
-    threads:
-        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
-    input:
-        bam = lambda wildcards: wildcards["assayID"] + "/merged/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + "/" + wildcards["duplicates"] + "/" +  wildcards["replicates"] + ".bam"
-    output:
-        "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{replicates}.bw"
-    shell:
-        """
-            {params.deepTools_dir}/bamCoverage --bam {input.bam} \
-                                               --outFileName {output} \
-                                               --outFileFormat bigwig \
-                                               {params.program_parameters} \
-                                               --numberOfProcessors {threads} \
-                                               --normalizeUsingRPKM \
-                                               --ignoreForNormalization {params.ignore}
-        """
 
 rule computeMatrix:
     version:
@@ -238,8 +146,11 @@ rule bigwigCompareMerged:
         0.1
     params:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        debug = debugWildcards
+    threads:
+        32
     input:
-        chip = lambda wildcards: "/".join(wildcards["assayID"],
+        chip = lambda wildcards: "/".join((wildcards["assayID"],
                                            "merged",
                                            wildcards["outdir"],
                                            wildcards["reference_version"],
@@ -248,9 +159,8 @@ rule bigwigCompareMerged:
                                            wildcards["mode"],
                                            wildcards["norm"],
                                            wildcards["duplicates"],
-                                           config["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["ChIP"],
-                                           ".bw"),
-        input = lambda wildcards: "/".join(wildcards["assayID"],
+                                           ".".join((config["samples"]["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["ChIP"], "bw")))),
+        input = lambda wildcards: "/".join((wildcards["assayID"],
                                            "merged",
                                            wildcards["outdir"],
                                            wildcards["reference_version"],
@@ -259,8 +169,7 @@ rule bigwigCompareMerged:
                                            wildcards["mode"],
                                            wildcards["norm"],
                                            wildcards["duplicates"],
-                                           config["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["Input"],
-                                           ".bw")
+                                           ".".join((config["samples"]["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["Input"], "bw"))))
     output:
         "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{contrast}/{ratio}/{condition}.bw"
     shell:
@@ -268,6 +177,7 @@ rule bigwigCompareMerged:
             {params.deepTools_dir}/bigwigCompare --bigwig1 {input.chip}\
                                                  --bigwig2 {input.input}\
                                                  --ratio {wildcards.ratio}\
+                                                 --numberOfProcessors {threads} \
                                                  --outFileFormat bigwig\
                                                  --outFileName {output}
         """
@@ -281,7 +191,7 @@ rule all:
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
                application=["deepTools"],
-               tool=["plotProfile"],
+               tool=["bigwigCompare"],
                mode=["normal"],
                norm=["RPKM"],
                duplicates=["duplicates_removed"],
@@ -309,19 +219,3 @@ rule all:
                norm=["RPKM"],
                region=["allGenes", "intergenicRegions", "conditionMCF10A_shH2AZHP1a", "conditionMCF10A_shHP1ab", "conditionMCF10A_shHP1a", "conditionMCF10A_shHP1b", "conditionMCF10A_WT"],
                suffix=["pdf", "data", "bed"]),
-        expand("{assayID}/merged/{outdir}/{reference_version}/duplicates_removed/{replicates}.bam.bai",
-               assayID="ChIP-Seq",
-               outdir=config["processed_dir"],
-               reference_version=REF_VERSION,
-               replicates=['MCF10A_WT_HP1b_ChIP',
-                           'MCF10A_shHP1a_HP1b_ChIP',
-                           'MCF10A_shHP1b_Input',
-                           'MCF10A_WT_Input',
-                           'MCF10A_shH2AZ_Input',
-                           'MCF10A_shHP1b_HP1a_ChIP',
-                           'MCF10A_shH2AZ_HP1b_ChIP',
-                           'MCF10A_shH2AZ_HP1a_ChIP',
-                           'MCF10A_shHP1a_Input',
-                           'MCF10A_WT_HP1a_ChIP',
-                           'MCF10A_WT_H2AZ_ChIP']),
-        MergedBIGWIGs
