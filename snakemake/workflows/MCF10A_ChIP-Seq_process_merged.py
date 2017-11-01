@@ -148,7 +148,7 @@ rule bigwigCompareMerged:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
         debug = debugWildcards
     input:
-        chip = lambda wildcards: "/".join(wildcards["assayID"],
+        chip = lambda wildcards: "/".join((wildcards["assayID"],
                                            "merged",
                                            wildcards["outdir"],
                                            wildcards["reference_version"],
@@ -158,8 +158,8 @@ rule bigwigCompareMerged:
                                            wildcards["norm"],
                                            wildcards["duplicates"],
                                            config["samples"]["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["ChIP"],
-                                           ".bw"),
-        input = lambda wildcards: "/".join(wildcards["assayID"],
+                                           ".bw")),
+        input = lambda wildcards: "/".join((wildcards["assayID"],
                                            "merged",
                                            wildcards["outdir"],
                                            wildcards["reference_version"],
@@ -169,7 +169,7 @@ rule bigwigCompareMerged:
                                            wildcards["norm"],
                                            wildcards["duplicates"],
                                            config["samples"]["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["Input"],
-                                           ".bw")
+                                           ".bw"))
     output:
         "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{contrast}/{ratio}/{condition}.bw"
     shell:
