@@ -124,7 +124,7 @@ rule bamCoverageMerged:
     threads:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
     input:
-        bai = mergeBams("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai")
+        bai = mergeBams("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai"),
         bam = mergeBams("{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam")
     output:
         "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{replicates}.bw"
