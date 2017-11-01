@@ -190,7 +190,7 @@ rule all:
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
                application=["deepTools"],
-               tool=["plotProfile"],
+               tool=["bigwigCompare"],
                mode=["normal"],
                norm=["RPKM"],
                duplicates=["duplicates_removed"],
