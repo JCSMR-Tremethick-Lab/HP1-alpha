@@ -190,7 +190,7 @@ rule bamCoverageMerged:
 
 rule computeMatrix:
     version:
-        0.2
+        0.3
     params:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
         program_parameters = lambda wildcards: ' '.join("{!s}={!s}".format(key, val.strip("\\'")) for (key, val) in cli_parameters_computeMatrix(wildcards).items())
@@ -248,7 +248,7 @@ rule all:
                referencePoint="TSS",
                plotType="se",
                mode=["normal"],
-               norm=["RPKM"],
+               norm=["RPKM"],∏
                region=["allGenes", "intergenicRegions", "conditionMCF10A_shH2AZHP1a", "conditionMCF10A_shHP1ab", "conditionMCF10A_shHP1a", "conditionMCF10A_shHP1b", "conditionMCF10A_WT"],
                suffix=["pdf", "data", "bed"]),
         expand("{assayID}/merged/{outdir}/{reference_version}/duplicates_removed/{replicates}.bam.bai",

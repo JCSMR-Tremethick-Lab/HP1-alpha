@@ -216,6 +216,44 @@
             "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shHP1a_HP1b_ChIP_1a", "MCF10A_shHP1a_HP1b_ChIP_2a", "MCF10A_shHP1a_H2AZ_ChIP_1a", "MCF10A_shHP1a_H2AZ_ChIP_2a", "MCF10A_shHP1a_Input_1a", "MCF10A_shHP1a_Input_2a"],
             "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shHP1a_HP1b_ChIP_1b", "MCF10A_shHP1a_HP1b_ChIP_2b", "MCF10A_shHP1a_H2AZ_ChIP_1b", "MCF10A_shHP1a_H2AZ_ChIP_2b", "MCF10A_shHP1a_Input_1b", "MCF10A_shHP1a_Input_2b"]
           }
+        },
+        "ChIP-Input" :
+        {
+          "MCF10A_WT_HP1a" :
+          {
+            "ChIP" : "MCF10A_WT_HP1a_ChIP",
+            "Input" : "MCF10A_WT_Input"
+          },
+          "MCF10A_WT_HP1b" :
+          {
+            "ChIP" : "MCF10A_WT_HP1b_ChIP",
+            "Input" : "MCF10A_WT_Input"
+          },
+          "MCF10A_WT_H2AZ" :
+          {
+            "ChIP" : "MCF10A_WT_HP2AZ_ChIP",
+            "Input" : "MCF10A_WT_Input"
+          },
+          "MCF10A_shHP1a_HP1b":
+          {
+            "ChIP" : "MCF10A_shHP1a_HP1b_ChIP",
+            "Input" : "MCF10A_shHP1a_Input"
+          },
+          "MCF10A_shHP1b_HP1a":
+          {
+            "ChIP" : "MCF10A_shHP1b_HP1a_ChIP",
+            "Input" : "MCF10A_shHP1b_Input"
+          },
+          "MCF10A_shH2AZ_HP1a" :
+          {
+            "ChIP" : "MCF10A_shH2AZ_HP1a_ChIP",
+            "Input" : "MCF10A_shH2AZ_Input"
+          },
+          "MCF10A_shH2AZ_HP1b" :
+          {
+            "ChIP" : "MCF10A_shH2AZ_HP1b_ChIP",
+            "Input" : "MCF10A_shH2AZ_Input"
+          }
         }
       }
     },
