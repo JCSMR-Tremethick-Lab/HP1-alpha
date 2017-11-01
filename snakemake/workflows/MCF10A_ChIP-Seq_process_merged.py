@@ -157,7 +157,7 @@ rule bigwigCompareMerged:
                                            wildcards["mode"],
                                            wildcards["norm"],
                                            wildcards["duplicates"],
-                                           config["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["ChIP"],
+                                           config["samples"]["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["ChIP"],
                                            ".bw"),
         input = lambda wildcards: "/".join(wildcards["assayID"],
                                            "merged",
@@ -168,7 +168,7 @@ rule bigwigCompareMerged:
                                            wildcards["mode"],
                                            wildcards["norm"],
                                            wildcards["duplicates"],
-                                           config["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["Input"],
+                                           config["samples"]["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["Input"],
                                            ".bw")
     output:
         "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{contrast}/{ratio}/{condition}.bw"
