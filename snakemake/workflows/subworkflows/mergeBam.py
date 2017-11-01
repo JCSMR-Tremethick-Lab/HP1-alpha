@@ -102,7 +102,7 @@ rule indexMerged:
             samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
         """
 
-# rules section
+# rules section 
 rule bamCoverageMerged:
     version:
         0.1
