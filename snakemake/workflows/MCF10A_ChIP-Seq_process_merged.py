@@ -262,7 +262,7 @@ rule bigwigCompareMerged:
                                            config["ChIP-Seq"]["ChIP-Input"][wildcards["condition"]]["Input"],
                                            ".bw")
     output:
-        "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{condition}_{contrast}_{ratio}.bw"
+        "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{contrast}/{ratio}/{condition}.bw"
     shell:
         """
             {params.deepTools_dir}/bigwigCompare --bigwig1 {input.chip}\
@@ -275,7 +275,7 @@ rule bigwigCompareMerged:
 # target rules
 rule all:
     input:
-        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{condition}_{contrast}_{ratio}.bw",
+        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{contrast}/{ratio}/{condition}.bw",
                assayID="ChIP-Seq",
                runID="merged",
                outdir=config["processed_dir"],
@@ -285,15 +285,15 @@ rule all:
                mode=["normal"],
                norm=["RPKM"],
                duplicates=["duplicates_removed"],
+               contrast=["ChIP-Input"],
+               ratio="log2",
                condition=["MCF10A_WT_HP1a",
                           "MCF10A_WT_HP1b",
                           "MCF10A_WT_H2AZ",
                           "MCF10A_shHP1a_HP1b",
                           "MCF10A_shHP1b_HP1a",
                           "MCF10A_shH2AZ_HP1a",
-                          "MCF10A_shH2AZ_HP1b"],
-               contrast=["ChIP-Input"],
-               ratio="log2"),
+                          "MCF10A_shH2AZ_HP1b"]),
         expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
                assayID="ChIP-Seq",
                runID="merged",
