@@ -1,7 +1,7 @@
 {
   "references":
   {
-  "active": "hg38",
+  "active": "hg19",
   "database":
   {
       "biomart": "ensembl",
@@ -35,8 +35,9 @@
     },
   "hg19":
     {
-    "version": ["GRCh37_hg19_ensembl75_ERCC", "GRCh37_hg19_ensembl75", "GRCh37_hg19_UCSC", "GRCh37_hg19_UCSC_ERCC"],
-    "genome":
+      "ensemblHost": "grch37.ensembl.org",
+      "version": ["GRCh37_hg19_ensembl75_ERCC", "GRCh37_hg19_ensembl75", "GRCh37_hg19_UCSC", "GRCh37_hg19_UCSC_ERCC"],
+      "genome":
       {
         "GRCh37_hg19_ensembl75_ERCC": "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
         "GRCh37_hg19_ensembl75": "/Data/References/Genomes/Homo_sapiens/GRCh37_hg19_ensembl75/primary/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa",
@@ -67,26 +68,6 @@
       }
     }
   },
-    "kallisto":
-    {
-      "bootstraps": "30"
-    },
-    "STAR":
-    {
-      "runThreadN": "4"
-    },
-    "bt2_params":
-    {
-        "max_insert": ["1000"],
-        "threads": ["7"],
-        "platform": ["Illumina"]
-    },
-    "bt2_params_unmapped_reads":
-    {
-        "max_insert": ["1000000"],
-        "threads": ["7"],
-        "platform": ["Illumina"]
-    },
     "samples":
     {
       "RNA-Seq":
@@ -235,11 +216,70 @@
             "NB501086_0136_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shHP1a_HP1b_ChIP_1a", "MCF10A_shHP1a_HP1b_ChIP_2a", "MCF10A_shHP1a_H2AZ_ChIP_1a", "MCF10A_shHP1a_H2AZ_ChIP_2a", "MCF10A_shHP1a_Input_1a", "MCF10A_shHP1a_Input_2a"],
             "NB501086_0138_TSoboleva_JCSMR_Mouse_ChIPseq": ["MCF10A_shHP1a_HP1b_ChIP_1b", "MCF10A_shHP1a_HP1b_ChIP_2b", "MCF10A_shHP1a_H2AZ_ChIP_1b", "MCF10A_shHP1a_H2AZ_ChIP_2b", "MCF10A_shHP1a_Input_1b", "MCF10A_shHP1a_Input_2b"]
           }
+        },
+        "ChIP-Input" :
+        {
+          "MCF10A_WT_HP1a" :
+          {
+            "ChIP" : "MCF10A_WT_HP1a_ChIP",
+            "Input" : "MCF10A_WT_Input"
+          },
+          "MCF10A_WT_HP1b" :
+          {
+            "ChIP" : "MCF10A_WT_HP1b_ChIP",
+            "Input" : "MCF10A_WT_Input"
+          },
+          "MCF10A_WT_H2AZ" :
+          {
+            "ChIP" : "MCF10A_WT_HP2AZ_ChIP",
+            "Input" : "MCF10A_WT_Input"
+          },
+          "MCF10A_shHP1a_HP1b":
+          {
+            "ChIP" : "MCF10A_shHP1a_HP1b_ChIP",
+            "Input" : "MCF10A_shHP1a_Input"
+          },
+          "MCF10A_shHP1b_HP1a":
+          {
+            "ChIP" : "MCF10A_shHP1b_HP1a_ChIP",
+            "Input" : "MCF10A_shHP1b_Input"
+          },
+          "MCF10A_shH2AZ_HP1a" :
+          {
+            "ChIP" : "MCF10A_shH2AZ_HP1a_ChIP",
+            "Input" : "MCF10A_shH2AZ_Input"
+          },
+          "MCF10A_shH2AZ_HP1b" :
+          {
+            "ChIP" : "MCF10A_shH2AZ_HP1b_ChIP",
+            "Input" : "MCF10A_shH2AZ_Input"
+          }
         }
       }
     },
   "program_parameters":
   {
+  "kallisto":
+  {
+    "bootstraps": "30",
+    "threads" : "8"
+  },
+  "STAR":
+  {
+    "runThreadN": "8"
+  },
+  "bt2_params":
+  {
+      "max_insert": ["1000"],
+      "threads": ["7"],
+      "platform": ["Illumina"]
+  },
+  "bt2_params_unmapped_reads":
+  {
+      "max_insert": ["1000000"],
+      "threads": ["7"],
+      "platform": ["Illumina"]
+  },
   "deepTools":
   {
     "SES_sample_length": ["1000"],
@@ -253,7 +293,12 @@
       "GRCh37_hg19_ensembl75":
       {
         "allGenes": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
-        "intergenicRegions": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed"
+        "intergenicRegions": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed",
+        "conditionMCF10A_shH2AZHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shH2AZHP1a.bed",
+        "conditionMCF10A_shHP1ab" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1ab.bed",
+        "conditionMCF10A_shHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1a.bed",
+        "conditionMCF10A_shHP1b" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1b.bed",
+        "conditionMCF10A_WT" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shH2AZHP1a.bed"
       },
       "GRCh37_hg19_ensembl75_ERCC":
       {
@@ -296,6 +341,14 @@
     {
       "scale-regions":
       {
+        "default":
+        {
+          "--upstream": "1500",
+          "--downstream": "1500",
+          "--regionBodyLength": "5000",
+          "--unscaled5prime": "200",
+          "--unscaled3prime": "200"
+        },
         "allGenes":
         {
           "--upstream": "1500",
