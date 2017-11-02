@@ -31,7 +31,7 @@ BIGWIGs = expand("{assayID}/{file}.bw",
                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                         for j in config["samples"]["ChIP-Seq"][i]])
 
-# input functions
+# functions
 def get_sample_labels(wildcards):
     sl = []
     runIDs = config["samples"][wildcards["assayID"]]["runID"]
@@ -84,6 +84,13 @@ def getComputeMatrixInputMerged(wildcards):
                             wildcards["norm"],
                             wildcards["duplicates"],
                             i + ".bw"]))
+    return(fn)
+
+
+def getRegionFiles(wildcards):
+    fn = []
+    for i in config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]].values():
+        fn.append(home + i)
     return(fn)
 
 
@@ -192,7 +199,7 @@ rule computeMatrix:
         32
     input:
         file = getComputeMatrixInputMerged,
-        region = lambda wildcards: home + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
+        region = getRegionFiles
     output:
         matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
     shell:
@@ -243,5 +250,5 @@ rule all:
                plotType="se",
                mode=["normal"],
                norm=["RPKM"],
-               region=["allGenes", "intergenicRegions", "conditionMCF10A_shH2AZHP1a", "conditionMCF10A_shHP1ab", "conditionMCF10A_shHP1a", "conditionMCF10A_shHP1b", "conditionMCF10A_WT"],
+               region=["coding"],
                suffix=["pdf", "data", "bed"]),
