@@ -103,31 +103,6 @@ subworkflow mergeBams:
     snakefile: home + "Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/workflows/subworkflows/mergeBam.py"
 
 
-rule computeMatrix:
-    version:
-        0.3
-    params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
-        program_parameters = lambda wildcards: ' '.join("{!s}={!s}".format(key, val.strip("\\'")) for (key, val) in cli_parameters_computeMatrix(wildcards).items())
-    threads:
-        32
-    input:
-        file = getComputeMatrixInputMerged,
-        region = lambda wildcards: home + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
-    output:
-        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
-    shell:
-        """
-            {params.deepTools_dir}/computeMatrix {wildcards.command} \
-                                                 --regionsFileName {input.region} \
-                                                 --scoreFileName {input.file} \
-                                                 --missingDataAsZero \
-                                                 --skipZeros \
-                                                 --numberOfProcessors {threads} \
-                                                 {params.program_parameters} \
-                                                 --outFileName {output.matrix_gz}
-        """
-
 rule plotProfileMerged:
     version:
         0.1

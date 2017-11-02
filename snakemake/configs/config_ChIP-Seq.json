@@ -359,7 +359,7 @@
           "--unscaled5prime": "200",
           "--unscaled3prime": "200"
         },
-        "allGenes":
+        "coding":
         {
           "--upstream": "3000",
           "--downstream": "3000",
@@ -367,7 +367,7 @@
           "--unscaled5prime": "200",
           "--unscaled3prime": "200"
         },
-        "intergenicRegions":
+        "noncoding":
         {
           "--upstream": "0",
           "--downstream": "0",
