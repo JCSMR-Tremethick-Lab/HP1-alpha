@@ -184,6 +184,7 @@ rule computeMatrix:
                                                  --scoreFileName {input.file} \
                                                  --missingDataAsZero \
                                                  --skipZeros \
+						 --binSize 10 \
                                                  --numberOfProcessors {threads} \
                                                  {params.program_parameters} \
                                                  --outFileName {output.matrix_gz}
