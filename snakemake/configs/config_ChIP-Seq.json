@@ -294,12 +294,12 @@
       {
         "coding":
         {
-          "allGenes": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/allGenes.bed",
-          "conditionMCF10A_shH2AZHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shH2AZHP1a.bed",
-          "conditionMCF10A_shHP1ab" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1ab.bed",
-          "conditionMCF10A_shHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1a.bed",
-          "conditionMCF10A_shHP1b" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1b.bed",
-          "conditionMCF10A_WT" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_WT.bed"
+          "allGenes": "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/allGenes_unstranded.bed",
+          "conditionMCF10A_shH2AZHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shH2AZHP1a_unstranded.bed",
+          "conditionMCF10A_shHP1ab" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1ab_unstranded.bed",
+          "conditionMCF10A_shHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1a_unstranded.bed",
+          "conditionMCF10A_shHP1b" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1b_unstranded.bed",
+          "conditionMCF10A_WT" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_WT_unstranded.bed"
         },
         "non-coding" :
         {
