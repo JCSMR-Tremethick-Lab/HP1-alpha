@@ -73,17 +73,32 @@ def cli_parameters_normalization(wildcards):
 
 def getComputeMatrixInputMerged(wildcards):
     fn = []
-    for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
-        fn.append("/".join(["ChIP-Seq",
-                            "merged",
-                            config["processed_dir"],
-                            REF_VERSION,
-                            "deepTools",
-                            "bamCoverage",
-                            wildcards["mode"],
-                            wildcards["norm"],
-                            wildcards["duplicates"],
-                            i + ".bw"]))
+    path = "/".join([wildcards["assayID"],
+                     wildcards[]])
+    if wildcards["tool"] == "bamCoverage":
+        for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
+            fn.append("/".join(["ChIP-Seq",
+                                "merged",
+                                config["processed_dir"],
+                                REF_VERSION,
+                                "deepTools",
+                                "bamCoverage",
+                                wildcards["mode"],
+                                wildcards["norm"],
+                                wildcards["duplicates"],
+                                i + ".bw"]))
+    else if wildcards["tools"] == "bigwigCompare":
+        for i in config["samples"]["ChIP-Seq"][wildcards["contrast"]]:
+            fn.append("/".join(["ChIP-Seq",
+                                "merged",
+                                config["processed_dir"],
+                                REF_VERSION,
+                                "deepTools",
+                                wildcards["tool"],
+                                wildcards["mode"],
+                                wildcards["norm"],
+                                wildcards["duplicates"],
+                                i + ".bw"]))
     return(fn)
 
 
@@ -220,7 +235,7 @@ rule all:
                reference_version=REF_VERSION,
                application="deepTools",
                tool="plotProfile",
-               command=["scale-regions"],
+               command=["scale-regions", "reference-point"],
                duplicates=["duplicates_removed"],
                referencePoint="TSS",
                plotType="se",
