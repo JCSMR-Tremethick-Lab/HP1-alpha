@@ -108,7 +108,7 @@ def debugWildcards(wildcards):
 # subworkflows section
 subworkflow mergeBams:
     workdir:  home + "/Data/Tremethick/HP1-alpha"
-    snakefile: home + "Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/workflows/subworkflows/mergeBam.py"
+    snakefile: home + "/Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/workflows/subworkflows/mergeBam.py"
 
 
 rule bigwigCompareMerged:
