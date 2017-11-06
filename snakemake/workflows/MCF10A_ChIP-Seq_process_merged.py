@@ -186,7 +186,7 @@ rule plotProfileMerged:
     params:
         deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
     input:
-        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{source}.{region}.{mode}.{norm}.matrix.gz"
+        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}.{mode}.{norm}.matrix.gz"
     output:
         figure = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.pdf",
         data = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.data",
