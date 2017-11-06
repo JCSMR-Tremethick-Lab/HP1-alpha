@@ -257,7 +257,7 @@ rule all:
                ratio="log2",
                plotType="se",
                source="bigwigCompare",
-               region=["coding"],
+               region=["coding", "non-coding"],
                mode=["normal"],
                norm=["RPKM"],
                suffix=["pdf", "data", "bed"]),
