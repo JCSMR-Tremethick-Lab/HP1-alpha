@@ -74,27 +74,20 @@ def cli_parameters_normalization(wildcards):
 def getComputeMatrixInputMerged(wildcards):
     fn = []
     path = "/".join([wildcards["assayID"],
-                     wildcards[]])
-    if wildcards["tool"] == "bamCoverage":
+                     wildcards["runID"],
+                     config["processed_dir"],
+                     REF_VERSION,
+                     wildcards["application"]])
+    if wildcards["source"] == "bamCoverage":
         for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
-            fn.append("/".join(["ChIP-Seq",
-                                "merged",
-                                config["processed_dir"],
-                                REF_VERSION,
-                                "deepTools",
-                                "bamCoverage",
+            fn.append(path + "/".join(wildcards["tool"],
                                 wildcards["mode"],
                                 wildcards["norm"],
                                 wildcards["duplicates"],
                                 i + ".bw"]))
-    else if wildcards["tools"] == "bigwigCompare":
-        for i in config["samples"]["ChIP-Seq"][wildcards["contrast"]]:
-            fn.append("/".join(["ChIP-Seq",
-                                "merged",
-                                config["processed_dir"],
-                                REF_VERSION,
-                                "deepTools",
-                                wildcards["tool"],
+    else if wildcards["source"] == "bigwigCompare":
+        for i in config["samples"]["ChIP-Seq"][wildcards["contrast"]].keys():
+            fn.append(path + "/".join(wildcards["tool"],
                                 wildcards["mode"],
                                 wildcards["norm"],
                                 wildcards["duplicates"],
@@ -117,26 +110,6 @@ subworkflow mergeBams:
     workdir:  home + "/Data/Tremethick/HP1-alpha"
     snakefile: home + "Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/workflows/subworkflows/mergeBam.py"
 
-
-rule plotProfileMerged:
-    version:
-        0.1
-    params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
-    input:
-        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/computeMatrix/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
-    output:
-        figure = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.pdf",
-        data = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.data",
-        regions = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.bed"
-    shell:
-        """
-            {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
-                                               --outFileName {output.figure} \
-                                               --outFileNameData {output.data} \
-                                               --outFileSortedRegions {output.regions} \
-                                               --plotType {wildcards.plotType}
-        """
 
 rule bigwigCompareMerged:
     version:
@@ -191,7 +164,7 @@ rule computeMatrix:
         file = getComputeMatrixInputMerged,
         region = getRegionFiles
     output:
-        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
+        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{source}.{region}.{mode}.{norm}.matrix.gz"
     shell:
         """
             {params.deepTools_dir}/computeMatrix {wildcards.command} \
@@ -199,12 +172,31 @@ rule computeMatrix:
                                                  --scoreFileName {input.file} \
                                                  --missingDataAsZero \
                                                  --skipZeros \
-						 --binSize 10 \
+                                                 --binSize 10 \
                                                  --numberOfProcessors {threads} \
                                                  {params.program_parameters} \
                                                  --outFileName {output.matrix_gz}
         """
 
+rule plotProfileMerged:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+    input:
+        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{source}.{region}.{mode}.{norm}.matrix.gz"
+    output:
+        figure = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.pdf",
+        data = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.data",
+        regions = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.bed"
+    shell:
+        """
+            {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
+                                               --outFileName {output.figure} \
+                                               --outFileNameData {output.data} \
+                                               --outFileSortedRegions {output.regions} \
+                                               --plotType {wildcards.plotType}
+        """
 
 # target rules
 rule all:
@@ -228,7 +220,7 @@ rule all:
                           "MCF10A_shHP1b_HP1a",
                           "MCF10A_shH2AZ_HP1a",
                           "MCF10A_shH2AZ_HP1b"]),
-        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
+        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.{suffix}",
                assayID="ChIP-Seq",
                runID="merged",
                outdir=config["processed_dir"],
@@ -239,7 +231,8 @@ rule all:
                duplicates=["duplicates_removed"],
                referencePoint="TSS",
                plotType="se",
+               source = ["bamCoverage", "bigwigCompare"],
+               region=["coding"],
                mode=["normal"],
                norm=["RPKM"],
-               region=["coding"],
                suffix=["pdf", "data", "bed"]),
