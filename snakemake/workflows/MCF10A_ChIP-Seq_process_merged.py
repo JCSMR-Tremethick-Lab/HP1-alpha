@@ -200,6 +200,27 @@ rule plotProfileMerged:
                                                --plotType {wildcards.plotType}
         """
 
+rule plotProfileContrasts:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+    input:
+        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{source}.{region}.{mode}.{norm}.matrix.gz"
+    output:
+        figure = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{plotType}.{source}.{region}.{mode}.{norm}.pdf",
+        data = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{plotType}.{source}.{region}.{mode}.{norm}.data",
+        regions = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{plotType}.{source}.{region}.{mode}.{norm}.bed"
+    shell:
+        """
+            {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
+                                               --outFileName {output.figure} \
+                                               --outFileNameData {output.data} \
+                                               --outFileSortedRegions {output.regions} \
+                                               --plotType {wildcards.plotType}
+        """
+
+
 # target rules
 rule all:
     input:
@@ -222,7 +243,7 @@ rule all:
                           "MCF10A_shHP1b_HP1a",
                           "MCF10A_shH2AZ_HP1a",
                           "MCF10A_shH2AZ_HP1b"]),
-        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{source}.{region}.{mode}.{norm}.matrix.gz",
+        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{plotType}.{source}.{region}.{mode}.{norm}.{suffix}",
                assayID="ChIP-Seq",
                runID="merged",
                outdir=config["processed_dir"],
@@ -234,10 +255,12 @@ rule all:
                referencePoint="TSS",
                contrast=["ChIP-Input"],
                ratio="log2",
+               plotType="se",
                source="bigwigCompare",
                region=["coding"],
                mode=["normal"],
-               norm=["RPKM"]),
+               norm=["RPKM"],
+               suffix=["pdf", "data", "bed"]),
         # expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.{suffix}",
         #        assayID="ChIP-Seq",
         #        runID="merged",
