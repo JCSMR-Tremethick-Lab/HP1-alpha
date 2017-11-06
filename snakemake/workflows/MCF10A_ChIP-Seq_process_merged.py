@@ -77,20 +77,22 @@ def getComputeMatrixInputMerged(wildcards):
                      wildcards["runID"],
                      config["processed_dir"],
                      REF_VERSION,
-                     wildcards["application"]])
+                     wildcards["application"]]) + "/"
     if wildcards["source"] == "bamCoverage":
         for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
-            fn.append(path + "/".join(wildcards["tool"],
+            fn.append(path + "/".join([wildcards["source"],
                                 wildcards["mode"],
                                 wildcards["norm"],
                                 wildcards["duplicates"],
                                 i + ".bw"]))
-    else if wildcards["source"] == "bigwigCompare":
+    elif wildcards["source"] == "bigwigCompare":
         for i in config["samples"]["ChIP-Seq"][wildcards["contrast"]].keys():
-            fn.append(path + "/".join(wildcards["tool"],
+            fn.append(path + "/".join([wildcards["source"],
                                 wildcards["mode"],
                                 wildcards["norm"],
                                 wildcards["duplicates"],
+                                wildcards["contrast"],
+                                wildcards["ratio"],
                                 i + ".bw"]))
     return(fn)
 
@@ -152,7 +154,7 @@ rule bigwigCompareMerged:
                                                  --outFileName {output}
         """
 
-rule computeMatrix:
+rule computeMatrixContrasts:
     version:
         0.3
     params:
@@ -164,7 +166,7 @@ rule computeMatrix:
         file = getComputeMatrixInputMerged,
         region = getRegionFiles
     output:
-        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{source}.{region}.{mode}.{norm}.matrix.gz"
+        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{source}.{region}.{mode}.{norm}.matrix.gz"
     shell:
         """
             {params.deepTools_dir}/computeMatrix {wildcards.command} \
@@ -220,6 +222,25 @@ rule all:
                           "MCF10A_shHP1b_HP1a",
                           "MCF10A_shH2AZ_HP1a",
                           "MCF10A_shH2AZ_HP1b"]),
+        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{source}.{region}.{mode}.{norm}.matrix.gz"
+               assayID="ChIP-Seq",
+               runID="merged",
+               outdir=config["processed_dir"],
+               reference_version=REF_VERSION,
+               application=["deepTools"],
+               tool=["computeMatrix"],
+               command=["scale-regions"],
+               duplicates=["duplicates_removed"],
+               referencePoint = "TSS",
+               contrast=["ChIP-Input"],
+               mode=["normal"],
+               ratio="log2",
+               norm=["RPKM"],
+               source="bigwigCompare",
+               region=["coding"],
+               mode=["normal"],
+               norm=["RPKM"]
+        ),
         expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.{suffix}",
                assayID="ChIP-Seq",
                runID="merged",
