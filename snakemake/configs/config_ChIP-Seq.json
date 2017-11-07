@@ -303,7 +303,8 @@
         },
         "non-coding" :
         {
-          "intergenicRegions": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed"
+          "intergenicRegions": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed",
+          "repeats" : "/Data/References/Annotations/Homo_sapiens/hg19/Ensembl/RepeatMasker.bed"
         },
         "peaks" :
         {
