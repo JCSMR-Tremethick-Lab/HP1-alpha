@@ -21,10 +21,44 @@ wrapper_dir = os.environ['HOME'] + "/Development/snakemake-wrappers/bio"
 
 include_prefix= os.environ['HOME'] + "/Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/rules/"
 
-assay_dir = "NB501086_0114_B_Azad_JCSMR_hRNAseq"
+rule star_align_full:
+    version:
+        0.6
+    threads:
+        8
+    params:
+        trim_dir = config["trim_dir"]
+    input:
+        read1 = "{assayID}/{runID}/{processed_dir}/trimmed_data/{unit}_R1_001.QT.CA.fastq.gz",
+        read2 = "{assayID}/{runID}/{processed_dir}/trimmed_data/{unit}_R2_001.QT.CA.fastq.gz",
+        index = lambda wildcards: config["references"][REF_GENOME]["STAR"][wildcards["reference_version"]]
+    output:
+        "{assayID}/{runID}/{processed_dir}/{reference_version}/STAR/full/{unit}.bam"
+    shell:
+        """
+            STAR --runMode alignReads \
+                 --runThreadN {threads} \
+                 --genomeDir {input.index} \
+                 --readFilesIn {input.read1} {input.read2} \
+                 --readFilesCommand zcat \
+                 --outTmpDir /home/sebastian/tmp/{wildcards.unit} \
+                 --outSAMmode Full \
+                 --outSAMattributes Standard \
+                 --outSAMtype BAM SortedByCoordinate \
+                 --outStd BAM_SortedByCoordinate \
+                 --alignEndsType EndToEnd\
+                 > {output}
+        """
 
-include:
-    include_prefix + "run_STAR.py"
+rule bam_index_STAR_output:
+    version:
+        0.2
+    input:
+        "{assayID}/{runID}/{processed_dir}/{reference_version}/STAR/full/{unit}.bam"
+    output:
+        "{assayID}/{runID}/{processed_dir}/{reference_version}/STAR/full/{unit}.bam.bai"
+    wrapper:
+        "file://" + wrapper_dir + "/samtools/index/wrapper.py"
 
 # targets
 STARS = expand("{assayID}/{file}",
