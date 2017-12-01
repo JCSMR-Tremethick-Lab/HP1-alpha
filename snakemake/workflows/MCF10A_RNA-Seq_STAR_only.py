@@ -25,7 +25,7 @@ rule star_align_full:
     version:
         0.6
     threads:
-        8
+        16
     params:
         trim_dir = config["trim_dir"],
         genomeLoad = "LoadAndKeep",
