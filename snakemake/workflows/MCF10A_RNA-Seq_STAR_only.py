@@ -27,7 +27,8 @@ rule star_align_full:
     threads:
         8
     params:
-        trim_dir = config["trim_dir"]
+        trim_dir = config["trim_dir"],
+        genomeLoad = "LoadAndKeep"
     input:
         read1 = "{assayID}/{runID}/{processed_dir}/trimmed_data/{unit}_R1_001.QT.CA.fastq.gz",
         read2 = "{assayID}/{runID}/{processed_dir}/trimmed_data/{unit}_R2_001.QT.CA.fastq.gz",
@@ -39,6 +40,7 @@ rule star_align_full:
             STAR --runMode alignReads \
                  --runThreadN {threads} \
                  --genomeDir {input.index} \
+                 --genomeLoad {params.genomeLoad} \
                  --readFilesIn {input.read1} {input.read2} \
                  --readFilesCommand zcat \
                  --outTmpDir /home/sebastian/tmp/{wildcards.unit} \
