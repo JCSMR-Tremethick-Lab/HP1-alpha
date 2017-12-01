@@ -28,7 +28,8 @@ rule star_align_full:
         8
     params:
         trim_dir = config["trim_dir"],
-        genomeLoad = "LoadAndKeep"
+        genomeLoad = "LoadAndKeep",
+        limitBAMsortRAM = 16000000000,
     input:
         read1 = "{assayID}/{runID}/{processed_dir}/trimmed_data/{unit}_R1_001.QT.CA.fastq.gz",
         read2 = "{assayID}/{runID}/{processed_dir}/trimmed_data/{unit}_R2_001.QT.CA.fastq.gz",
@@ -41,6 +42,7 @@ rule star_align_full:
                  --runThreadN {threads} \
                  --genomeDir {input.index} \
                  --genomeLoad {params.genomeLoad} \
+                 --limitBAMsortRAM {params.limitBAMsortRAM} \
                  --readFilesIn {input.read1} {input.read2} \
                  --readFilesCommand zcat \
                  --outTmpDir /home/sebastian/tmp/{wildcards.unit} \
