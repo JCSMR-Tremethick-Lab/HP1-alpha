@@ -41,8 +41,6 @@ rule star_align_full:
             STAR --runMode alignReads \
                  --runThreadN {threads} \
                  --genomeDir {input.index} \
-                 --genomeLoad {params.genomeLoad} \
-                 --limitBAMsortRAM {params.limitBAMsortRAM} \
                  --readFilesIn {input.read1} {input.read2} \
                  --readFilesCommand zcat \
                  --outTmpDir /home/sebastian/tmp/{wildcards.unit} \
