@@ -1,4 +1,4 @@
-from snakemake.exceptions import MissingInputException
+# from snakemake.exceptions import MissingInputException
 import os
 from os.path import join
 
@@ -249,7 +249,7 @@ rule all:
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
                application=["deepTools"],
-               tool=["computeMatrix"],
+               tool=["plotProfile"],
                command=["scale-regions"],
                duplicates=["duplicates_removed"],
                referencePoint="TSS",
