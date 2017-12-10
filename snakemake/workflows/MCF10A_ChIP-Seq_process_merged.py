@@ -1,4 +1,4 @@
-from snakemake.exceptions import MissingInputException
+# from snakemake.exceptions import MissingInputException
 import os
 from os.path import join
 
@@ -31,7 +31,7 @@ BIGWIGs = expand("{assayID}/{file}.bw",
                     for i in config["samples"]["ChIP-Seq"]["runID"] \
                         for j in config["samples"]["ChIP-Seq"][i]])
 
-# input functions
+# functions
 def get_sample_labels(wildcards):
     sl = []
     runIDs = config["samples"][wildcards["assayID"]]["runID"]
@@ -73,17 +73,34 @@ def cli_parameters_normalization(wildcards):
 
 def getComputeMatrixInputMerged(wildcards):
     fn = []
-    for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
-        fn.append("/".join(["ChIP-Seq",
-                            "merged",
-                            config["processed_dir"],
-                            REF_VERSION,
-                            "deepTools",
-                            "bamCoverage",
-                            wildcards["mode"],
-                            wildcards["norm"],
-                            wildcards["duplicates"],
-                            i + ".bw"]))
+    path = "/".join([wildcards["assayID"],
+                     wildcards["runID"],
+                     config["processed_dir"],
+                     REF_VERSION,
+                     wildcards["application"]]) + "/"
+    if wildcards["source"] == "bamCoverage":
+        for i in config["samples"]["ChIP-Seq"]["replicates"].keys():
+            fn.append(path + "/".join([wildcards["source"],
+                                wildcards["mode"],
+                                wildcards["norm"],
+                                wildcards["duplicates"],
+                                i + ".bw"]))
+    elif wildcards["source"] == "bigwigCompare":
+        for i in config["samples"]["ChIP-Seq"][wildcards["contrast"]].keys():
+            fn.append(path + "/".join([wildcards["source"],
+                                wildcards["mode"],
+                                wildcards["norm"],
+                                wildcards["duplicates"],
+                                wildcards["contrast"],
+                                wildcards["ratio"],
+                                i + ".bw"]))
+    return(fn)
+
+
+def getRegionFiles(wildcards):
+    fn = []
+    for i in config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]].values():
+        fn.append(home + i)
     return(fn)
 
 
@@ -93,53 +110,8 @@ def debugWildcards(wildcards):
 # subworkflows section
 subworkflow mergeBams:
     workdir:  home + "/Data/Tremethick/HP1-alpha"
-    snakefile: home + "Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/workflows/subworkflows/mergeBam.py"
+    snakefile: home + "/Development/JCSMR-Tremethick-Lab/HP1-alpha/snakemake/workflows/subworkflows/mergeBam.py"
 
-
-rule computeMatrix:
-    version:
-        0.3
-    params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
-        program_parameters = lambda wildcards: ' '.join("{!s}={!s}".format(key, val.strip("\\'")) for (key, val) in cli_parameters_computeMatrix(wildcards).items())
-    threads:
-        32
-    input:
-        file = getComputeMatrixInputMerged,
-        region = lambda wildcards: home + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
-    output:
-        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
-    shell:
-        """
-            {params.deepTools_dir}/computeMatrix {wildcards.command} \
-                                                 --regionsFileName {input.region} \
-                                                 --scoreFileName {input.file} \
-                                                 --missingDataAsZero \
-                                                 --skipZeros \
-                                                 --numberOfProcessors {threads} \
-                                                 {params.program_parameters} \
-                                                 --outFileName {output.matrix_gz}
-        """
-
-rule plotProfileMerged:
-    version:
-        0.1
-    params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
-    input:
-        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/computeMatrix/{command}/{duplicates}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
-    output:
-        figure = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.pdf",
-        data = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.data",
-        regions = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.bed"
-    shell:
-        """
-            {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
-                                               --outFileName {output.figure} \
-                                               --outFileNameData {output.data} \
-                                               --outFileSortedRegions {output.regions} \
-                                               --plotType {wildcards.plotType}
-        """
 
 rule bigwigCompareMerged:
     version:
@@ -182,6 +154,73 @@ rule bigwigCompareMerged:
                                                  --outFileName {output}
         """
 
+rule computeMatrixContrasts:
+    version:
+        0.3
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        program_parameters = lambda wildcards: ' '.join("{!s}={!s}".format(key, val.strip("\\'")) for (key, val) in cli_parameters_computeMatrix(wildcards).items())
+    threads:
+        32
+    input:
+        file = getComputeMatrixInputMerged,
+        region = getRegionFiles
+    output:
+        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{source}.{region}.{mode}.{norm}.matrix.gz"
+    shell:
+        """
+            {params.deepTools_dir}/computeMatrix {wildcards.command} \
+                                                 --regionsFileName {input.region} \
+                                                 --scoreFileName {input.file} \
+                                                 --missingDataAsZero \
+                                                 --skipZeros \
+                                                 --binSize 10 \
+                                                 --numberOfProcessors {threads} \
+                                                 {params.program_parameters} \
+                                                 --outFileName {output.matrix_gz}
+        """
+
+rule plotProfileMerged:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+    input:
+        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{region}.{mode}.{norm}.matrix.gz"
+    output:
+        figure = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.pdf",
+        data = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.data",
+        regions = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.bed"
+    shell:
+        """
+            {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
+                                               --outFileName {output.figure} \
+                                               --outFileNameData {output.data} \
+                                               --outFileSortedRegions {output.regions} \
+                                               --plotType {wildcards.plotType}
+        """
+
+rule plotProfileContrasts:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+    input:
+        matrix_gz = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{source}.{region}.{mode}.{norm}.matrix.gz"
+    output:
+        figure = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{plotType}.{source}.{region}.{mode}.{norm}.pdf",
+        data = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{plotType}.{source}.{region}.{mode}.{norm}.data",
+        regions = "{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{plotType}.{source}.{region}.{mode}.{norm}.bed"
+    shell:
+        """
+            {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
+                                               --outFileName {output.figure} \
+                                               --outFileNameData {output.data} \
+                                               --outFileSortedRegions {output.regions} \
+                                               --plotType {wildcards.plotType}
+        """
+
+
 # target rules
 rule all:
     input:
@@ -204,18 +243,37 @@ rule all:
                           "MCF10A_shHP1b_HP1a",
                           "MCF10A_shH2AZ_HP1a",
                           "MCF10A_shH2AZ_HP1b"]),
-        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
+        expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{contrast}/{ratio}/{plotType}.{source}.{region}.{mode}.{norm}.{suffix}",
                assayID="ChIP-Seq",
                runID="merged",
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
-               application="deepTools",
-               tool="plotProfile",
+               application=["deepTools"],
+               tool=["plotProfile"],
                command=["scale-regions"],
                duplicates=["duplicates_removed"],
                referencePoint="TSS",
+               contrast=["ChIP-Input"],
+               ratio="log2",
                plotType="se",
+               source="bigwigCompare",
+               region=["coding", "non-coding"],
                mode=["normal"],
                norm=["RPKM"],
-               region=["allGenes", "intergenicRegions", "conditionMCF10A_shH2AZHP1a", "conditionMCF10A_shHP1ab", "conditionMCF10A_shHP1a", "conditionMCF10A_shHP1b", "conditionMCF10A_WT"],
                suffix=["pdf", "data", "bed"]),
+        # expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{duplicates}/{referencePoint}/{plotType}.{source}.{region}.{mode}.{norm}.{suffix}",
+        #        assayID="ChIP-Seq",
+        #        runID="merged",
+        #        outdir=config["processed_dir"],
+        #        reference_version=REF_VERSION,
+        #        application="deepTools",
+        #        tool="plotProfile",
+        #        command=["scale-regions", "reference-point"],
+        #        duplicates=["duplicates_removed"],
+        #        referencePoint="TSS",
+        #        plotType="se",
+        #        source = ["bamCoverage", "bigwigCompare"],
+        #        region=["coding"],
+        #        mode=["normal"],
+        #        norm=["RPKM"],
+        #        suffix=["pdf", "data", "bed"]),
