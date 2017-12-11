@@ -55,7 +55,7 @@ PROCESSED_BAMs_pseudo_reps = expand("{assayID}/{file1}",
 
 rule make_pseudo_replicates:
     params:
-        seed = print(randint(0,1000)),
+        seed = print(randint(0, 1000)),
         fraction = 0.5
     threads:
         4
@@ -67,7 +67,7 @@ rule make_pseudo_replicates:
         protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}/pseudo_{rep}.sorted.bam")
     shell:
         """
-            samtools view -b --threads {threads} -s {params.seed}.{params.fraction} {input} > {output} 2 > {log}
+            samtools view -b --threads {threads} -s {params.seed}.{params.fraction} -o {output} {input} 1>{log} 2>{log}
         """
 
 rule index_pseudo_replicates:
