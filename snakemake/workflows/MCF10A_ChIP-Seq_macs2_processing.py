@@ -5,6 +5,7 @@ __date__ = "2017-08-23"
 from snakemake.exceptions import MissingInputException
 import os
 from os.path import join
+from random import *
 
 rule:
     version: 0.1
@@ -43,39 +44,45 @@ def get_sample_labels(wildcards):
 
 # set targets here
 
-PROCESSED_BAMs_dups_removed = expand("{assayID}/{file1}",
+PROCESSED_BAMs_pseudo_reps = expand("{assayID}/{file1}",
                                      assayID = "ChIP-Seq",
-                                     file1 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
-                                        for i in config["samples"]["ChIP-Seq"]["runID"] \
-                                            for j in config["samples"]["ChIP-Seq"][i]]),
-
-PROCESSED_BAMs_dups_marked = expand("{assayID}/{file2}",
-                                     assayID = "ChIP-Seq",
-                                     file2 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_marked/" + j + ".Q" + config["alignment_quality"] + ".sorted.bam.bai" \
-                                     for i in config["samples"]["ChIP-Seq"]["runID"] \
-                                        for j in config["samples"]["ChIP-Seq"][i]])
+                                     file1 = [ i + "/" + config["processed_dir"] + "/" + REF_VERSION + "/bowtie2/duplicates_removed/" + j + ".Q" + config["alignment_quality"] + "/" + "pseudo_rep" + rep + ".sorted.bam.bai" \
+                                        for i in config["samples"]["ChIP-Seq"]["runID"]\
+                                            for j in config["samples"]["ChIP-Seq"][i]\
+                                                for rep in ["1", "2"]])
 
 
 
-rule bam_rmdup:
-    input:
-        rules.bam_mark_duplicates.output
-    output:
-        protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}.sorted.bam")
-    shell:
-        "samtools rmdup {input} {output}"
-
-rule bam_rmdup_index:
+rule make_pseudo_replicates:
     params:
-        qual = config["alignment_quality"]
+        seed = print(randint(0,1000))
+        fraction = 0.5
+    threads:
+        4
+    log:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}/log.txt"
     input:
-        rules.bam_rmdup.output
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}.sorted.bam"
     output:
-        protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}.sorted.bam.bai")
+        protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}/pseudo_{rep}.sorted.bam")
     shell:
-        "samtools index {input} {output}"
+        """
+            samtools view -b --threads {threads} -s {params.seed}.{params.fraction} {input} > {output} 2 > {log}
+        """
+
+rule index_pseudo_replicates:
+    threads:
+        4
+    log:
+    input:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}/pseudo_{rep}.sorted.bam"
+    output:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}/pseudo_{rep}.sorted.bam.bai"
+    shell:
+        """
+            samtools index -@ {threads} {input} {output}
+        """
 
 rule all:
     input:
-        PROCESSED_BAMs_dups_removed,
-        PROCESSED_BAMs_dups_marked
+        PROCESSED_BAMs_pseudo_reps
