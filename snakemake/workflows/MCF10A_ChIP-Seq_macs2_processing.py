@@ -133,7 +133,7 @@ rule index_pseudo_replicates:
             samtools index -@ {threads} {input} {output}
         """
 
-rule macs2_replicates:
+rule macs2_callpeak_replicates:
     threads:
         1
     params:
@@ -141,12 +141,12 @@ rule macs2_replicates:
         filetype="BAM",
         verbosity=config["program_parameters"]["macs2"]["verbosity"]
     log:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/{mode}/callpeak.log"
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/callpeak/callpeak.log"
     input:
         chip=getChIPBam,
         input=getMergedInputBAM
     output:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/{mode}"
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/callpeak"
     shell:
         """
             macs2 {wildcard.macs2_command} -t {input.chip}\
