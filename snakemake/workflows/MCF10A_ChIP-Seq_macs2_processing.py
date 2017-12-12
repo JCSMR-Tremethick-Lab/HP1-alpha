@@ -41,6 +41,56 @@ def get_sample_labels(wildcards):
             sl.append(k)
     return(sl)
 
+def macs2OutputFiles(wildcards):
+    fn = []
+    for i in config["samples"]["ChIP-Seq"]["ChIP-Input"].keys():
+        for j in config["samples"]["ChIP-Seq"]["replicates"][config["samples"]["ChIP-Seq"]["ChIP-Input"][i]["ChIP"]]:
+            contrasts = i + "/" + j
+            path = "/".join(["ChIP-Seq",
+                            "processed_data",
+                            REF_VERSION,
+                            "macs2",
+                            contrasts,
+                            "callpeak"])
+            fn.append(path)
+    return(fn)
+
+
+def getMergedInputBAM(wildcards):
+    fn = []
+    inp = config["samples"]["ChIP-Seq"]["ChIP-Input"][wildcards["contrast"]]["Input"]
+    inp = config["samples"]["ChIP-Seq"]["replicates"][inp]
+    for i in config["samples"]["ChIP-Seq"]["runID"]:
+        for j in config["samples"]["ChIP-Seq"][i].keys():
+            for k in inp:
+                if k == j:
+                    f = "/".join([wildcards["assayID"],
+                                  i,
+                                  wildcards["processed_dir"],
+                                  REF_VERSION,
+                                  "bowtie2",
+                                  "duplicates_removed",
+                                  j + ".Q" + config["alignment_quality"] + ".sorted.bam"
+                                  ])
+                    fn.append(f)
+    return(fn)
+
+
+def getChIPBam(wildcards):
+    fn = []
+    for i in config["samples"]["ChIP-Seq"]["runID"]:
+        for j in config["samples"]["ChIP-Seq"][i].keys():
+                if j == wildcards["unit"]:
+                        f = "/".join([wildcards["assayID"],
+                                      i,
+                                      wildcards["processed_dir"],
+                                      REF_VERSION,
+                                      "bowtie2",
+                                      "duplicates_removed",
+                                      j + ".Q" + config["alignment_quality"] + ".sorted.bam"
+                                      ])
+                        fn.append(f)
+    return(fn)
 
 # set targets here
 
@@ -51,7 +101,7 @@ PROCESSED_BAMs_pseudo_reps = expand("{assayID}/{file1}",
                                             for j in config["samples"]["ChIP-Seq"][i]\
                                                 for rep in ["1", "2"]])
 
-
+MACS2_output = macs2OutputFiles(wildcards)
 
 rule make_pseudo_replicates:
     params:
@@ -83,6 +133,36 @@ rule index_pseudo_replicates:
             samtools index -@ {threads} {input} {output}
         """
 
+rule macs2_replicates:
+    threads:
+        1
+    params:
+        gsize=config["program_parameters"]["macs2"]["gsize"],
+        filetype="BAM",
+        verbosity=config["program_parameters"]["macs2"]["verbosity"]
+    log:
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/{mode}/callpeak.log"
+    input:
+        #INPUTFUNCTION# required
+        chip=getChIPBam
+        input=getMergedInputBAM
+    output:
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/{mode}"
+    shell:
+        """
+            macs2 {wildcard.macs2_command} -t {input.chip}\
+                                           -c {input.input}\
+                                           --gsize {params.gsize}\
+                                           -f {params.filetype}\
+                                           --name {contrast}
+                                           --outdir {output}\
+                                           --verbose {params.verbosity}\
+                                           --bdg\
+            1>>{log} 2>>{log}
+        """
+
+
 rule all:
     input:
-        PROCESSED_BAMs_pseudo_reps
+        PROCESSED_BAMs_pseudo_reps,
+        MACS2_output
