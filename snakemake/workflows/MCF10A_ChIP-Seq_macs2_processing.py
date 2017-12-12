@@ -41,7 +41,7 @@ def get_sample_labels(wildcards):
             sl.append(k)
     return(sl)
 
-def macs2OutputFiles(wildcards):
+def macs2OutputFiles():
     fn = []
     for i in config["samples"]["ChIP-Seq"]["ChIP-Input"].keys():
         for j in config["samples"]["ChIP-Seq"]["replicates"][config["samples"]["ChIP-Seq"]["ChIP-Input"][i]["ChIP"]]:
@@ -101,7 +101,7 @@ PROCESSED_BAMs_pseudo_reps = expand("{assayID}/{file1}",
                                             for j in config["samples"]["ChIP-Seq"][i]\
                                                 for rep in ["1", "2"]])
 
-MACS2_output = macs2OutputFiles(wildcards)
+MACS2_output = macs2OutputFiles()
 
 rule make_pseudo_replicates:
     params:
@@ -143,8 +143,7 @@ rule macs2_replicates:
     log:
         "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/{mode}/callpeak.log"
     input:
-        #INPUTFUNCTION# required
-        chip=getChIPBam
+        chip=getChIPBam,
         input=getMergedInputBAM
     output:
         "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/{mode}"
