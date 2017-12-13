@@ -94,17 +94,17 @@ PROCESSED_BAMs_dups_marked = expand("{assayID}/{file2}",
 #             mv {input} {output}
 #        """
 
-# rule AdapterRemoval:
-#     threads:
-#         lambda wildcards: int(str(config["program_parameters"]["AdapterRemoval"]["threads"]).strip("['']"))
-#     input:
-#         read1 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
-#         read2 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
-#     output:
-#         read1 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R1.fastq.gz",
-#         read2 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R2.fastq.gz"
-#     wrapper:
-#         "file://" + wrapper_dir + "/AdapterRemoval/wrapper.py"
+rule AdapterRemoval:
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["AdapterRemoval"]["threads"]).strip("['']"))
+    input:
+        read1 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
+        read2 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
+    output:
+        read1 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R1.fastq.gz",
+        read2 = "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}_R2.fastq.gz"
+    wrapper:
+        "file://" + wrapper_dir + "/AdapterRemoval/wrapper.py"
 #
 # rule fastqc:
 #     version:
@@ -237,4 +237,3 @@ rule all:
     input:
         PROCESSED_BAMs_dups_removed,
         PROCESSED_BAMs_dups_marked
-
