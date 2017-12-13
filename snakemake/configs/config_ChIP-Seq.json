@@ -281,10 +281,9 @@
   },
   "macs2" :
   {
-    "macs2_binary" : "/miniconda3/envs/py27/bin/macs2",
+    "binary" : "/miniconda3/envs/py27/bin/macs2",
     "gsize" : "hs",
-    "verbosity" : "3",
-
+    "verbosity" : "3"
   },
   "deepTools":
   {
