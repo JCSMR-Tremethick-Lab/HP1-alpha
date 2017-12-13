@@ -158,6 +158,7 @@
           "MCF10A_shH2AZ_HP1a_ChIP_2b": ["TS6_S6_R1_001.fastq.gz", "TS6_S6_R2_001.fastq.gz"],
           "MCF10A_WT_HP1b_ChIP_1b": ["TS7_S7_R1_001.fastq.gz", "TS7_S7_R2_001.fastq.gz"],
           "MCF10A_WT_HP1b_ChIP_2b": ["TS8_S8_R1_001.fastq.gz", "TS8_S8_R2_001.fastq.gz"],
+          "MCF10A_shHP1a_HP1b_ChIP_1a": ["TS9_S9_R1_001.fastq.gz", "TS9_S9_R2_001.fastq.gz"],
           "MCF10A_shHP1a_HP1b_ChIP_2b": ["TS10_S10_R1_001.fastq.gz", "TS10_S10_R2_001.fastq.gz"],
           "MCF10A_shH2AZ_HP1b_ChIP_1b": ["TS11_S11_R1_001.fastq.gz", "TS11_S11_R2_001.fastq.gz"],
           "MCF10A_shH2AZ_HP1b_ChIP_2b": ["TS12_S12_R1_001.fastq.gz", "TS12_S12_R2_001.fastq.gz"],
