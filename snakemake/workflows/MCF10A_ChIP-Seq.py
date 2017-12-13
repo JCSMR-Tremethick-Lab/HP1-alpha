@@ -95,8 +95,12 @@ PROCESSED_BAMs_dups_marked = expand("{assayID}/{file2}",
 #        """
 
 rule AdapterRemoval:
+    version:
+        "0.2"
     threads:
         lambda wildcards: int(str(config["program_parameters"]["AdapterRemoval"]["threads"]).strip("['']"))
+    log:
+        "{assayID}/{runID}/{outdir}/{trim_dir}/{unit}.AdapterRemoval.log"
     input:
         read1 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][0],
         read2 = lambda wildcards: wildcards["assayID"] + "/" + wildcards["runID"] + "/" + config["raw_dir"] + "/" + config["samples"][wildcards["assayID"]][wildcards["runID"]][wildcards["unit"]][1]
@@ -127,6 +131,8 @@ rule bowtie2_pe:
         bt2_index = home_dir + config["references"][REF_GENOME]["bowtie2"][REF_VERSION]
     threads:
         lambda wildcards: int(str(config["program_parameters"]["bowtie2"]["threads"]).strip("['']"))
+    log:
+        "{assayID}/{runID}/{outdir}/" + REF_VERSION + "/bowtie2/{unit}.log"
     input:
         read1="{assayID}/{runID}/{outdir}/trimmed_data/{unit}_R1.fastq.gz",
         read2="{assayID}/{runID}/{outdir}/trimmed_data/{unit}_R2.fastq.gz",
@@ -147,7 +153,7 @@ rule bowtie2_pe:
             --rg 'PU:NA' \
             -1 {input.read1} \
             -2 {input.read2} \
-            | samtools view -Sb - > {output}
+            | samtools view -Sb - > {output} 2>{log}
         """
 
 rule bam_quality_filter:
@@ -155,10 +161,12 @@ rule bam_quality_filter:
     #     qual = config["alignment_quality"]
     input:
         "{assayID}/{runID}/{outdir}/" + REF_VERSION + "/bowtie2/{unit}.bam"
+    log:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/quality_filtered/{unit}.Q{qual}.log"
     output:
         temp("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/quality_filtered/{unit}.Q{qual}.bam")
     shell:
-        "samtools view -b -h -q {wildcards.qual} {input} > {output}"
+        "samtools view -b -h -q {wildcards.qual} {input} > {output} 2>{log}"
 
 rule bam_sort:
     params:
@@ -167,10 +175,12 @@ rule bam_sort:
         4
     input:
         rules.bam_quality_filter.output
+    log:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/sorted/{unit}.Q{qual}.log"
     output:
         "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/sorted/{unit}.Q{qual}.sorted.bam"
     shell:
-        "samtools sort -@ {threads} {input} -T {wildcards.unit}.Q{params.qual}.sorted -o {output}"
+        "samtools sort -@ {threads} {input} -T {wildcards.unit}.Q{params.qual}.sorted -o {output} 2>{log}"
 
 rule bam_mark_duplicates:
     params:
@@ -179,6 +189,8 @@ rule bam_mark_duplicates:
         temp = home + config["temp_dir"]
     threads:
         4
+    log:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_marked/{unit}.Q{qual}.log"
     input:
         rules.bam_sort.output
     output:
@@ -191,36 +203,42 @@ rule bam_mark_duplicates:
             INPUT={input}\
             OUTPUT={output}\
             ASSUME_SORTED=true\
-            METRICS_FILE={output}.metrics.txt
+            METRICS_FILE={output}.metrics.txt 1>{log} 2>{log}
         """
 
 rule bam_index:
     params:
         qual = config["alignment_quality"]
+    log:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_marked/{unit}.Q{qual}.log"
     input:
         rules.bam_mark_duplicates.output
     output:
         protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_marked/{unit}.Q{qual}.sorted.bam.bai")
     shell:
-        "samtools index {input} {output}"
+        "samtools index {input} {output} 1>>{log} 2>>{log}"
 
 rule bam_rmdup:
     input:
         rules.bam_mark_duplicates.output
+    log:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}.log"
     output:
         protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}.sorted.bam")
     shell:
-        "samtools rmdup {input} {output}"
+        "samtools rmdup {input} {output} 1>{log} 2>{log}"
 
 rule bam_rmdup_index:
     params:
         qual = config["alignment_quality"]
+    log:
+        "{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}.log"
     input:
         rules.bam_rmdup.output
     output:
         protected("{assayID}/{runID}/{outdir}/{reference_version}/bowtie2/duplicates_removed/{unit}.Q{qual}.sorted.bam.bai")
     shell:
-        "samtools index {input} {output}"
+        "samtools index {input} {output} 1>>{log} 2>>{log}"
 
 # target rules
 # rule run_AdapterRemoval:
