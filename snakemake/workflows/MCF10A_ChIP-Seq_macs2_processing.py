@@ -240,4 +240,5 @@ rule macs2_callpeak_pseudoreplicates:
 rule all:
     input:
         PROCESSED_BAMs_pseudo_reps,
-        MACS2_output
+        MACS2_output,
+	MACS2_output_pseudo_reps
