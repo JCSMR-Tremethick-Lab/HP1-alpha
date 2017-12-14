@@ -186,7 +186,7 @@ rule macs2_callpeak_replicates:
         verbosity=config["program_parameters"]["macs2"]["verbosity"],
 	    macs2_binary=home + config["program_parameters"]["macs2"]["binary"]
     log:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak.log"
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak/callpeak.log"
     input:
         chip=getChIPBam,
         input=getMergedInputBAM
@@ -217,12 +217,12 @@ rule macs2_callpeak_pseudoreplicates:
         name=lambda wildcards: ".".join([wildcards["unit"], wildcards["pseudo"]]),
         macs2_binary=home + config["program_parameters"]["macs2"]["binary"]
     log:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{pseudo}/{macs2_command}/callpeak/callpeak.log"
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak/{pseudo}/callpeak.log"
     input:
         chip=getChIPBamPseudoRep,
         input=getMergedInputBAM
     output:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{pseudo}/{macs2_command}/callpeak"
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak/{pseudo}"
     shell:
         """
             {params.macs2_binary} {wildcard.macs2_command} -t {input.chip}\
