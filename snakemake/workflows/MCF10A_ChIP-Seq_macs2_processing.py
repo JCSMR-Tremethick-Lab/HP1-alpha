@@ -66,7 +66,7 @@ def getMergedInputBAM(wildcards):
                 if k == j:
                     f = "/".join([wildcards["assayID"],
                                   i,
-                                  wildcards["processed_dir"],
+                                  config["processed_dir"],
                                   REF_VERSION,
                                   "bowtie2",
                                   "duplicates_removed",
@@ -83,7 +83,7 @@ def getChIPBam(wildcards):
                 if j == wildcards["unit"]:
                         f = "/".join([wildcards["assayID"],
                                       i,
-                                      wildcards["processed_dir"],
+                                      config["processed_dir"],
                                       REF_VERSION,
                                       "bowtie2",
                                       "duplicates_removed",
@@ -139,24 +139,25 @@ rule macs2_callpeak_replicates:
     params:
         gsize=config["program_parameters"]["macs2"]["gsize"],
         filetype="BAM",
-        verbosity=config["program_parameters"]["macs2"]["verbosity"]
+        verbosity=config["program_parameters"]["macs2"]["verbosity"],
+	macs2_binary=home + config["program_parameters"]["macs2"]["binary"]
     log:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/callpeak/callpeak.log"
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak.log"
     input:
         chip=getChIPBam,
         input=getMergedInputBAM
     output:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/callpeak"
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak"
     shell:
         """
-            macs2 {wildcard.macs2_command} -t {input.chip}\
-                                           -c {input.input}\
-                                           --gsize {params.gsize}\
-                                           -f {params.filetype}\
-                                           --name {contrast}
-                                           --outdir {output}\
-                                           --verbose {params.verbosity}\
-                                           --bdg\
+            {params.macs2_binary} callpeak -t {input.chip}\
+                           -c {input.input}\
+                           --gsize {params.gsize}\
+                           -f {params.filetype}\
+                           --name {wildcards.contrast}\
+                           --outdir {output}\
+                           --verbose {params.verbosity}\
+                           --bdg\
             1>>{log} 2>>{log}
         """
 
