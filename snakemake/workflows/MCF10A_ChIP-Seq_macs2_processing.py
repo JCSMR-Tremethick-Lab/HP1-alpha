@@ -41,6 +41,7 @@ def get_sample_labels(wildcards):
             sl.append(k)
     return(sl)
 
+
 def macs2OutputFiles():
     fn = []
     for i in config["samples"]["ChIP-Seq"]["ChIP-Input"].keys():
@@ -52,7 +53,23 @@ def macs2OutputFiles():
                             "macs2",
                             contrasts,
                             "callpeak"])
+            pseudorep1 = i + "/" + j + "/pseudo_rep1"
+            pseudorep2 = i + "/" + j + "/pseudo_rep2"
+            pseudorep1 = "/".join(["ChIP-Seq",
+                            "processed_data",
+                            REF_VERSION,
+                            "macs2",
+                            pseudorep1,
+                            "callpeak"])
+            pseudorep2 = "/".join(["ChIP-Seq",
+                            "processed_data",
+                            REF_VERSION,
+                            "macs2",
+                            pseudorep2,
+                            "callpeak"])
             fn.append(path)
+            fn.append(pseudorep1)
+            fn.append(pseudorep2)
     return(fn)
 
 
@@ -88,6 +105,23 @@ def getChIPBam(wildcards):
                                       "bowtie2",
                                       "duplicates_removed",
                                       j + ".Q" + config["alignment_quality"] + ".sorted.bam"
+                                      ])
+                        fn.append(f)
+    return(fn)
+
+
+def getChIPBamPseudoRep(wildcards):
+    fn = []
+    for i in config["samples"]["ChIP-Seq"]["runID"]:
+        for j in config["samples"]["ChIP-Seq"][i].keys():
+                if j == wildcards["unit"]:
+                        f = "/".join([wildcards["assayID"],
+                                      i,
+                                      wildcards["processed_dir"],
+                                      REF_VERSION,
+                                      "bowtie2",
+                                      "duplicates_removed",
+                                      j + ".Q" + config["alignment_quality"] + "/" + wildcards["pseudo"] + ".sorted.bam"
                                       ])
                         fn.append(f)
     return(fn)
@@ -134,12 +168,14 @@ rule index_pseudo_replicates:
         """
 
 rule macs2_callpeak_replicates:
+    version:
+        0.2
     threads:
         1
     params:
         gsize=config["program_parameters"]["macs2"]["gsize"],
         filetype="BAM",
-        verbosity=config["program_parameters"]["macs2"]["verbosity"]
+        verbosity=config["program_parameters"]["macs2"]["verbosity"],
     log:
         "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{macs2_command}/callpeak/callpeak.log"
     input:
@@ -154,6 +190,36 @@ rule macs2_callpeak_replicates:
                                            --gsize {params.gsize}\
                                            -f {params.filetype}\
                                            --name {contrast}
+                                           --outdir {output}\
+                                           --verbose {params.verbosity}\
+                                           --bdg\
+            1>>{log} 2>>{log}
+        """
+
+rule macs2_callpeak_pseudoreplicates:
+    version:
+        0.1
+    threads:
+        1
+    params:
+        gsize=config["program_parameters"]["macs2"]["gsize"],
+        filetype="BAM",
+        verbosity=config["program_parameters"]["macs2"]["verbosity"],
+        name=lambda wildcards: ".".join([wildcards["unit"], wildcards["pseudo"]])
+    log:
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{pseudo}/{macs2_command}/callpeak/callpeak.log"
+    input:
+        chip=getChIPBamPseudoRep,
+        input=getMergedInputBAM
+    output:
+        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/{pseudo}/{macs2_command}/callpeak"
+    shell:
+        """
+            macs2 {wildcard.macs2_command} -t {input.chip}\
+                                           -c {input.input}\
+                                           --gsize {params.gsize}\
+                                           -f {params.filetype}\
+                                           --name {params.name}\
                                            --outdir {output}\
                                            --verbose {params.verbosity}\
                                            --bdg\
