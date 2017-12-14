@@ -82,7 +82,8 @@ def macs2OutputFilesPseudoReps():
 
 def getMergedInputBAM(wildcards):
     fn = []
-    inp = config["samples"]["ChIP-Seq"]["ChIP-Input"][wildcards["contrast"]]["Input"]
+    contrast = wildcards["contrast"].split("/")[0]
+    inp = config["samples"]["ChIP-Seq"]["ChIP-Input"][contrast]["Input"]
     inp = config["samples"]["ChIP-Seq"]["replicates"][inp]
     for i in config["samples"]["ChIP-Seq"]["runID"]:
         for j in config["samples"]["ChIP-Seq"][i].keys():
