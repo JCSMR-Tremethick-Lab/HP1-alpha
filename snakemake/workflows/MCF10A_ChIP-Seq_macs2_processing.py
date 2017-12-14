@@ -53,6 +53,14 @@ def macs2OutputFiles():
                             "macs2",
                             contrasts,
                             "callpeak"])
+            fn.append(path)
+    return(fn)
+
+
+def macs2OutputFilesPseudoReps():
+    fn = []
+    for i in config["samples"]["ChIP-Seq"]["ChIP-Input"].keys():
+        for j in config["samples"]["ChIP-Seq"]["replicates"][config["samples"]["ChIP-Seq"]["ChIP-Input"][i]["ChIP"]]:
             pseudorep1 = i + "/" + j + "/pseudo_rep1"
             pseudorep2 = i + "/" + j + "/pseudo_rep2"
             pseudorep1 = "/".join(["ChIP-Seq",
@@ -67,7 +75,6 @@ def macs2OutputFiles():
                             "macs2",
                             pseudorep2,
                             "callpeak"])
-            fn.append(path)
             fn.append(pseudorep1)
             fn.append(pseudorep2)
     return(fn)
@@ -136,6 +143,7 @@ PROCESSED_BAMs_pseudo_reps = expand("{assayID}/{file1}",
                                                 for rep in ["1", "2"]])
 
 MACS2_output = macs2OutputFiles()
+MACS2_output_pseudo_reps = macs2OutputFilesPseudoReps()
 
 rule make_pseudo_replicates:
     params:
