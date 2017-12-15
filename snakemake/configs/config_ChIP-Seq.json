@@ -100,6 +100,15 @@
           "MCF10A_WT_5": ["10AD8_2_S17_R1_001.fastq.gz", "10AD8_2_S17_R2_001.fastq.gz"],
           "MCF10A_WT_6": ["10AD8_3_S18_R1_001.fastq.gz", "10AD8_3_S18_R2_001.fastq.gz"]
         },
+        "replicates":
+        {
+          "MCF10A_WT" : ["MCF10A_WT_4", "MCF10A_WT_5", "MCF10A_WT_6"],
+          "MCF10A_Scramble" : ["MCF10A_Scramble_1", "MCF10A_Scramble_3"],
+          "MCF10A_shH2AZHP1a" : ["MCF10A_shH2AZHP1a_1", "MCF10A_shH2AZHP1a_2", "MCF10A_shH2AZHP1a_3"],
+          "MCF10A_shHP1a" : ["MCF10A_shHP1a_1", "MCF10A_shHP1a_2", "MCF10A_shHP1a_3"],
+          "MCF10A_shHP1ab" : ["MCF10A_shHP1ab_1", "MCF10A_shHP1ab_2"],
+          "MCF10A_shHP1b" : ["MCF10A_shHP1b_1", "MCF10A_shHP1b_2"]
+        },
         "sleuth_parameters":
         {
           "conditions":
