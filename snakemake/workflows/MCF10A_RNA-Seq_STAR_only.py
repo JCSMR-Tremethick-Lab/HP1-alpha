@@ -83,6 +83,22 @@ rule star_align_IRFinder:
                  > {output}
         """
 
+def getBAMbyReplicatesSTAR(wildcards):
+    fn=[]
+    for i in config["samples"]["RNA-Seq"]["runID"]:
+        for j in config["samples"]["RNA-Seq"][i]:
+            if j in config["samples"]["RNA-Seq"]["replicates"][wildcards["replicates"]]:
+                fn.append(join("RNA-Seq/" +
+                               i +
+                               "/" +
+                               config["processed_dir"] +
+                               "/" +
+                               REF_VERSION +
+                               "/STAR/full/" +
+                               j + ".bam"))
+    return(fn)
+
+
 rule bam_index_STAR_output:
     version:
         0.2
@@ -93,6 +109,40 @@ rule bam_index_STAR_output:
     wrapper:
         "file://" + wrapper_dir + "/samtools/index/wrapper.py"
 
+rule bamMerge:
+    version:
+        0.1
+    params:
+        outputFormat = "--output-fmt BAM"  # ToDo: move
+    log:
+        "{assayID}/merged/{outdir}/{reference_version}/{replicates}.bamMerge.log"
+    threads:
+        16
+    input:
+        getBAMbyReplicatesSTAR
+    output:
+        "{assayID}/merged/{outdir}/{reference_version}/{replicates}.bam"
+    shell:
+        """
+            samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
+        """
+
+rule indexMerged:
+    version:
+        0.1
+    log:
+        "{assayID}/merged/{outdir}/{reference_version}/{replicates}.indexMerged.log"
+    threads:
+        16
+    input:
+        rules.bamMerge.output
+    output:
+        "{assayID}/merged/{outdir}/{reference_version}/{replicates}.bam.bai"
+    shell:
+        """
+            samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
+        """
+
 # targets
 STARS = expand("{assayID}/{file}",
               assayID = "RNA-Seq",
@@ -100,6 +150,16 @@ STARS = expand("{assayID}/{file}",
                   for i in config["samples"]["RNA-Seq"]["runID"] \
                       for j in config["samples"]["RNA-Seq"][i]])
 
+MERGED_STARS = expand("{assayID}/merged/{outdir}/{reference_version}/{replicates}.bam.bai",
+               assayID="RNA-Seq",
+               outdir=config["processed_dir"],
+               reference_version=REF_VERSION,
+               replicates=['MCF10A_WT',
+                           'MCF10A_Scramble',
+                           'MCF10A_shH2AZHP1a',
+                           'MCF10A_shHP1a',
+                           'MCF10A_shHP1ab',
+                           'MCF10A_shHP1b']),
 rule all:
     input:
         STARS
