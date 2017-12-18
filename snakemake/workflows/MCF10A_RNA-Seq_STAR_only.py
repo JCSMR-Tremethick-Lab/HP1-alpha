@@ -165,4 +165,4 @@ MERGED_STARS = expand("{assayID}/merged/{outdir}/{reference_version}/{replicates
 rule all:
     input:
         STARS,
-	MERGED_STARS
+	    MERGED_STARS
