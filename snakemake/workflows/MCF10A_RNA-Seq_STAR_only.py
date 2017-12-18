@@ -5,6 +5,8 @@ __modified__ = "2017-05-11"
 
 from snakemake.exceptions import MissingInputException
 import os
+from os.path import join
+
 
 rule:
     version: 0.1
@@ -162,4 +164,5 @@ MERGED_STARS = expand("{assayID}/merged/{outdir}/{reference_version}/{replicates
                            'MCF10A_shHP1b']),
 rule all:
     input:
-        STARS
+        STARS,
+	MERGED_STARS
