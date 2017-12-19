@@ -85,6 +85,21 @@ rule star_align_IRFinder:
                  > {output}
         """
 
+def cli_parameters_bamCoverage(wildcards):
+    a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["mode"]]
+    b = str()
+    for (key, val) in a.items():
+        if val == " ":
+            f = key + " "
+            b = b + f
+        else:
+            f = key + "=" + val + " "
+            b = b + f
+    if wildcards["mode"] == "MNase":
+        b = b + "--MNase"
+    return(b.rstrip())
+
+
 def getBAMbyReplicatesSTAR(wildcards):
     fn=[]
     for i in config["samples"]["RNA-Seq"]["runID"]:
@@ -149,7 +164,7 @@ rule bamCoverageMerged:
     version:
         0.1
     params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        deepTools_dir = HOME + config["program_parameters"]["deepTools"]["deepTools_dir"],
         ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
         program_parameters = cli_parameters_bamCoverage
     threads:

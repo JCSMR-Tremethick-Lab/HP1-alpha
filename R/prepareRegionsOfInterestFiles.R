@@ -2,6 +2,8 @@
 # double KD
 library(deepToolsUtils)
 library(GenomicRanges)
+
+annotationVersion <- "GRCh37_hg19_ensembl75"
 if (!dir.exists(paste("~/Data/Tremethick/HP1-alpha/AnnotationData", annotationVersion, sep = "/"))) {
   dir.create(paste("~/Data/Tremethick/HP1-alpha/AnnotationData", annotationVersion, sep =  "/"))
   pathPrefix <- paste("~/Data/Tremethick/HP1-alpha/AnnotationData", annotationVersion, sep = "/")
@@ -52,9 +54,26 @@ deepToolsUtils::WriteGRangesToBED(gr = gr1, out_file = out_file)
 library("rtracklayer")
 rm1 <- import("~/Data/References/Annotations/Homo_sapiens/hg19/UCSC/hg19_repeat_regions.bed")
 rm1
+# map Ensembl to UCSC chromosome IDs
 chromMap <- data.table::fread("/home/sebastian/Data/References/Annotations/ChromosomeMappings/GRCh37_UCSC2ensembl.txt", sep = "\t")
 seqlevels(rm1) <- chromMap$V2[match(seqlevels(rm1), chromMap$V1)]
 
+deepToolsUtils::WriteGRangesToBED(gr = rm1[grep("GSAT", rm1$name)], out_file = paste(pathPrefix, "hg19_GSAT_repeats.bed", sep = "/"))
+deepToolsUtils::WriteGRangesToBED(gr = rm1[grep("LTR", rm1$name)], out_file = paste(pathPrefix, "hg19_LTR_repeats.bed", sep = "/"))
+
+repeatMaskerTab <- data.table::fread("/home/sebastian/Data/References/Annotations/Homo_sapiens/hg19/UCSC/repeatMaskerhg19.txt", sep = "\t")
+setkey(repeatMaskerTab, repClass)
+for (i in c("LINE", "SINE", "Low_complexity")){ 
+  gr1 <- GenomicRanges::GRanges(seqnames = repeatMaskerTab[i]$genoName,
+                                IRanges(start = repeatMaskerTab[i]$genoStart,
+                                        end = repeatMaskerTab[i]$genoEnd,
+                                        names = repeatMaskerTab[i]$repName),
+                                strand = repeatMaskerTab[i]$strand,
+                                repClass = repeatMaskerTab[i]$repClass)
+  seqlevels(gr1) <- chromMap$V2[match(seqlevels(gr1), chromMap$V1)]
+  fn <- paste(pathPrefix, "/hg19_", i, "_repeats.bed", sep = "")
+  deepToolsUtils::WriteGRangesToBED(gr = gr1, out_file = fn)
+}
 
 
 
