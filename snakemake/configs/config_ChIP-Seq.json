@@ -307,24 +307,15 @@
     {
       "GRCh37_hg19_ensembl75":
       {
-        "coding":
-        {
-          "allGenes": "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/allGenes.bed",
-          "conditionMCF10A_shH2AZHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shH2AZHP1a.bed",
-          "conditionMCF10A_shHP1ab" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1ab.bed",
-          "conditionMCF10A_shHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1a.bed",
-          "conditionMCF10A_shHP1b" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1b.bed",
-          "conditionMCF10A_WT" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_WT.bed"
-        },
-        "non-coding" :
-        {
-          "intergenicRegions": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed",
-          "repeats" : "/Data/References/Annotations/Homo_sapiens/hg19/Ensembl/RepeatMasker.bed"
-        },
-        "peaks" :
-        {
-          "dummy" : "dummy.bed"
-        }
+        "allGenes": "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/allGenes.bed",
+        "conditionMCF10A_shH2AZHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shH2AZHP1a.bed",
+        "conditionMCF10A_shHP1ab" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1ab.bed",
+        "conditionMCF10A_shHP1a" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1a.bed",
+        "conditionMCF10A_shHP1b" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_shHP1b.bed",
+        "conditionMCF10A_WT" : "/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/conditionMCF10A_WT.bed",
+        "intergenicRegions": "/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/intergenicRegions10kb-200kb.bed",
+        "repeats" : "/Data/References/Annotations/Homo_sapiens/hg19/Ensembl/RepeatMasker.bed",
+        "dummy" : "dummy.bed"
       },
       "GRCh37_hg19_ensembl75_ERCC":
       {
