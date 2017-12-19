@@ -145,6 +145,30 @@ rule indexMerged:
             samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
         """
 
+rule bamCoverageMerged:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
+        program_parameters = cli_parameters_bamCoverage
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+    input:
+        bam = lambda wildcards: wildcards["assayID"] + "/merged/" + wildcards["outdir"] + "/" + wildcards["reference_version"] + "/" +  wildcards["replicates"] + ".bam"
+    output:
+        "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{replicates}.bw"
+    shell:
+        """
+            {params.deepTools_dir}/bamCoverage --bam {input.bam} \
+                                               --outFileName {output} \
+                                               --outFileFormat bigwig \
+                                               {params.program_parameters} \
+                                               --numberOfProcessors {threads} \
+                                               --normalizeUsingRPKM \
+                                               --ignoreForNormalization {params.ignore}
+        """
+
 # targets
 STARS = expand("{assayID}/{file}",
               assayID = "RNA-Seq",
@@ -161,8 +185,15 @@ MERGED_STARS = expand("{assayID}/merged/{outdir}/{reference_version}/{replicates
                            'MCF10A_shH2AZHP1a',
                            'MCF10A_shHP1a',
                            'MCF10A_shHP1ab',
-                           'MCF10A_shHP1b']),
+                           'MCF10A_shHP1b'])
+
+MergedBIGWIGs = expand("{assayID}/{file}.bw",
+                         assayID="RNA-Seq",
+                         file=["merged/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/"  + j \
+                                for j in config["samples"]["RNA-Seq"]["replicates"].keys()])
+
 rule all:
     input:
         STARS,
-	    MERGED_STARS
+	    MERGED_STARS,
+        MergedBIGWIGs
