@@ -116,6 +116,21 @@ def getBAMbyReplicatesSTAR(wildcards):
     return(fn)
 
 
+def getComputeMatrixInput(wildcards):
+    fn = []
+    for j in config["samples"]["RNA-Seq"]["replicates"].keys():
+        fn.append("/".join(["RNA-Seq/merged",
+                            config["processed_dir"],
+                            REF_VERSION,
+                            "deepTools",
+                            "bamCoverage",
+                            wildcards["mode"],
+                            wildcards["norm"],
+                            j + ".bw"]))
+    return(fn)
+
+
+# rules
 rule bam_index_STAR_output:
     version:
         0.2
@@ -184,6 +199,51 @@ rule bamCoverageMerged:
                                                --ignoreForNormalization {params.ignore}
         """
 
+rule computeMatrix:
+    version:
+        0.2
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        program_parameters = lambda wildcards: ' '.join("{!s}={!s}".format(key, val.strip("\\'")) for (key, val) in cli_parameters_computeMatrix(wildcards).items())
+    threads:
+        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+    input:
+        file = getComputeMatrixInput,
+        region = lambda wildcards: home + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
+    output:
+        matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
+    shell:
+        """
+            {params.deepTools_dir}/computeMatrix {wildcards.command} \
+                                                 --regionsFileName {input.region} \
+                                                 --scoreFileName {input.file} \
+                                                 --missingDataAsZero \
+                                                 --skipZeros \
+                                                 --numberOfProcessors {threads} \
+                                                 {params.program_parameters} \
+                                                 --outFileName {output.matrix_gz}
+        """
+
+rule plotProfile:
+    version:
+        0.1
+    params:
+        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+    input:
+        matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/computeMatrix/{command}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
+    output:
+        figure = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.pdf",
+        data = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.data",
+        regions = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.bed"
+    shell:
+        """
+            {params.deepTools_dir}/plotProfile --matrixFile {input.matrix_gz} \
+                                               --outFileName {output.figure} \
+                                               --outFileNameData {output.data} \
+                                               --outFileSortedRegions {output.regions} \
+                                               --plotType {wildcards.plotType}
+        """
+
 # targets
 STARS = expand("{assayID}/{file}",
               assayID = "RNA-Seq",
@@ -207,8 +267,21 @@ MergedBIGWIGs = expand("{assayID}/{file}.bw",
                          file=["merged/" + config["processed_dir"] + "/" + REF_VERSION + "/deepTools/bamCoverage/normal/RPKM/"  + j \
                                 for j in config["samples"]["RNA-Seq"]["replicates"].keys()])
 
+PLOTs = expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
+               assayID="RNA-Seq",
+               outdir=config["processed_dir"],
+               reference_version=REF_VERSION,
+               application="deepTools",
+               tool="plotProfile",
+               command=["scale-regions"],
+               duplicates=["duplicates_removed"],
+               referencePoint="TSS",
+               plotType="se",
+               mode=["normal"],
+               norm=["RPKM"],
+               region=["allGenes", "intergenicRegions"],
+               suffix=["pdf", "data", "bed"])
+
 rule all:
     input:
-        STARS,
-	    MERGED_STARS,
         MergedBIGWIGs
