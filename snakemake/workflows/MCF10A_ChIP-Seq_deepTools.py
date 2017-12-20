@@ -153,7 +153,6 @@ def getBAMbyReplicates(wildcards):
                                ".Q" +
                                config["alignment_quality"] +
                                ".sorted.bam"))
-                print(i, j)
     return(fn)
 
 # rules
