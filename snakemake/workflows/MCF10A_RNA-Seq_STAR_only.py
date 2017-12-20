@@ -295,7 +295,7 @@ PLOTs = expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{com
 
 rule all:
     input:
-	expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
+	   expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
                assayID="RNA-Seq",
                outdir=config["processed_dir"],
                reference_version=REF_VERSION,
@@ -309,5 +309,3 @@ rule all:
                norm=["RPKM"],
                suffix=["pdf", "data", "bed"],
                region=["allGenes", "intergenicRegions"])
-
-
