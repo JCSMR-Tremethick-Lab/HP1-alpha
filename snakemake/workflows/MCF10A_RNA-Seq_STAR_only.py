@@ -85,6 +85,17 @@ rule star_align_IRFinder:
                  > {output}
         """
 
+
+def cli_parameters_computeMatrix(wildcards):
+    if wildcards["command"] == "reference-point":
+        a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]]
+        a["--referencePoint"]=wildcards["referencePoint"]
+        return(a)
+    if wildcards["command"] == "scale-regions":
+        a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]][wildcards["region"]]
+        return(a)
+
+
 def cli_parameters_bamCoverage(wildcards):
     a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["mode"]]
     b = str()
@@ -228,7 +239,7 @@ rule plotProfile:
     version:
         0.1
     params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        deepTools_dir = HOME + config["program_parameters"]["deepTools"]["deepTools_dir"],
     input:
         matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/computeMatrix/{command}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
     output:
@@ -284,4 +295,19 @@ PLOTs = expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{com
 
 rule all:
     input:
-        MergedBIGWIGs
+	expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
+               assayID="RNA-Seq",
+               outdir=config["processed_dir"],
+               reference_version=REF_VERSION,
+               application="deepTools",
+               tool="plotProfile",
+               command=["scale-regions"],
+               duplicates=["duplicates_removed"],
+               referencePoint="TSS",
+               plotType="se",
+               mode=["normal"],
+               norm=["RPKM"],
+               suffix=["pdf", "data", "bed"],
+               region=["allGenes", "intergenicRegions"])
+
+
