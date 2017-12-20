@@ -203,7 +203,7 @@ rule computeMatrix:
     version:
         0.2
     params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
+        deepTools_dir = HOME + config["program_parameters"]["deepTools"]["deepTools_dir"],
         program_parameters = lambda wildcards: ' '.join("{!s}={!s}".format(key, val.strip("\\'")) for (key, val) in cli_parameters_computeMatrix(wildcards).items())
     threads:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))

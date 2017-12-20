@@ -63,12 +63,8 @@ def getComputeMatrixInputMerged(wildcards):
                                 i + ".bw"]))
     return(fn)
 
-contrasts = lambda: for i in config["samples"]["ChIP-Seq"]["ChIP-Input"].keys()\
-    j = config["samples"]["ChIP-Seq"]["ChIP-Input"][i]["ChIP"]
-    k = i + "/" + j
-    return(k)
 
-def macs2OutputFiles(wildcards):
+def macs2OutputFiles():
     fn = []
     for i in config["samples"]["ChIP-Seq"]["ChIP-Input"].keys():
         for j in config["samples"]["ChIP-Seq"]["replicates"][config["samples"]["ChIP-Seq"]["ChIP-Input"][i]["ChIP"]]:
@@ -79,7 +75,23 @@ def macs2OutputFiles(wildcards):
                             "macs2",
                             contrasts,
                             "callpeak"])
+            pseudorep1 = i + "/" + j + "_pseudo_rep1"
+            pseudorep2 = i + "/" + j + "_pseudo_rep2"
+            pseudorep1 = "/".join(["ChIP-Seq",
+                            "processed_data",
+                            REF_VERSION,
+                            "macs2",
+                            pseudorep1,
+                            "callpeak"])
+            pseudorep2 = "/".join(["ChIP-Seq",
+                            "processed_data",
+                            REF_VERSION,
+                            "macs2",
+                            pseudorep2,
+                            "callpeak"])
             fn.append(path)
+            fn.append(pseudorep1)
+            fn.append(pseudorep2)
     return(fn)
 
 
@@ -95,7 +107,7 @@ def getMergedInputBAM(wildcards):
                 if k == j:
                     f = "/".join([wildcards["assayID"],
                                   i,
-                                  wildcards["processed_dir"],
+                                  config["processed_dir"],
                                   REF_VERSION,
                                   "bowtie2",
                                   "duplicates_removed",
@@ -111,7 +123,7 @@ def getChIPBam(wildcards):
                 if j == wildcards["unit"]:
                         f = "/".join([wildcards["assayID"],
                                       i,
-                                      wildcards["processed_dir"],
+                                      config["processed_dir"],
                                       REF_VERSION,
                                       "bowtie2",
                                       "duplicates_removed",
