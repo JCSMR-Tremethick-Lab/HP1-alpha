@@ -209,7 +209,7 @@ rule computeMatrix:
         lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
     input:
         file = getComputeMatrixInput,
-        region = lambda wildcards: home + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
+        region = lambda wildcards: HOME + config["program_parameters"]["deepTools"]["regionFiles"][wildcards["reference_version"]][wildcards["region"]]
     output:
         matrix_gz = "{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{region}_{mode}_{norm}.matrix.gz"
     shell:
@@ -279,8 +279,8 @@ PLOTs = expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{com
                plotType="se",
                mode=["normal"],
                norm=["RPKM"],
-               region=["allGenes", "intergenicRegions"],
-               suffix=["pdf", "data", "bed"])
+               suffix=["pdf", "data", "bed"],
+               region = ["allGenes", "intergenicRegions"])
 
 rule all:
     input:
