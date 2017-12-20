@@ -92,7 +92,10 @@ def cli_parameters_computeMatrix(wildcards):
         a["--referencePoint"]=wildcards["referencePoint"]
         return(a)
     if wildcards["command"] == "scale-regions":
-        a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]][wildcards["region"]]
+        if wildcards["region"] in config["program_parameters"]["deepTools"]["computeMatrix"]["scale-regions"].keys():
+            a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]][wildcards["region"]]
+        else:
+            a = config["program_parameters"][wildcards["application"]][wildcards["tool"]][wildcards["command"]]["default"]
         return(a)
 
 
