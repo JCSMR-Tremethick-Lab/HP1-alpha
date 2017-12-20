@@ -291,21 +291,8 @@ PLOTs = expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{com
                mode=["normal"],
                norm=["RPKM"],
                suffix=["pdf", "data", "bed"],
-               region = ["allGenes", "intergenicRegions"])
+               region = ["allGenes", "intergenicRegions"]),
 
 rule all:
     input:
-	   expand("{assayID}/{outdir}/{reference_version}/{application}/{tool}/{command}/{referencePoint}/{plotType}.{mode}.{norm}.{region}.{suffix}",
-               assayID="RNA-Seq",
-               outdir=config["processed_dir"],
-               reference_version=REF_VERSION,
-               application="deepTools",
-               tool="plotProfile",
-               command=["scale-regions"],
-               duplicates=["duplicates_removed"],
-               referencePoint="TSS",
-               plotType="se",
-               mode=["normal"],
-               norm=["RPKM"],
-               suffix=["pdf", "data", "bed"],
-               region=["allGenes", "intergenicRegions"])
+        PLOTs
