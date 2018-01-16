@@ -228,7 +228,7 @@ rule macs2_callpeak_pseudoreplicates:
         "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/{pseudo}"
     shell:
         """
-            {params.macs2_binary} {wildcard.macs2_command} -t {input.chip}\
+            {params.macs2_binary} {wildcards.macs2_command} -t {input.chip}\
                                            -c {input.input}\
                                            --gsize {params.gsize}\
                                            -f {params.filetype}\
