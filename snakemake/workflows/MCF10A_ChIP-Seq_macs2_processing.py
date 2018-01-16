@@ -198,13 +198,13 @@ rule macs2_callpeak_replicates:
     shell:
         """
             {params.macs2_binary} callpeak -t {input.chip}\
-                           -c {input.input}\
-                           --gsize {params.gsize}\
-                           -f {params.filetype}\
-                           --name {wildcards.contrast}\
-                           --outdir {output}\
-                           --verbose {params.verbosity}\
-                           --bdg\
+                                           -c {input.input}\
+                                           --gsize {params.gsize}\
+                                           -f {params.filetype}\
+                                           --name {wildcards.contrast}\
+                                           --outdir {output}\
+                                           --verbose {params.verbosity}\
+                                           --bdg\
             1>>{log} 2>>{log}
         """
 
@@ -228,7 +228,7 @@ rule macs2_callpeak_pseudoreplicates:
         "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/{pseudo}"
     shell:
         """
-            {params.macs2_binary} {wildcards.macs2_command} -t {input.chip}\
+            {params.macs2_binary} callpeak -t {input.chip}\
                                            -c {input.input}\
                                            --gsize {params.gsize}\
                                            -f {params.filetype}\
