@@ -217,7 +217,6 @@ rule macs2_callpeak_pseudoreplicates:
         gsize=config["program_parameters"]["macs2"]["gsize"],
         filetype="BAM",
         verbosity=config["program_parameters"]["macs2"]["verbosity"],
-        name=lambda wildcards: ".".join([wildcards["unit"], wildcards["pseudo"]]),
         macs2_binary=home + config["program_parameters"]["macs2"]["binary"]
     log:
         "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/{pseudo}/callpeak.log"
@@ -232,7 +231,7 @@ rule macs2_callpeak_pseudoreplicates:
                                            -c {input.input}\
                                            --gsize {params.gsize}\
                                            -f {params.filetype}\
-                                           --name {params.name}\
+                                           --name {wildcards["unit"]}"."{wildcards["pseudo"]}\
                                            --outdir {output}\
                                            --verbose {params.verbosity}\
                                            --bdg\
