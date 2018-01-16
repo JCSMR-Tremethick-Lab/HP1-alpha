@@ -67,14 +67,16 @@ def macs2OutputFilesPseudoReps():
                             "processed_data",
                             REF_VERSION,
                             "macs2",
-                            pseudorep1,
-                            "callpeak"])
+                            "callpeak",
+                            pseudorep1
+                            ])
             pseudorep2 = "/".join(["ChIP-Seq",
                             "processed_data",
                             REF_VERSION,
                             "macs2",
-                            pseudorep2,
-                            "callpeak"])
+                            "callpeak",
+                            pseudorep2
+                            ])
             fn.append(pseudorep1)
             fn.append(pseudorep2)
     return(fn)
