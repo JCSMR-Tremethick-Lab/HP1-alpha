@@ -220,12 +220,12 @@ rule macs2_callpeak_pseudoreplicates:
         name=lambda wildcards: ".".join([wildcards["unit"], wildcards["pseudo"]]),
         macs2_binary=home + config["program_parameters"]["macs2"]["binary"]
     log:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak/{pseudo}/callpeak.log"
+        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/{pseudo}/callpeak.log"
     input:
         chip=getChIPBamPseudoRep,
         input=getMergedInputBAM
     output:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak/{pseudo}"
+        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/{pseudo}"
     shell:
         """
             {params.macs2_binary} {wildcard.macs2_command} -t {input.chip}\
