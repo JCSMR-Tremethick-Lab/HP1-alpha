@@ -127,7 +127,7 @@ def getChIPBamPseudoRep(wildcards):
                 if j == wildcards["unit"]:
                         f = "/".join([wildcards["assayID"],
                                       i,
-                                      config["processed_dir"],
+                                      wildcards["processed_dir"],
                                       REF_VERSION,
                                       "bowtie2",
                                       "duplicates_removed",
@@ -217,6 +217,7 @@ rule macs2_callpeak_pseudoreplicates:
         gsize=config["program_parameters"]["macs2"]["gsize"],
         filetype="BAM",
         verbosity=config["program_parameters"]["macs2"]["verbosity"],
+        name=lambda wildcards: ".".join([wildcards["unit"], wildcards["pseudo"]]),
         macs2_binary=home + config["program_parameters"]["macs2"]["binary"]
     log:
         "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/{pseudo}/callpeak.log"
@@ -231,7 +232,7 @@ rule macs2_callpeak_pseudoreplicates:
                                            -c {input.input}\
                                            --gsize {params.gsize}\
                                            -f {params.filetype}\
-                                           --name {wildcards["unit"]}"."{wildcards["pseudo"]}\
+                                           --name {params.name}\
                                            --outdir {output}\
                                            --verbose {params.verbosity}\
                                            --bdg\
