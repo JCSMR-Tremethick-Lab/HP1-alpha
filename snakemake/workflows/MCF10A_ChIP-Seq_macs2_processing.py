@@ -127,7 +127,7 @@ def getChIPBamPseudoRep(wildcards):
                 if j == wildcards["unit"]:
                         f = "/".join([wildcards["assayID"],
                                       i,
-                                      wildcards["processed_dir"],
+                                      config["processed_dir"],
                                       REF_VERSION,
                                       "bowtie2",
                                       "duplicates_removed",
