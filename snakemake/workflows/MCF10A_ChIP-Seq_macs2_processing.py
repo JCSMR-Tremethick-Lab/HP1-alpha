@@ -205,7 +205,6 @@ rule macs2_callpeak_replicates:
                                            --name {wildcards.unit}\
                                            --outdir {output}\
                                            --verbose {params.verbosity}\
-                                           --bdg\
             1>>{log} 2>>{log}
         """
 
@@ -236,7 +235,6 @@ rule macs2_callpeak_pseudoreplicates:
                                            --name {params.name}\
                                            --outdir {output}\
                                            --verbose {params.verbosity}\
-                                           --bdg\
             1>>{log} 2>>{log}
         """
 
