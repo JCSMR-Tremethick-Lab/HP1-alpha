@@ -51,8 +51,9 @@ def macs2OutputFiles():
                             "processed_data",
                             REF_VERSION,
                             "macs2",
-                            contrasts,
-                            "callpeak"])
+                            "callpeak",
+                            contrasts
+                            ])
             fn.append(path)
     return(fn)
 
