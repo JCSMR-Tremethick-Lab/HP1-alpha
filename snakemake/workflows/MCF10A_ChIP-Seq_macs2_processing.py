@@ -189,19 +189,19 @@ rule macs2_callpeak_replicates:
         verbosity=config["program_parameters"]["macs2"]["verbosity"],
 	    macs2_binary=home + config["program_parameters"]["macs2"]["binary"]
     log:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak/callpeak.log"
+        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/callpeak.log"
     input:
         chip=getChIPBam,
         input=getMergedInputBAM
     output:
-        "{assayID}/{outdir}/{reference_version}/macs2/{contrast}/{unit}/callpeak"
+        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/"
     shell:
         """
             {params.macs2_binary} callpeak -t {input.chip}\
                                            -c {input.input}\
                                            --gsize {params.gsize}\
                                            -f {params.filetype}\
-                                           --name {wildcards.contrast}\
+                                           --name {wildcards.unit}\
                                            --outdir {output}\
                                            --verbose {params.verbosity}\
                                            --bdg\
