@@ -248,6 +248,6 @@ rule macs2_replicates:
     input:
         MACS2_output
 
-rules macs2_pseudo_replicates:
+rule macs2_pseudo_replicates:
     input:
         MACS2_output_pseudo_reps
