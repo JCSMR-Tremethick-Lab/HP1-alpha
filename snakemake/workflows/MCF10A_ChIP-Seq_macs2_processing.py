@@ -195,7 +195,7 @@ rule macs2_callpeak_replicates:
         chip=getChIPBam,
         input=getMergedInputBAM
     output:
-        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/"
+        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}"
     shell:
         """
             {params.macs2_binary} callpeak -t {input.chip}\
