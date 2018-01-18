@@ -69,6 +69,7 @@ def macs2OutputFilesPseudoReps():
                             REF_VERSION,
                             "macs2",
                             "callpeak",
+                            "pseudoreps",
                             pseudorep1
                             ])
             pseudorep2 = "/".join(["ChIP-Seq",
@@ -76,6 +77,7 @@ def macs2OutputFilesPseudoReps():
                             REF_VERSION,
                             "macs2",
                             "callpeak",
+                            "pseudoreps",
                             pseudorep2
                             ])
             fn.append(pseudorep1)
@@ -220,12 +222,12 @@ rule macs2_callpeak_pseudoreplicates:
         name=lambda wildcards: ".".join([wildcards["unit"], wildcards["pseudo"]]),
         macs2_binary=home + config["program_parameters"]["macs2"]["binary"]
     log:
-        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/{pseudo}/callpeak.log"
+        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/pseudoreps/{contrast}/{unit}/{pseudo}/callpeak.log"
     input:
         chip=getChIPBamPseudoRep,
         input=getMergedInputBAM
     output:
-        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/{contrast}/{unit}/{pseudo}"
+        "{assayID}/{outdir}/{reference_version}/macs2/callpeak/pseudoreps/{contrast}/{unit}/{pseudo}"
     shell:
         """
             {params.macs2_binary} callpeak -t {input.chip}\
