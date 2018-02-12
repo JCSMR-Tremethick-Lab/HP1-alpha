@@ -18,8 +18,8 @@
       },
       "bowtie2":
         {
-          "GRCh38_ensembl84_cDNA": "/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/canonical/hg38_ensembl84",
-          "GRCh38_ensembl84_ERCC": "/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/canonical/hg38_ensembl84"
+          "GRCh38_ensembl84_cDNA": "/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/canonical/index/hg38_ensembl84",
+          "GRCh38_ensembl84_ERCC": "/Data/References/Genomes/Homo_sapiens/GRCh38_ensembl84/canonical/index/hg38_ensembl84"
         },
       "GTF":
       {
