@@ -2,6 +2,7 @@
 # double KD
 library(deepToolsUtils)
 library(GenomicRanges)
+library(snowfall)
 
 annotationVersion <- "GRCh37_hg19_ensembl75"
 if (!dir.exists(paste("~/Data/Tremethick/HP1-alpha/AnnotationData", annotationVersion, sep = "/"))) {
@@ -76,6 +77,89 @@ for (i in c("LINE", "SINE", "Low_complexity")){
 }
 
 
+# use TxDB for extracting gene structures ---------------------------------
+require(GenomicFeatures)
+require(RSQLite)
+
+TxDBFile <- "~/Data/References/Annotations/Homo_sapiens/GRCh37_hg19_ensembl75/hsapiens_gene_ensembl_GRCh37_TxDB.sqlite"
+file.exists(TxDBFile)
+hsapEnsemblTxDB <- loadDb(TxDBFile)
+canonicalChr <- c(seq(1,22,1), "X", "MT")
+seqlevels(hsapEnsemblTxDB) <- canonicalChr
+
+# get exons ---------------------------------------------------------------
+exons <- GenomicFeatures::exonsBy(hsapEnsemblTxDB, by = "gene")
+exons <- unlist(exons)
+keep <- seqlevels(exons) %in% unique(ChIPClusters$`#chrom`)
+seqlevels(exons, pruning.mode = "tidy") <- seqlevels(exons)[keep]
+exons <- sort(exons)
+exons <- reduce(exons)
+
+expressedGenes <- results$kallisto_table_genes_wide$ensembl_gene_id
+exons[expressedGenes]
+strand(exons) <- "*"
+deepToolsUtils::WriteGRangesToBED(reduce(exons[names(exons) %in% expressedGenes]), out_file = "~/Data/Tremethick/HP1-alpha/AnnotationData/expressedExons.bed")
 
 
+# get introns -------------------------------------------------------------
+canonicalChr <- c(seq(1,22,1), "X", "MT")
+
+introns <- intronicParts(hsapEnsemblTxDB, linked.to.single.gene.only = T)
+grl.introns <- intronsByTranscript(hsapEnsemblTxDB, use.name = T)
+sfInit(parallel = T, cpus = 16)
+sfExport("grl.introns")
+n1 <- sfLapply(grl.introns, function(x) {length(x)})
+grl.introns <- grl.introns[names(n1[which(n1 > 0)])]
+
+sfExport("grl.introns")
+sfLibrary(biovizBase)
+sfLibrary(GenomicRanges)
+grl <- sfLapply(canonicalChr, function(x) biovizBase::flatGrl(grl.introns[which(GenomicRanges::seqnames(grl.introns) == x)]))
+grl <- GenomicRanges::GRangesList(grl)
+grl <- GenomicRanges::sort(grl)
+grl <- GenomicRanges::reduce(grl)
+grl.introns <- grl
+
+sfExport("grl.introns")
+grl.exonIntron <- GRangesList(sfLapply(grl.introns, function(x) {
+  if (length(x) > 0){ 
+    d <- data.frame(chr = seqnames(x), start = start(x) - 49, width = 100, strand = as.character(strand(x)))
+    gr <- GRanges(as.character(d[,"chr"]), IRanges(start = as.numeric(d[,"start"]), width = as.numeric(d[,"width"])), strand = as.character(d[,"strand"]))
+    return(gr)
+  }
+})
+)
+
+sfExport("grl.exonIntron")
+grl <- sfLapply(canonicalChr, function(x) flatGrl(grl.exonIntron[which(seqnames(grl.exonIntron) == x)]))
+grl <- GRangesList(grl)
+grl <- sort(grl)
+grl <- reduce(grl)
+grl.exonIntron <- grl
+
+grl.intronExon <- GRangesList(sfLapply(grl.introns, function(x) {
+  if (length(x) > 0){ 
+    d <- data.frame(chr = seqnames(x), start = end(x) - 49, width = 100, strand = as.character(strand(x)))
+    gr <- GRanges(as.character(d[,"chr"]), IRanges(start = as.numeric(d[,"start"]), width = as.numeric(d[,"width"])), strand = as.character(d[,"strand"]))
+    return(gr)
+  }
+}
+)
+)
+
+sfExport("grl.intronExon")
+grl <- sfLapply(canonicalChr, function(x) flatGrl(grl.intronExon[which(seqnames(grl.intronExon) == x)]))
+grl <- GRangesList(grl)
+grl <- sort(grl)
+grl <- reduce(grl)
+grl.intronExon <- grl
+
+grl.intronExonFlank25 <- flank(grl.intronExon, width = 25, both = TRUE)
+grl.exonIntronFlank25 <- flank(grl.exonIntron, width = 25, both = TRUE)
+grl.intronsFlank25 <- flank(grl.introns, width = 25, both = TRUE)
+
+gr.introns <- introns
+seqlevels(gr.introns, pruning.mode = "tidy") <- canonicalChr
+deepToolsUtils::WriteGRangesToBED(reduce(introns), 
+                                  out_file = "~/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/allIntrons.bed")
 

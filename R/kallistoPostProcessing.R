@@ -25,12 +25,16 @@ lDir <- function(x, y){
 
 # global variables --------------------------------------------------------
 colors <- RColorBrewer::brewer.pal(3, "Set2")
-refVersion <- runConfig$references$active
+#refVersion <- runConfig$references$active
+# manually set to hg19
+refVersion <- "hg19"
 dataset <- runConfig$references$database$dataset
 biomart <- runConfig$references$database$biomart
-ensemblHost <- runConfig$references$hg38$ensemblHost
+
+#ensemblHost <- runConfig$references[[refVersion]]$ensemblHost
+ensemblHost <- "http://grch37.ensembl.org"
 annotationVersion <- runConfig$references[[refVersion]]$version
-# reset to Ensembl84 ERCC
+# reset to Ensembl75 ERCC
 annotationVersion <- annotationVersion[2]
 # manually set to "RNA-Seq"
 assay <- names(runConfig$samples)[1]
@@ -119,14 +123,13 @@ if (length(runID) == 1){
 }
 
 # file names for data output  ---------------------------------------------
-analysis_version <- "_only_scramble_2_removed"
+analysis_version <- "1_wo_scrambled"
 sleuth_results_output <- paste("sleuthResults_", annotationVersion, "_V", analysis_version, ".rda", sep = "")
 sleuth_resultsCompressed_file <- paste("sleuthResultsCompressed_", annotationVersion, "_V", analysis_version, ".rda", sep = "")
 clusterProfiler_results_output <- paste("clusterProfilerResults_", annotationVersion, "_V", analysis_version, ".rda", sep = "")
 
 # read in additional parameters from JSON file ----------------------------
 transcriptBiotype <- runConfig$samples$`RNA-Seq`$sleuth_parameters$transcript_biotype
-
 
 # preparing annotation data from Ensembl ----------------------------------
 # ToDo: refactor annotation data preparation 
@@ -303,9 +306,9 @@ txi <- tximport::tximport(files,
                           ignoreTxVersion = F)
 
 # perform PCA for first inspection of data --------------------------------
-sd1 <- apply(txi$abundance, 1, sd)
+sd1 <- apply(log2(txi$abundance + 1), 1, sd)
 summary(sd1)
-pca1 <- ade4::dudi.pca(t(txi$abundance[sd1 > 0, ]), scannf = F, nf = 6)
+pca1 <- ade4::dudi.pca(t(log2(txi$abundance[sd1 > 0, ] + 1)), scannf = F, nf = 6)
 pdf(paste("PCA_MCF10A_HP1-alpha_", annotationVersion, ".pdf", sep = ""))
   ade4::s.arrow(pca1$li, boxes = F)
   ade4::s.class(pca1$li, fac = as.factor(condition))
@@ -316,7 +319,7 @@ dev.off()
 # MCF10A_shHP1b_3 removed due to low knock-down efficiency 
 # MCF10A_shHP1ab_3 removed due to low knock-down efficiency
 
-toRemove <- c("MCF10A_WT_1|MCF10A_WT_2|MCF10A_WT_3|MCF10A_Scramble_2")
+toRemove <- c("MCF10A_WT_1|MCF10A_WT_2|MCF10A_WT_3|MCF10A_Scramble_")
 files <- files[-grep(toRemove, names(files))]
 length(files)
 condition <- condition[-grep(toRemove, names(condition))]
@@ -328,19 +331,20 @@ txi <- tximport::tximport(files,
                           type = "kallisto",
                           tx2gene = subset(t2g, select = c(targetIdCol, geneIdCol)), geneIdCol = geneIdCol, txIdCol = targetIdCol,
                           ignoreTxVersion = F)
-sd1 <- apply(txi$abundance, 1, sd)
+sd1 <- apply(log2(txi$abundance + 1), 1, sd)
 summary(sd1)
-pca1 <- ade4::dudi.pca(t(txi$abundance[sd1 > 0, ]), scannf = F, nf = 6)
+pca1 <- ade4::dudi.pca(t(log2(txi$abundance[sd1 > 0.25, ] + 1)), scannf = F, nf = 6)
 pdf(paste("PCA_MCF10A_HP1-alpha_post_sample_removal_", annotationVersion, ".pdf", sep = ""))
   ade4::s.arrow(pca1$li, boxes = F)
   ade4::s.class(pca1$li, fac = as.factor(condition))
 dev.off()
 
+
 # prepare data.frame for importing kallisto data into sleuth --------------
 s2c <- data.frame(sample = sample_id, condition = condition)
 s2c <- dplyr::mutate(s2c, path = kal_dirs)
 s2c$sample <- as.character(s2c$sample)
-
+s2c$condition <- relevel(s2c$condition, ref = "MCF10A_WT")
 # build a list for all contrasts to test ----------------------------------
 contrastsList <- runConfig$samples$`RNA-Seq`$sleuth_parameters$contrasts
 conditionsList <- runConfig$samples$`RNA-Seq`$sleuth_parameters$conditions
@@ -349,7 +353,7 @@ design <- model.matrix(~ condition, data = s2c)
 
 # run sleuth --------------------------------------------------------------
 if(!file.exists(sleuth_results_output)){
-    #-----------------------------------------------------------------------------
+    #----------------------------------------------------------------------
     # only doing gene level DE
     so.gene <- sleuth::sleuth_prep(s2c, 
                                    ~ condition, 
@@ -366,9 +370,23 @@ if(!file.exists(sleuth_results_output)){
       rt.gene <- data.table::data.table(rt.gene[order(rt.gene$qval),])
     })
     names(rt.gene.list) <- colnames(design)[grep("Intercept", colnames(design), invert = T)]
-    kt.gene <- data.table::data.table(sleuth::kallisto_table(so.gene, use_filtered = T, normalized = T, include_covariates = T))
-    kt_wide.gene <- tidyr::spread(kt.gene[, c("target_id", "sample", "tpm")], sample, tpm)
-    kt_wide.gene <- data.table::as.data.table(merge(kt_wide.gene, unique(subset(ensGenes, select =  c("ensembl_gene_id", "external_gene_name", "description")), by = "ensembl_gene_id"), by.x = "target_id", by.y = "external_gene_name", all.x = TRUE, all.y = FALSE))
+    kt.gene <- data.table::data.table(sleuth::kallisto_table(so.gene, 
+                                                             use_filtered = T, 
+                                                             normalized = T, 
+                                                             include_covariates = T))
+    kt_wide.gene <- tidyr::spread(kt.gene[, c("target_id", "sample", "tpm")], 
+                                  sample, 
+                                  tpm)
+    kt_wide.gene <- data.table::as.data.table(merge(kt_wide.gene, 
+                                                    unique(subset(ensGenes, 
+                                                                  select =  c("ensembl_gene_id", 
+                                                                              "external_gene_name",
+                                                                              "description")),
+                                                                  by = "ensembl_gene_id"), 
+                                                    by.x = "target_id", 
+                                                    by.y = "external_gene_name",
+                                                    all.x = TRUE, 
+                                                    all.y = FALSE))
     kt_wide.gene <- kt_wide.gene[!duplicated(kt_wide.gene$target_id),]
     results <- list(sleuth_object_genes = so.gene,
                     sleuth_results_genes = rt.gene.list,
