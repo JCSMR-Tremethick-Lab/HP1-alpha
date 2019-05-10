@@ -18,7 +18,7 @@ home = home_dir
 
 wrapper_dir = os.environ['HOME'] + "/Development/snakemake-wrappers/bio"
 
-REF_GENOME = "hg19"
+REF_GENOME = "hg38"
 REF_VERSION = config["references"][REF_GENOME]["version"][1]
 
 # includes

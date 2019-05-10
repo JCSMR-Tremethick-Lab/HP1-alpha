@@ -129,8 +129,8 @@ sleuth_resultsCompressed_file <- paste("sleuthResultsCompressed_", annotationVer
 clusterProfiler_results_output <- paste("clusterProfilerResults_", annotationVersion, "_V", analysis_version, ".rda", sep = "")
 
 # read in additional parameters from JSON file ----------------------------
-transcriptBiotype <- runConfig$samples$`RNA-Seq`$sleuth_parameters$transcript_biotype
-
+# transcriptBiotype <- runConfig$samples$`RNA-Seq`$sleuth_parameters$transcript_biotype
+transcriptBiotype <- unique(mybiotypes)
 # preparing annotation data from Ensembl ----------------------------------
 # ToDo: refactor annotation data preparation 
 # so that exsiting files will be re-used within the same project
@@ -308,7 +308,7 @@ txi <- tximport::tximport(files,
 # perform PCA for first inspection of data --------------------------------
 sd1 <- apply(log2(txi$abundance + 1), 1, sd)
 summary(sd1)
-pca1 <- ade4::dudi.pca(t(log2(txi$abundance[sd1 > 0, ] + 1)), scannf = F, nf = 6)
+pca1 <- ade4::dudi.pca(t(log2(txi$abundance[sd1 > 1, ] + 1)), scannf = F, nf = 6)
 pdf(paste("PCA_MCF10A_HP1-alpha_", annotationVersion, ".pdf", sep = ""))
   ade4::s.arrow(pca1$li, boxes = F)
   ade4::s.class(pca1$li, fac = as.factor(condition))
@@ -333,7 +333,7 @@ txi <- tximport::tximport(files,
                           ignoreTxVersion = F)
 sd1 <- apply(log2(txi$abundance + 1), 1, sd)
 summary(sd1)
-pca1 <- ade4::dudi.pca(t(log2(txi$abundance[sd1 > 0.25, ] + 1)), scannf = F, nf = 6)
+pca1 <- ade4::dudi.pca(t(log2(txi$abundance[sd1 > 1, ] + 1)), scannf = F, nf = 6)
 pdf(paste("PCA_MCF10A_HP1-alpha_post_sample_removal_", annotationVersion, ".pdf", sep = ""))
   ade4::s.arrow(pca1$li, boxes = F)
   ade4::s.class(pca1$li, fac = as.factor(condition))
@@ -371,7 +371,7 @@ if(!file.exists(sleuth_results_output)){
     })
     names(rt.gene.list) <- colnames(design)[grep("Intercept", colnames(design), invert = T)]
     kt.gene <- data.table::data.table(sleuth::kallisto_table(so.gene, 
-                                                             use_filtered = T, 
+                                                             use_filtered = F, 
                                                              normalized = T, 
                                                              include_covariates = T))
     kt_wide.gene <- tidyr::spread(kt.gene[, c("target_id", "sample", "tpm")], 

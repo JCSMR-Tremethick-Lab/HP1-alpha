@@ -25,20 +25,6 @@ lapply(names(results$sleuth_results_genes), function(x){
   deepToolsUtils::WriteGRangesToBED(gr = gr1, out_file = out_file)
 })
 
-lapply(names(results$sleuth_results_genes), function(x){
-  id <- results$sleuth_results_genes[[x]][qval < 0.1]$target_id
-  dT1 <- ensGenes[external_gene_name %in% id]
-  gr1 <- GenomicRanges::GRanges(seqnames = dT1$chromosome_name,
-                                IRanges(start = dT1$start_position,
-                                        end = dT1$end_position,
-                                        names = dT1$external_gene_name),
-                                strand = c("+", "-")[match(dT1$strand, c(1, -1))],
-                                category = rep(x, nrow(dT1)))
-  strand(gr1) <- "*"
-  out_file <- paste(pathPrefix, "/", x, "_unstranded.bed", sep = "")
-  deepToolsUtils::WriteGRangesToBED(gr = gr1, out_file = out_file)
-})
-
 dT1 <- ensGenes
 
 # makes GR from ensGenes
@@ -60,6 +46,7 @@ chromMap <- data.table::fread("/home/sebastian/Data/References/Annotations/Chrom
 seqlevels(rm1) <- chromMap$V2[match(seqlevels(rm1), chromMap$V1)]
 
 deepToolsUtils::WriteGRangesToBED(gr = rm1[grep("GSAT", rm1$name)], out_file = paste(pathPrefix, "hg19_GSAT_repeats.bed", sep = "/"))
+deepToolsUtils::WriteGRangesToBED(gr = rm1[grep("SAT", rm1$name)], out_file = paste(pathPrefix, "hg19_SATs_repeats.bed", sep = "/"))
 deepToolsUtils::WriteGRangesToBED(gr = rm1[grep("LTR", rm1$name)], out_file = paste(pathPrefix, "hg19_LTR_repeats.bed", sep = "/"))
 
 repeatMaskerTab <- data.table::fread("/home/sebastian/Data/References/Annotations/Homo_sapiens/hg19/UCSC/repeatMaskerhg19.txt", sep = "\t")
@@ -76,6 +63,10 @@ for (i in c("LINE", "SINE", "Low_complexity")){
   deepToolsUtils::WriteGRangesToBED(gr = gr1, out_file = fn)
 }
 
+for (i in unique(rm1[grep("SAT", rm1$name)]$name)){
+  deepToolsUtils::WriteGRangesToBED(gr = rm1[grep(i, rm1$name)], out_file = paste(pathPrefix, "/hg19_",i,"_repeats.bed", sep = ""))
+}
+
 
 # use TxDB for extracting gene structures ---------------------------------
 require(GenomicFeatures)
@@ -90,16 +81,20 @@ seqlevels(hsapEnsemblTxDB) <- canonicalChr
 # get exons ---------------------------------------------------------------
 exons <- GenomicFeatures::exonsBy(hsapEnsemblTxDB, by = "gene")
 exons <- unlist(exons)
-keep <- seqlevels(exons) %in% unique(ChIPClusters$`#chrom`)
+keep <- seqlevels(exons) %in% unique(canonicalChr)
 seqlevels(exons, pruning.mode = "tidy") <- seqlevels(exons)[keep]
 exons <- sort(exons)
 exons <- reduce(exons)
+deepToolsUtils::WriteGRangesToBED(exons, out_file = paste("~/Data/Tremethick/HP1-alpha/AnnotationData/", annotationVersion, "/allExons.bed", sep = ""))
 
 expressedGenes <- results$kallisto_table_genes_wide$ensembl_gene_id
-exons[expressedGenes]
+expressedExons <- which(names(exons) %in% expressedGenes)
+silentExons <- which(!names(exons) %in% expressedGenes)
+exons[expressedExons]
+exons[silentExons]
 strand(exons) <- "*"
-deepToolsUtils::WriteGRangesToBED(reduce(exons[names(exons) %in% expressedGenes]), out_file = "~/Data/Tremethick/HP1-alpha/AnnotationData/expressedExons.bed")
-
+deepToolsUtils::WriteGRangesToBED(reduce(exons[expressedExons]), out_file = paste("~/Data/Tremethick/HP1-alpha/AnnotationData/", annotationVersion, "/expressedExons.bed", sep = ""))
+deepToolsUtils::WriteGRangesToBED(reduce(exons[silentExons]), out_file = paste("~/Data/Tremethick/HP1-alpha/AnnotationData/", annotationVersion, "/silentExons.bed", sep = ""))
 
 # get introns -------------------------------------------------------------
 canonicalChr <- c(seq(1,22,1), "X", "MT")
@@ -163,3 +158,23 @@ seqlevels(gr.introns, pruning.mode = "tidy") <- canonicalChr
 deepToolsUtils::WriteGRangesToBED(reduce(introns), 
                                   out_file = "~/Data/Tremethick/HP1-alpha/AnnotationData/GRCh37_hg19_ensembl75/allIntrons.bed")
 
+ensGenes[results$kallisto_table_genes_wide$ensembl_gene_id]
+dT1 <- ensGenes[results$kallisto_table_genes_wide$ensembl_gene_id]
+length(unique(dT1$ensembl_gene_id))
+table(duplicated(dT1$ensembl_gene_id))
+dT1[duplicated(dT1$ensembl_gene_id)]
+dT1 <- ensGenes[results$kallisto_table_genes_wide$ensembl_gene_id]
+dT1 <- dT1[!duplicated(dT1$ensembl_gene_id)]
+dT1
+# makes GR from ensGenes
+dT1 <- ensGenes[dTq[WT_quartile == "Q2" & shHP1ab_quartile == "Q4"]$ext_gene]
+
+gr1 <-  GenomicRanges::GRanges(seqnames = dT1$chromosome_name,
+                              IRanges(start = dT1$start_position,
+                              end = dT1$end_position,
+                              names = dT1$external_gene_name),
+                              strand = c("+", "-")[match(dT1$strand, c(1, -1))],
+                              category = rep("Q2_to_Q4", nrow(dT1)))
+gr1
+out_file <- paste(pathPrefix, "/", "Q2_to_Q4", ".bed", sep = "")
+deepToolsUtils::WriteGRangesToBED(gr = gr1, out_file = out_file)
