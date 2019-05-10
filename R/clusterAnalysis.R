@@ -144,6 +144,7 @@ table(dT$cluster,useNA = "ifany")
 dTm <- melt.data.table(dT)
 dTm$value <- log2(dTm$value + 1)
 dTm$group <- unlist(lapply(strsplit(as.character(dTm$variable), "_"), function(x) x[2]))
+dTm$group <- (factor(dTm$group, levels = c("WT", "shHP1a", "shHP1b", "shHP1ab", "shH2AZHP1a")))
 library(ggplot2)
 bp1 <- ggplot(data = dTm, aes(x = cluster, y = value)) + geom_boxplot() + facet_wrap(~group)
 bp1
@@ -213,7 +214,7 @@ ggparallel(list("WT_quartile", "shHP1ab_quartile"), data=dTq, method="hammock", 
 
 dTmeanExpression$group <- (factor(dTmeanExpression$group, levels = c("WT", "shHP1a", "shHP1b", "shHP1ab", "shH2AZHP1a")))
 setkey(dTmeanExpression, "ext_gene")
-ggplot(dTmeanExpression[dTq[WT_quartile == "Q1" & shHP1ab_quartile == "Q3"]$ext_gene], aes(x = group, y = V1)) + geom_boxplot()
+ggplot(dTmeanExpression[dTq[WT_quartile == "Q2" & shHP1ab_quartile == "Q4"]$ext_gene], aes(x = group, y = V1)) + geom_boxplot()
 
 dTmq <- merge(dTm, subset(dTsort, select = c("ext_gene", "quartile")), by.x = "ext_gene", by.y = "ext_gene", all.x = T)
 dTmq$group <- (factor(dTmq$group, levels = c("WT", "shHP1a", "shHP1b", "shHP1ab", "shH2AZHP1a")))
@@ -234,6 +235,46 @@ lapply(as.character(unique(dTsort$quartile)), function (x) {
   deepToolsUtils::WriteGRangesToBED(gr = gr1, out_file = out_file)
 })
 
+# clusterProfiler analysis of genes changing quartiles
+library(clusterProfiler)
+library(org.Hs.eg.db)
+
+gene <- c(dTq[which(dTq$WT_quartile == "Q3" & (dTq$shHP1a_quartile == "Q4" & dTq$shHP1b_quartile == "Q4" & dTq$shHP1ab_quartile == "Q4"))]$ext_gene,
+          dTq[which(dTq$WT_quartile == "Q2" & (dTq$shHP1a_quartile == "Q3" & dTq$shHP1b_quartile == "Q3" & dTq$shHP1ab_quartile == "Q3"))]$ext_gene,
+          dTq[which(dTq$WT_quartile == "Q3" & (dTq$shHP1a_quartile == "Q2" & dTq$shHP1b_quartile == "Q2" & dTq$shHP1ab_quartile == "Q2"))]$ext_gene,
+          dTq[which(dTq$WT_quartile == "Q4" & (dTq$shHP1a_quartile == "Q3" & dTq$shHP1b_quartile == "Q3" & dTq$shHP1ab_quartile == "Q3"))]$ext_gene)
+
+gene.df <- bitr(gene, fromType = "SYMBOL", 
+                toType = c("ENSEMBL", "ENTREZID"),
+                OrgDb = org.Hs.eg.db)
+universe <- bitr(dTq$ext_gene, fromType = "SYMBOL", 
+                 toType = c("ENSEMBL", "ENTREZID"),
+                 OrgDb = org.Hs.eg.db)
+
+pvalueCutoff <- 0.01
+
+egoMF <- enrichGO(gene         = gene.df$ENTREZID,
+                  OrgDb         = 'org.Hs.eg.db',
+                  ont           = "MF",
+                  pvalueCutoff  = pvalueCutoff)
+head(egoMF)
+
+egoBP <- enrichGO(gene         = gene.df$ENTREZID,
+                  OrgDb         = "org.Hs.eg.db",
+                  ont           = "BP",
+                  pvalueCutoff  = pvalueCutoff)
+egoBP
+
+egoCC <- enrichGO(gene         = gene.df$ENTREZID,
+                  OrgDb         = "org.Hs.eg.db",
+                  ont           = "CC",
+                  pvalueCutoff  = pvalueCutoff)
+egoCC
+dotplot(egoBP)
+dotplot(egoCC)
+
+
+# genes rankes by WT expression -------------------------------------------
 out_file
 dT1 <- ensGenes[rankedWTgenes]
 gr1 <-  GenomicRanges::GRanges(seqnames = dT1$chromosome_name,
@@ -251,4 +292,4 @@ deepToolsUtils::WriteGRangesToBED(gr = gr1[rankedWTgenes], out_file = out_file)
 # look at exons
 exonClusters <- data.table::fread("/home/sebastian/Data/Tremethick/HP1-alpha/Figures/bigwigCompare.expressedExons.normal.RPKM.kmeans4.bed")
 
-
+#
