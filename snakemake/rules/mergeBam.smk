@@ -7,8 +7,6 @@ rule bamMerge:
         "./envs/bam.yaml"
     params:
         outputFormat = "--output-fmt BAM"  # ToDo: move
-    log:
-        "logs/{replicates}.bamMerge.log"
     threads:
         16
     input:
@@ -17,14 +15,12 @@ rule bamMerge:
         "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam"
     shell:
         """
-            samtools merge -f {output} {input} --threads {threads} {params.outputFormat} 1>>{log} 2>>{log}
+            samtools merge -f {output} {input} --threads {threads} {params.outputFormat}
         """
 
 rule indexMerged:
     version:
         0.1
-    log:
-        "logs/{replicates}.indexMerged.log"
     threads:
         16
     input:
@@ -33,7 +29,7 @@ rule indexMerged:
         "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai"
     shell:
         """
-            samtools index {input} {output} -@ {threads} 1>>{log} 2>>{log}
+            samtools index {input} {output} -@ {threads}
         """
 
 # rules section 
