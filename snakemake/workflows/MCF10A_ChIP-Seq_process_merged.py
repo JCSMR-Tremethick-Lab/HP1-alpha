@@ -63,13 +63,13 @@ def cli_parameters_computeMatrix(wildcards):
             return(a)
 
 
-
 def cli_parameters_normalization(wildcards):
     if wildcards["norm"] == "RPKM":
         a = "--normalizeUsingRPKM"
     elif wildcards["norm"] == "1xcoverage":
         a = " ".join(("--normalizeTo1x", config["references"][REF_GENOME]["effectiveSize"]))
     return(a)
+
 
 def getComputeMatrixInputMerged(wildcards):
     fn = []
