@@ -45,7 +45,7 @@ rule bamCoverageMerged:
         ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
         program_parameters = cliParametersBamCoverage
     threads:
-        lambda wildcards: int(str(config["program_parameters"]["deepTools"]["threads"]).strip("['']"))
+        32
     input:
         bai = "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai",
         bam = "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam"

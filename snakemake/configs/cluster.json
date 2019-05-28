@@ -1,0 +1,103 @@
+{
+    "__default__" :
+    {
+        "P" : "pb97",
+        "queue" : "biodev",
+        "mem" : "32G",
+        "ncpus" : 16,
+        "std1_out_dir" : "/home/150/sxk150/qsub_output",
+        "error_out_dir" : "/home/150/sxk150/qsub_error",
+        "M" : "skurscheid@gmail.com",
+        "m" : "abe",
+    },
+    "md5check" :
+    {
+        "mem" : "1024M",
+        "ncpus" : 1,
+        "walltime": "23:59:00"
+    },
+    "decompress" : 
+    {
+        "mem" : "1024M",
+        "ncpus" : 4,
+        "walltime": "01:00:00",
+        "name" : "{rule}.{wildcards.library}"
+    },
+    "qc_and_trim" : 
+    {
+        "mem" : "2048M",
+        "ncpus" : 4,
+        "walltime": "00:30:00",
+        "name" : "{rule}.{wildcards.library}"
+    },
+    "bam_index" :
+    {
+        "mem" : "8G",
+        "ncpus" : 1,
+        "walltime": "01:00:00",
+        "name" : "{rule}.{wildcards.library}"
+    },
+    "bam_mark_duplicates" : 
+    {
+        "mem" : "32G",
+        "ncpus" : 1,
+        "walltime": "04:00:00",
+        "name" : "{rule}.{wildcards.library}"
+    },
+    "bam_quality_filter" : 
+    {
+        "mem" : "8G",
+        "ncpus" : 1,
+        "walltime": "04:00:00",
+        "name" : "{rule}.{wildcards.library}"
+    },
+    "bam_sort" : 
+    {
+        "mem" : "32G",
+        "ncpus" : 4,
+        "walltime": "04:00:00",
+        "name" : "{rule}.{wildcards.library}"
+    },
+    "bam_sortn" : 
+    {
+        "mem" : "32G",
+        "ncpus" : 4,
+        "walltime": "04:00:00",
+        "name" : "{rule}.{wildcards.library}"
+    },
+    "bowtie2_pe_multimap" : 
+    {        
+        "mem" : "32G",
+        "ncpus" : 16,
+        "walltime": "08:00:00",
+        "name" : "{rule}.{wildcards.library}"
+    },
+    "genrich" :
+    {
+        "mem" : "32G",
+        "ncpus" : 1,
+        "walltime": "08:00:00",
+        "name" : "{rule}.{wildcards.sample}"
+    },
+    "bamMerge" :
+    {
+        "mem" : "32G",
+        "ncpus" : 16,
+        "walltime": "04:00:00",
+        "name" : "{rule}" 
+    },
+    "indexMerged" :
+    {
+        "mem" : "32G",
+        "ncpus" : 16,
+        "walltime": "04:00:00",
+        "name" : "{rule}" 
+    },
+    "bamCoverageMerged" :
+    {
+        "mem" : "64G",
+        "ncpus" : 32,
+        "walltime": "04:00:00",
+        "name" : "{rule}" 
+    }
+}
