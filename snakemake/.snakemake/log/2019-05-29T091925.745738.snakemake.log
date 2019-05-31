@@ -1,0 +1,3 @@
+KeyError in line 26 of /home/150/sxk150/HP1-alpha/snakemake/Snakefile:
+'references'
+  File "/home/150/sxk150/HP1-alpha/snakemake/Snakefile", line 26, in <module>

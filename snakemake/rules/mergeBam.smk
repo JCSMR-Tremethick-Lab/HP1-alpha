@@ -1,10 +1,8 @@
-
-# rules
 rule bamMerge:
     version:
         1
     conda:
-        "./envs/bam.yaml"
+        "../envs/bam.yaml"
     params:
         outputFormat = "--output-fmt BAM"  # ToDo: move
     threads:
@@ -22,7 +20,7 @@ rule indexMerged:
     version:
         1
     conda:
-        "./envs/bam.yaml"
+        "../envs/bam.yaml"
     threads:
         16
     input:
@@ -39,13 +37,12 @@ rule bamCoverageMerged:
     version:
         1
     conda:
-        "./envs/deeptools.yaml"
+        "../envs/deeptools.yaml"
     params:
-        deepTools_dir = home + config["program_parameters"]["deepTools"]["deepTools_dir"],
         ignore = config["program_parameters"]["deepTools"]["ignoreForNormalization"],
         program_parameters = cliParametersBamCoverage
     threads:
-        32
+        16
     input:
         bai = "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam.bai",
         bam = "{assayID}/merged/{outdir}/{reference_version}/{duplicates}/{replicates}.bam"
@@ -53,20 +50,20 @@ rule bamCoverageMerged:
         "{assayID}/merged/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{replicates}.bw"
     shell:
         """
-            {params.deepTools_dir}/bamCoverage --bam {input.bam} \
-                                               --outFileName {output} \
-                                               --outFileFormat bigwig \
-                                               {params.program_parameters} \
-                                               --numberOfProcessors {threads} \
-                                               --normalizeUsingRPKM \
-                                               --ignoreForNormalization {params.ignore}
+            bamCoverage --bam {input.bam} \
+                        --outFileName {output} \
+                        --outFileFormat bigwig \
+                        {params.program_parameters} \
+                        --numberOfProcessors {threads} \
+                        --normalizeUsing RPKM \
+                        --ignoreForNormalization {params.ignore}
         """
 
 rule bigwigCompareMerged:
     version:
         1
     conda:
-        "./envs/deeptools.yaml"
+        "../envs/deeptools.yaml"
     threads:
         32
     input:

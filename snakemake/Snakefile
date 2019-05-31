@@ -34,6 +34,7 @@ rule all:
                     for j in config["samples"]["ChIP-Seq"]["replicates"].keys()])
 
 rule all_bigwigcompare:
+    input:
         expand("{assayID}/{runID}/{outdir}/{reference_version}/{application}/{tool}/{mode}/{norm}/{duplicates}/{contrast}/{ratio}/{condition}.bw",
                assayID="ChIP-Seq",
                runID="merged",

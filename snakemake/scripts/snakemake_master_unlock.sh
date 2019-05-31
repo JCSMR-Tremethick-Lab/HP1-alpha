@@ -5,7 +5,7 @@
 #PBS -e /home/150/sxk150/qsub_error
 #PBS -o /home/150/sxk150/qsub_out
 #PBS -l ncpus=1
-#PBS -l mem=1G
+#PBS -l mem=4G
 #PBS -M skurscheid@gmail.com
 #PBS -m abe
 #PBS -N snakemake_master
@@ -29,4 +29,5 @@ source ~/.bashrc
                     -e {cluster.error_out_dir} \
                     -o {cluster.std1_out_dir}" \
         --cluster-config /home/150/sxk150/HP1-alpha/snakemake/configs/cluster.json\
-        --rerun-incomplete 
+        --rerun-incomplete \
+        --unlock

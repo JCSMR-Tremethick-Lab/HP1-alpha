@@ -95,9 +95,11 @@
     },
     "bamCoverageMerged" :
     {
-        "mem" : "64G",
-        "ncpus" : 32,
-        "walltime": "04:00:00",
+        "P" : "kv78",
+        "queue" : "express",
+        "mem" : "32G",
+        "ncpus" : 16,
+        "walltime": "24:00:00",
         "name" : "{rule}" 
     }
 }

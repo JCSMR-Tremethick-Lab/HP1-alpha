@@ -330,8 +330,8 @@
       "normal":
       {
         "--centerReads": " ",
-        "--binSize": "100",
-        "--smoothLength": "150"
+        "--binSize": "50",
+        "--smoothLength": "100"
       }
     },
     "bamCompare":
